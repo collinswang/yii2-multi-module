@@ -23,22 +23,28 @@ class QcloudSmsSignService implements  SmsSignInterface
         $this->util = new SmsSenderUtil();
     }
 
-    public function add()
+    /**
+     * 创建签名
+     * @param string    $sign   签名内容，不带【】，例如：【腾讯科技】这个签名，这里填"腾讯科技"
+     * @param string    $desc   签名备注，比如申请原因，使用场景等，可选字段
+     * @return string
+     */
+    public function add($sign, $desc)
     {
         $random = $this->util->getRandom();
         $curTime = time();
         $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
 
         // 按照协议组织 post 包体
-        $data['remark'] = '';
-        $data['text'] = '';
+        $data['remark'] = $desc;
+        $data['text'] = $sign;
         $data['sig'] = hash("sha256",
             "appkey=".$this->appkey."&random=".$random."&time="
             .$curTime, FALSE);
         $data['time'] = $curTime;
-        return json_encode([$wholeUrl, $data]);
-        exit;
-        return $this->util->sendCurlPost($wholeUrl, $data);
+
+        $result = $this->util->sendCurlPost($wholeUrl, $data);
+        return json_encode($result, true);
     }
 
     public function update()

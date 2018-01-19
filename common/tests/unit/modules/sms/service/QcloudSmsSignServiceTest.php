@@ -12,9 +12,7 @@ class QcloudSmsSignServiceTest extends \Codeception\Test\Unit
     public function testAdd()
     {
         $model = new QcloudSmsSignService();
-        print_r($model->add());
-        $status = true;
-        expect('判断是否为假，但传递过来的结果为正', $status)->false();
+        expect('判断是否为真，但传递过来的结果为正', $model->add('云提醒', '通过腾迅云进行多端提醒'))->true();
         $status = false;
         expect('结果为正', $status)->false();
     }

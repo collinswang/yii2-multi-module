@@ -8,4 +8,8 @@ return [
             'identityClass' => backend\models\User::className(),
         ],
     ],
+    'params' => yii\helpers\ArrayHelper::merge(
+        require __DIR__ . '/params.php',
+        require __DIR__ . '/params-local.php'
+    )
 ];
