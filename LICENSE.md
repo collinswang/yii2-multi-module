@@ -1,4 +1,4 @@
-The Feehi CMS is free software. It is released under the terms of
+=The Feehi CMS is free software. It is released under the terms of=
 the following BSD License.
 
 Copyright © 2016 LLC (http://www.feehi.com)

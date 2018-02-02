@@ -10,7 +10,7 @@ $config = [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=192.168.2.66;dbname=yii2adv',
+            'dsn' => 'mysql:host=192.168.200.66;dbname=yii2adv',
             'username' => 'root',
             'password' => '123456',
             'charset' => 'utf8',
