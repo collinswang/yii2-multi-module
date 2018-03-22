@@ -7,11 +7,20 @@ namespace common\modules\sms\base;
 use Qcloud\Sms\SmsSenderUtil;
 use Yii;
 
-class QcloudSmsSignService implements  SmsSignInterface
+class QcloudSmsTemplateService implements  SmsTemplateInterface
 {
-    const ADD_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/add_sign';
-    const UPDATE_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/mod_sign';
-    const CHECK_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/get_sign';
+    const ADD_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/add_template';
+    const UPDATE_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/mod_template';
+    const DELETE_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/del_template';
+    const CHECK_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/get_template';
+
+    /**
+     * @param mixed $appid
+     */
+    public static $template_type = [0=>'普通短信模板', 1 =>'营销短信模板', 2 => '语音模板'];
+    const TEMPLATE_TYPE_NORMAL = 0;
+    const TEMPLATE_TYPE_SPREAD = 1;
+    const TEMPLATE_TYPE_VOICE = 2;
 
     private $url;
     private $appid;
@@ -26,21 +35,24 @@ class QcloudSmsSignService implements  SmsSignInterface
     }
 
     /**
-     * 创建签名
-     * @param string $sign 签名内容，不带【】，例如：【腾讯科技】这个签名，这里填"腾讯科技"
-     * @param string $desc 签名备注，比如申请原因，使用场景等，可选字段
+     * 发送短信
+     * @param int       $type       模板类型
+     * @param string    $content    模板内容    {1}为您的登录验证码，请于{2}分钟内填写。如非本人操作，请忽略本短信。（其中{数字}为可自定义的内容，须从1开始连续编号，如{1}、{2}等。）
+     * @param string    $desc 签名备注，比如申请原因，使用场景等，可选字段
+     * @param string    $title
      * @return array
      *                     {
      *                     "result": 0, //0表示成功，非0表示失败
      *                     "msg": "", //result非0时的具体错误信息
      *                     "data": {
-     *                     "id": 123, //签名id
-     *                     "text": "xxxxx", //签名内容
-     *                     "status": 1, //0：已通过；1：待审核；2：已拒绝
-     *                     }
+     *                          "id": 123, //签名id
+     *                          "text": "xxxxx", //签名内容
+     *                          "status": 1, //0：已通过；1：待审核；2：已拒绝
+     *                          "type": 0 //0：普通短信模板；1：营销短信模板；2：语音模板
+     *                      }
      *                     }
      */
-    public function sms_sign_add($sign, $desc)
+    public function sms_template_add($type, $content, $desc = null, $title = null)
     {
         $this->url = self::ADD_URL;
         $random = $this->util->getRandom();
@@ -48,8 +60,10 @@ class QcloudSmsSignService implements  SmsSignInterface
         $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
 
         // 按照协议组织 post 包体
-        $data['remark'] = $desc;
-        $data['text'] = $sign;
+        $data['title'] = $title;     //模板名称
+        $data['remark'] = $desc;    //模板备注
+        $data['text'] = $content;      //模板内容
+        $data['type'] = $type;      //0：普通短信模板；1：营销短信模板；2：语音模板
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
         $data['time'] = $curTime;
 
@@ -59,21 +73,24 @@ class QcloudSmsSignService implements  SmsSignInterface
 
     /**
      * 修改签名
-     * @param int    $sign_id   签名ID
-     * @param string $sign 签名内容，不带【】，例如：【腾讯科技】这个签名，这里填"腾讯科技"
-     * @param string $desc 签名备注，比如申请原因，使用场景等，可选字段
+     * @param int       $id
+     * @param int       $type       模板类型
+     * @param string    $content    模板内容    {1}为您的登录验证码，请于{2}分钟内填写。如非本人操作，请忽略本短信。（其中{数字}为可自定义的内容，须从1开始连续编号，如{1}、{2}等。）
+     * @param string    $desc 签名备注，比如申请原因，使用场景等，可选字段
+     * @param string    $title
      * @return array
-     *                     {
-     *                     "result": 0, //0表示成功，非0表示失败
-     *                     "msg": "", //result非0时的具体错误信息
-     *                     "data": {
-     *                     "id": 123, //签名id
-     *                     "text": "xxxxx", //签名内容
-     *                     "status": 1, //0：已通过；1：待审核；2：已拒绝
-     *                     }
-     *                     }
+     *         {
+     *         "result": 0, //0表示成功，非0表示失败
+     *         "msg": "", //result非0时的具体错误信息
+     *         "data": {
+     *             "id": 123, //模板id
+     *             "text": "xxxxx", //模板内容
+     *             "status": 1, //0：已通过；1：待审核；2：已拒绝
+     *             "type": 0 //0：普通短信模板；1：营销短信模板；2：语音模板
+     *             }
+     *         }
      */
-    public function sms_sign_update($sign_id, $sign, $desc)
+    public function sms_template_update($id, $type, $content, $desc = null, $title = null)
     {
         $this->url = self::UPDATE_URL;
         $random = $this->util->getRandom();
@@ -82,10 +99,11 @@ class QcloudSmsSignService implements  SmsSignInterface
 
         // 按照协议组织 post 包体
         $data['remark'] = $desc;
-        $data['text'] = $sign;
+        $data['title'] = $title;     //模板名称
+        $data['text'] = $content;
+        $data['tpl_id'] = $id;
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
         $data['time'] = $curTime;
-        $data['sign_id'] = $sign_id;
 
         $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
@@ -93,14 +111,14 @@ class QcloudSmsSignService implements  SmsSignInterface
 
     /**
      * 删除签名
-     * @param int $sign_id 签名ID
+     * @param int $id 签名ID
      * @return array
      *                     {
      *                     "result": 0, //0表示成功，非0表示失败
      *                     "msg": "" //result非0时的具体错误信息
      *                     }
      */
-    public function sms_sign_del($sign_id)
+    public function sms_template_del($id)
     {
         $this->url = self::UPDATE_URL;
         $random = $this->util->getRandom();
@@ -110,7 +128,7 @@ class QcloudSmsSignService implements  SmsSignInterface
         // 按照协议组织 post 包体
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
         $data['time'] = $curTime;
-        $data['sign_id'] = $sign_id;
+        $data['sign_id'] = $id;
 
         $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
@@ -118,7 +136,7 @@ class QcloudSmsSignService implements  SmsSignInterface
 
     /**
      * 检查签名状态
-     * @param int $sign_id 签名ID
+     * @param int $id 签名ID
      * @return array
      *                     {
      *                     "result": 0, //0表示成功，非0表示失败
@@ -134,7 +152,7 @@ class QcloudSmsSignService implements  SmsSignInterface
      *                     ]
      *                     }
      */
-    public function sms_sign_check($sign_id)
+    public function sms_template_check($id)
     {
         $this->url = self::CHECK_URL;
         $random = $this->util->getRandom();
@@ -144,7 +162,7 @@ class QcloudSmsSignService implements  SmsSignInterface
         // 按照协议组织 post 包体
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
         $data['time'] = $curTime;
-        $data['sign_id'] = $sign_id;
+        $data['sign_id'] = $id;
 
         $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);

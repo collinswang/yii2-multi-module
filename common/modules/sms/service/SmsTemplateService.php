@@ -4,16 +4,16 @@
  */
 namespace common\modules\sms\service;
 
+use common\modules\sms\base\SmsTemplateInterface;
 use common\modules\sms\data\SmsSignData;
-use common\modules\sms\base\SmsSignInterface;
 
-class SmsSignService
+class SmsTemplateService
 {
     const SMS_SIGN_API_QCLOUD = 1;
     const SMS_SIGN_API_ALIDAYU = 2;
     protected static $sms_sign_api = [
-        1 => 'common\modules\sms\base\QcloudSmsSignService',
-        2 => 'common\modules\sms\base\AliDayuSmsSignService',
+        1 => 'common\modules\sms\base\QcloudSmsTemplateService',
+        2 => 'common\modules\sms\base\AliDayuSmsTemplateService',
     ];
 
     public static function get_sms_sign_api()
@@ -25,8 +25,8 @@ class SmsSignService
 
     public function __construct($model_sign)
     {
-        if(!$model_sign instanceof SmsSignInterface){
-            return ['status'=>-1, 'desc'=>'传入非SmsSignInterface的实例'];
+        if(!$model_sign instanceof SmsTemplateInterface){
+            return ['status'=>-1, 'desc'=>'传入非 SmsTemplateInterface 的实例'];
         } else {
             $this->model_sign = $model_sign;
         }
@@ -54,7 +54,7 @@ class SmsSignService
         $id = $model->add(['uid'=>$uid,'name'=>$sign, 'desc'=>$desc, 'source'=>1, 'sign_id'=>0, 'create_at'=>time()]);
         if($id){
             //调用API接口提交数据
-            $post_result = $this->model_sign->sms_sign_add($sign, $desc);
+            $post_result = $this->model_sign->add($sign, $desc);
             //更新本地签名记录，保存API接口返回结果
             $result = $model->update($id, [
                 'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
@@ -89,7 +89,7 @@ class SmsSignService
         $total = $model->update($id, ['sign_id'=>$sign_id,'name'=>$sign, 'desc'=>$desc, 'update_at'=>time()]);
         //提交到指定平台
         if($total){
-            $post_result = $this->model_sign->sms_sign_add($sign, $desc);
+            $post_result = $this->model_sign->add($sign, $desc);
             //更新提交结果
             $result = $model->update($id, [
                 'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
@@ -122,7 +122,7 @@ class SmsSignService
             return ['status'=>-2, 'desc'=>'数据不存在'];
         }
 
-        $post_result = $this->model_sign->sms_sign_del($detail['sign_id']);
+        $post_result = $this->model_sign->del($detail['sign_id']);
         //更新提交结果
         $model = new SmsSignData();
         $result = $model->update($id, [
@@ -148,7 +148,7 @@ class SmsSignService
     public function check($detail)
     {
         $sign_id = $detail['sign_id'];
-        $post_result = $this->model_sign->sms_sign_check($sign_id);
+        $post_result = $this->model_sign->check($sign_id);
         //如果取返回值成功，则更新DB
         if(isset($post_result['status'])){
             //更新提交结果

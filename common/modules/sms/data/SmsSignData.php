@@ -14,6 +14,9 @@ use Yii;
 class SmsSignData
 {
 
+    const SEARCH_BY_ID = 1;
+    const SEARCH_BY_UID = 2;
+
     /**
      * 创建签名
      * @param array     $data
@@ -62,22 +65,26 @@ class SmsSignData
      * @param int       $page_size
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function get($type, $key, $page = 1, $page_size = 20)
+    public function get($type, $key = null, $page = 1, $page_size = 20)
     {
         $detail = array();
         switch($type){
             case 1:
                 if (is_array($key)) {
                     $detail = SmsSign::find()->where("id in (".implode(",", $key).")")->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
+                } elseif(intval($key)) {
+                    $detail = SmsSign::find()->where("id =".intval($key))->asArray()->one();
                 } else {
-                    $detail = SmsSign::find()->where("id = $key")->asArray()->all();
+                    $detail = SmsSign::find()->offset($page_size*($page-1))->limit($page_size)->asArray()->all();
                 }
                 break;
             case 2:
                 if (is_array($key)) {
                     $detail = SmsSign::find()->where("uid in (".implode(",", $key).")")->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
+                } elseif(intval($key)) {
+                    $detail = SmsSign::find()->where("uid =".intval($key))->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
                 } else {
-                    $detail = SmsSign::find()->where("uid = $key")->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
+                    $detail = SmsSign::find()->offset($page_size*($page-1))->limit($page_size)->asArray()->all();
                 }
                 break;
         }
