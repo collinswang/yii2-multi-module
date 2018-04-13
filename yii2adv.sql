@@ -635,3 +635,41 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+DROP TABLE IF EXISTS `sms_template`;
+CREATE TABLE `sms_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `source` int(11) NOT NULL COMMENT '签名递交平台:1:QCLOUD',
+  `template_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
+  `content` varchar(255) NOT NULL COMMENT '模板内容',
+  `desc` varchar(255) DEFAULT NULL COMMENT '模板说明',
+  `title` varchar(50) DEFAULT '' COMMENT '模板名称',
+  `create_at` int(11) NOT NULL,
+  `update_at` int(11) DEFAULT NULL,
+  `verify_status` int(4) NOT NULL DEFAULT '1' COMMENT '审核状态：0：已通过；1：待审核；2：已拒绝',
+  `verify_desc` varchar(255) DEFAULT NULL COMMENT '审核返回说明',
+  `is_hidden` tinyint(4) DEFAULT '0' COMMENT '0:不删除 1:删除',
+  PRIMARY KEY (`id`),
+  KEY `source` (`source`,`template_id`),
+  KEY `uid` (`uid`),
+  KEY `create_at` (`create_at`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
+
+DROP TABLE IF EXISTS `sms_sign`;
+CREATE TABLE `sms_sign` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `source` int(11) NOT NULL COMMENT '签名递交平台:1:QCLOUD',
+  `sign_id` int(11) NOT NULL DEFAULT '0' COMMENT '签名ID',
+  `name` varchar(50) NOT NULL COMMENT '签名',
+  `desc` varchar(255) DEFAULT NULL COMMENT '签名描述',
+  `create_at` int(11) NOT NULL,
+  `update_at` int(11) DEFAULT NULL,
+  `verify_status` int(4) NOT NULL DEFAULT '1' COMMENT '0：已通过；1：待审核；2：已拒绝',
+  `verify_desc` varchar(255) DEFAULT NULL COMMENT '审核返回说明',
+  `is_hidden` tinyint(4) DEFAULT '0' COMMENT '0:不删除 1:删除',
+  PRIMARY KEY (`id`),
+  KEY `source` (`source`,`sign_id`),
+  KEY `uid` (`uid`),
+  KEY `create_at` (`create_at`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';

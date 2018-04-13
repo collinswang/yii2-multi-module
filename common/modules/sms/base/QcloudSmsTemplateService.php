@@ -40,6 +40,7 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
      * @param string    $content    模板内容    {1}为您的登录验证码，请于{2}分钟内填写。如非本人操作，请忽略本短信。（其中{数字}为可自定义的内容，须从1开始连续编号，如{1}、{2}等。）
      * @param string    $desc 签名备注，比如申请原因，使用场景等，可选字段
      * @param string    $title
+     * @link https://cloud.tencent.com/document/product/382/5817
      * @return array
      *                     {
      *                     "result": 0, //0表示成功，非0表示失败
@@ -52,7 +53,7 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
      *                      }
      *                     }
      */
-    public function sms_template_add($type, $content, $desc = null, $title = null)
+    public function sms_template_add($content, $type =0, $desc = null, $title = null)
     {
         $this->url = self::ADD_URL;
         $random = $this->util->getRandom();
@@ -60,19 +61,19 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
         $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
 
         // 按照协议组织 post 包体
-        $data['title'] = $title;     //模板名称
-        $data['remark'] = $desc;    //模板备注
-        $data['text'] = $content;      //模板内容
-        $data['type'] = $type;      //0：普通短信模板；1：营销短信模板；2：语音模板
+        $data['text'] = $content;   //必填，模板内容
+        $data['type'] = $type;      //必填，0：普通短信模板；1：营销短信模板；2：语音模板
+        $data['title'] = $title;    //可选，模板名称
+        $data['remark'] = $desc;    //可选，模板备注，比如申请原因，使用场景等
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
-        $data['time'] = $curTime;
+        $data['time'] = $curTime;   //请求发起时间，unix 时间戳，如果和QQ服务器系统时间相差超过 10 分钟则会返回失败
 
         $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
     }
 
     /**
-     * 修改签名
+     * 修改模板
      * @param int       $id
      * @param int       $type       模板类型
      * @param string    $content    模板内容    {1}为您的登录验证码，请于{2}分钟内填写。如非本人操作，请忽略本短信。（其中{数字}为可自定义的内容，须从1开始连续编号，如{1}、{2}等。）
@@ -98,10 +99,10 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
         $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
 
         // 按照协议组织 post 包体
-        $data['remark'] = $desc;
+        $data['tpl_id'] = $id;      //模板服务端ID
+        $data['remark'] = $desc;    //
         $data['title'] = $title;     //模板名称
         $data['text'] = $content;
-        $data['tpl_id'] = $id;
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
         $data['time'] = $curTime;
 

@@ -6,11 +6,6 @@ namespace common\modules\sms\base;
 
 interface SmsTemplateInterface
 {
-    /**
-     * @param $sign
-     * @param $desc
-     * @return mixed
-     */
     function sms_template_add($sign, $desc);
     function sms_template_update($sign_id,$sign, $desc);
     function sms_template_del($sign_id);

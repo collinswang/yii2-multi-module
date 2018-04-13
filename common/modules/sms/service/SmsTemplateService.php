@@ -35,13 +35,15 @@ class SmsTemplateService
     }
 
     /**
-     * 新增签名
-     * @param int    $uid  用户UID
-     * @param string $sign 签名
-     * @param string $desc 签名说明
+     * 新增模板
+     * @param int    $uid     用户UID
+     * @param string $content 签名
+     * @param        $type
+     * @param string $desc    签名说明
+     * @param        $title
      * @return array
      */
-    public function add($uid, $sign, $desc)
+    public function add($uid, $content, $type, $desc, $title)
     {
         if (!$uid) {
             return ['status'=>-1, 'desc'=>'UID不能为空'];
@@ -54,14 +56,16 @@ class SmsTemplateService
         $id = $model->add(['uid'=>$uid,'name'=>$sign, 'desc'=>$desc, 'source'=>1, 'sign_id'=>0, 'create_at'=>time()]);
         if($id){
             //调用API接口提交数据
-            $post_result = $this->model_sign->add($sign, $desc);
-            //更新本地签名记录，保存API接口返回结果
-            $result = $model->update($id, [
-                'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
-                'verify_status' => $post_result['result'] ? $post_result['result'] : 0,
-                'verify_desc'   => $post_result['msg']? $post_result['msg'] : '',
-                'update_at'   => time(),
-            ]);
+            $post_result = $this->model_sign->sms_template_add($content, $type, $desc, $title);
+            if($post_result['data']['id']){
+                //更新本地签名记录，保存API接口返回结果
+                $result = $model->update($id, [
+                    'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
+                    'verify_status' => $post_result['data']['status'] ? $post_result['data']['status'] : 0,
+                    'verify_desc'   => $post_result['msg']? $post_result['msg'] : '',
+                    'update_at'   => time(),
+                ]);
+            }
             if($post_result['data']['id'] && $result){
                 return ['status'=>1, 'desc'=>'添加成功', 'id' => $id];
             } else {
