@@ -71,8 +71,16 @@ class SmsSignService
         return ['status'=>-1, 'desc'=>'添加失败'];
     }
 
-
-    public function update($id, $sign_id, $sign, $desc)
+    /**
+     * 更新签名
+     * @param $uid
+     * @param $id
+     * @param $sign_id
+     * @param $sign
+     * @param $desc
+     * @return array
+     */
+    public function update($uid, $id, $sign_id, $sign, $desc)
     {
         //数据安全性检查
         $id = intval($id);
@@ -84,8 +92,14 @@ class SmsSignService
         if(empty($sign)){
             return  ['status'=>-1, 'desc'=>'签名ID不能为空'];
         }
-        //存DB
+
         $model = new SmsSignData();
+        $verify = $model->check($uid, $id);
+        if(!$verify){
+            return  ['status'=>-1, 'desc'=>'无权限修改此条记录'];
+        }
+
+        //存DB
         $total = $model->update($id, ['sign_id'=>$sign_id,'name'=>$sign, 'desc'=>$desc, 'update_at'=>time()]);
         //提交到指定平台
         if($total){
@@ -122,7 +136,7 @@ class SmsSignService
             return ['status'=>-2, 'desc'=>'数据不存在'];
         }
 
-        $post_result = $this->model_sign->sms_sign_del($detail['sign_id']);
+        $post_result = $this->model_sign->sms_sign_del([$detail['sign_id']]);
         //更新提交结果
         $model = new SmsSignData();
         $result = $model->update($id, [
@@ -148,7 +162,7 @@ class SmsSignService
     public function check($detail)
     {
         $sign_id = $detail['sign_id'];
-        $post_result = $this->model_sign->sms_sign_check($sign_id);
+        $post_result = $this->model_sign->sms_sign_check([$sign_id]);
         //如果取返回值成功，则更新DB
         if(isset($post_result['status'])){
             //更新提交结果

@@ -63,10 +63,10 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
         // 按照协议组织 post 包体
         $data['text'] = $content;   //必填，模板内容
         $data['type'] = $type;      //必填，0：普通短信模板；1：营销短信模板；2：语音模板
+        $data['time'] = $curTime;   //必填，请求发起时间，unix 时间戳，如果和QQ服务器系统时间相差超过 10 分钟则会返回失败
         $data['title'] = $title;    //可选，模板名称
         $data['remark'] = $desc;    //可选，模板备注，比如申请原因，使用场景等
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
-        $data['time'] = $curTime;   //请求发起时间，unix 时间戳，如果和QQ服务器系统时间相差超过 10 分钟则会返回失败
 
         $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
@@ -91,7 +91,7 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
      *             }
      *         }
      */
-    public function sms_template_update($id, $type, $content, $desc = null, $title = null)
+    public function sms_template_update($id, $content, $type, $desc = null, $title = null)
     {
         $this->url = self::UPDATE_URL;
         $random = $this->util->getRandom();
@@ -99,12 +99,13 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
         $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
 
         // 按照协议组织 post 包体
-        $data['tpl_id'] = $id;      //模板服务端ID
-        $data['remark'] = $desc;    //
-        $data['title'] = $title;     //模板名称
-        $data['text'] = $content;
+        $data['tpl_id'] = $id;      //必填，模板服务端ID
+        $data['text'] = $content;   //必填，模板内容
+        $data['type'] = $type;          //必填，0:普通短信 1：营销短信
+        $data['time'] = $curTime;   //必填，时间戳
+        $data['title'] = $title;    //可选，模板名称
+        $data['remark'] = $desc;    //可选，模板备注，比如申请原因，使用场景等
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
-        $data['time'] = $curTime;
 
         $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
@@ -129,7 +130,7 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
         // 按照协议组织 post 包体
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
         $data['time'] = $curTime;
-        $data['sign_id'] = $id;
+        $data['tpl_id'] = $id;
 
         $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
@@ -163,7 +164,7 @@ class QcloudSmsTemplateService implements  SmsTemplateInterface
         // 按照协议组织 post 包体
         $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime, FALSE);
         $data['time'] = $curTime;
-        $data['sign_id'] = $id;
+        $data['tpl_id'] = $id;
 
         $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);

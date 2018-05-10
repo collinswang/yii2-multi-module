@@ -6,6 +6,7 @@ namespace common\modules\sms\service;
 
 use common\modules\sms\base\SmsTemplateInterface;
 use common\modules\sms\data\SmsSignData;
+use common\modules\sms\data\SmsTemplateData;
 
 class SmsTemplateService
 {
@@ -37,7 +38,7 @@ class SmsTemplateService
     /**
      * 新增模板
      * @param int    $uid     用户UID
-     * @param string $content 签名
+     * @param string $content 模板内容签名
      * @param        $type
      * @param string $desc    签名说明
      * @param        $title
@@ -48,19 +49,19 @@ class SmsTemplateService
         if (!$uid) {
             return ['status'=>-1, 'desc'=>'UID不能为空'];
         }
-        if (empty($sign)) {
-            return ['status'=>-2, 'desc'=>'签名不能为空'];
+        if (empty($content)) {
+            return ['status'=>-2, 'desc'=>'模板内容不能为空'];
         }
         //添加本地签名记录
-        $model = new SmsSignData();
-        $id = $model->add(['uid'=>$uid,'name'=>$sign, 'desc'=>$desc, 'source'=>1, 'sign_id'=>0, 'create_at'=>time()]);
+        $model = new SmsTemplateData();
+        $id = $model->add(['uid'=>$uid, 'content'=>$content, 'title'=>$title, 'desc'=>$desc, 'source'=>1, 'template_id'=>0, 'create_at'=>time()]);
         if($id){
             //调用API接口提交数据
             $post_result = $this->model_sign->sms_template_add($content, $type, $desc, $title);
             if($post_result['data']['id']){
                 //更新本地签名记录，保存API接口返回结果
                 $result = $model->update($id, [
-                    'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
+                    'template_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
                     'verify_status' => $post_result['data']['status'] ? $post_result['data']['status'] : 0,
                     'verify_desc'   => $post_result['msg']? $post_result['msg'] : '',
                     'update_at'   => time(),
@@ -75,28 +76,39 @@ class SmsTemplateService
         return ['status'=>-1, 'desc'=>'添加失败'];
     }
 
-
-    public function update($id, $sign_id, $sign, $desc)
+    /**
+     * 修改模板
+     * @param int       $id
+     * @param string    $content    模板内容
+     * @param int       $type       模板类型 0:普通短信模板 1：营销短信模板
+     * @param string    $desc       备注,方便审核
+     * @param string    $title      别名,方便管理
+     * @return array
+     */
+    public function update($uid, $id, $content, $type, $desc, $title)
     {
         //数据安全性检查
         $id = intval($id);
-        $sign_id = intval($sign_id);
-        if($id <= 0 || $sign_id <= 0){
-            return  ['status'=>-1, 'desc'=>'签名ID不能为空'];
+        $type = intval($type);
+        if($id <= 0 || !$content){
+            return  ['status'=>-1, 'desc'=>'模板内容不能为空'];
         }
-        $sign = trim($sign);
-        if(empty($sign)){
-            return  ['status'=>-1, 'desc'=>'签名ID不能为空'];
-        }
+
         //存DB
-        $model = new SmsSignData();
-        $total = $model->update($id, ['sign_id'=>$sign_id,'name'=>$sign, 'desc'=>$desc, 'update_at'=>time()]);
+        $model = new SmsTemplateData();
+
+        $verify = $model->check($uid, $id);
+        if(!$verify){
+            return  ['status'=>-1, 'desc'=>'无权限修改此条记录'];
+        }
+
+        $total = $model->update($id, ['content'=>$content, 'title'=>$title, 'desc'=>$desc, 'update_at'=>time()]);
         //提交到指定平台
         if($total){
-            $post_result = $this->model_sign->add($sign, $desc);
+            $post_result = $this->model_sign->sms_template_update($id, $content, $type, $desc, $title);
             //更新提交结果
             $result = $model->update($id, [
-                'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
+                'template_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
                 'verify_status' => $post_result['data']['status'] ? $post_result['data']['status'] : 0,
                 'verify_desc'   => $post_result['msg']? $post_result['msg'] : '',
                 'update_at'   => time(),
@@ -112,21 +124,22 @@ class SmsTemplateService
 
     /**
      * 删除
-     * @param int   $id  主健ID
+     * @param     $uid
+     * @param int $id 主健ID
      * @return array
      */
-    public function del($id)
+    public function del($uid, $id)
     {
         if($id <=0){
             return ['status'=>-1, 'desc'=>'参数错误'];
         }
-        $model = new SmsSignData();
+        $model = new SmsTemplateData();
         $detail = $model->get(SmsSignData::SEARCH_BY_ID, $id);
-        if(!$detail){
-            return ['status'=>-2, 'desc'=>'数据不存在'];
+        if(!$detail || $detail['uid'] != $uid){
+            return ['status'=>-2, 'desc'=>'数据不存在或无权限'];
         }
-
-        $post_result = $this->model_sign->del($detail['sign_id']);
+        //删除远端数据
+        $post_result = $this->model_sign->sms_template_del([$detail['template_id']]);
         //更新提交结果
         $model = new SmsSignData();
         $result = $model->update($id, [
@@ -146,17 +159,25 @@ class SmsTemplateService
 
     /**
      * 检查签名审核状态
-     * @param $detail
+     * @param $id
      * @return array
      */
-    public function check($detail)
+    public function check($id)
     {
-        $sign_id = $detail['sign_id'];
-        $post_result = $this->model_sign->check($sign_id);
+        if($id <=0){
+            return ['status'=>-1, 'desc'=>'参数错误'];
+        }
+        $model = new SmsTemplateData();
+        $detail = $model->get(SmsTemplateData::SEARCH_BY_ID, $id);
+        if(!$detail){
+            return ['status'=>-2, 'desc'=>'数据不存在或无权限'];
+        }
+
+        //获取远端数据
+        $post_result = $this->model_sign->sms_template_check([$detail['template_id']]);
         //如果取返回值成功，则更新DB
         if(isset($post_result['status'])){
             //更新提交结果
-            $model = new SmsSignData();
             $result = $model->update($detail['id'], [
                 'verify_status'   => $post_result['status'],
                 'verify_desc'     => $post_result['msg'],

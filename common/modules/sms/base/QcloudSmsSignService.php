@@ -93,7 +93,7 @@ class QcloudSmsSignService implements  SmsSignInterface
 
     /**
      * 删除签名
-     * @param int $sign_id 签名ID
+     * @param array $sign_id 签名ID
      * @return array
      *                     {
      *                     "result": 0, //0表示成功，非0表示失败
@@ -118,7 +118,7 @@ class QcloudSmsSignService implements  SmsSignInterface
 
     /**
      * 检查签名状态
-     * @param int $sign_id 签名ID
+     * @param array $sign_id 签名ID
      * @return array
      *                     {
      *                     "result": 0, //0表示成功，非0表示失败

@@ -25,14 +25,14 @@ interface SmsSignInterface
 
     /**
      * 删除签名
-     * @param int       $sign_id    目标平台签名ID
+     * @param array       $sign_id    目标平台签名ID
      * @return mixed
      */
     function sms_sign_del($sign_id);
 
     /**
      * 查询签名状态
-     * @param int       $sign_id    目标平台签名ID
+     * @param array       $sign_id    目标平台签名ID
      * @return mixed
      */
     function sms_sign_check($sign_id);

@@ -1,6 +1,6 @@
 <?php
 /**
- * SMS签名数据层逻辑
+ * SMS模板数据层逻辑
  *
  * 如需加REDIS层，在此处添加即可
  * 规则是：1.保存/修改/删除时更新REDIS
@@ -9,10 +9,10 @@
 namespace common\modules\sms\data;
 
 use common\modules\sms\models\SmsSign;
-use common\modules\sms\service\SmsSignService;
+use common\modules\sms\models\SmsTemplate;
 use Yii;
 
-class SmsSignData
+class SmsTemplateData
 {
 
     const SEARCH_BY_ID = 1;
@@ -25,7 +25,7 @@ class SmsSignData
      */
     public function add($data)
     {
-        $model = new SmsSign();
+        $model = new SmsTemplate();
         $model->attributes = $data;
         if ($model->save()) {
             return $model->id;
@@ -43,7 +43,7 @@ class SmsSignData
      */
     public function update($id, $data)
     {
-        $result = SmsSign::updateAll($data, ['id'=>$id]);
+        $result = SmsTemplate::updateAll($data, ['id'=>$id]);
         return $result;
     }
 
@@ -54,7 +54,7 @@ class SmsSignData
      */
     public function del($id)
     {
-        $result = SmsSign::updateAll(['is_hidden'=>1], ['id'=>$id]);
+        $result = SmsTemplate::updateAll(['is_hidden'=>1], ['id'=>$id]);
         return $result;
     }
 
@@ -64,7 +64,7 @@ class SmsSignData
      * @param array|int $key
      * @param int       $page
      * @param int       $page_size
-     * @return array|\yii\db\ActiveRecord[]
+     * @return array
      */
     public function get($type, $key = null, $page = 1, $page_size = 20)
     {
@@ -72,26 +72,27 @@ class SmsSignData
         switch($type){
             case 1:
                 if (is_array($key)) {
-                    $detail = SmsSign::find()->where("id in (".implode(",", $key).")")->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
+                    $detail = SmsTemplate::find()->where("id in (".implode(",", $key).")")->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
                 } elseif(intval($key)) {
-                    $detail = SmsSign::find()->where("id =".intval($key))->asArray()->one();
+                    $detail = SmsTemplate::find()->where("id =".intval($key))->asArray()->one();
                 } else {
-                    $detail = SmsSign::find()->offset($page_size*($page-1))->limit($page_size)->asArray()->all();
+                    $detail = SmsTemplate::find()->offset($page_size*($page-1))->limit($page_size)->asArray()->all();
                 }
                 break;
             case 2:
                 if (is_array($key)) {
-                    $detail = SmsSign::find()->where("uid in (".implode(",", $key).")")->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
+                    $detail = SmsTemplate::find()->where("uid in (".implode(",", $key).")")->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
                 } elseif(intval($key)) {
-                    $detail = SmsSign::find()->where("uid =".intval($key))->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
+                    $detail = SmsTemplate::find()->where("uid =".intval($key))->offset($page_size*($page-1))->limit($page_size)->orderBy("create_at desc")->asArray()->all();
                 } else {
-                    $detail = SmsSign::find()->offset($page_size*($page-1))->limit($page_size)->asArray()->all();
+                    $detail = SmsTemplate::find()->offset($page_size*($page-1))->limit($page_size)->asArray()->all();
                 }
                 break;
         }
 
         return $detail;
     }
+
 
     /**
      * 根据主键ID及用户UID查询记录
@@ -101,6 +102,6 @@ class SmsSignData
      */
     public function check($uid, $id)
     {
-        return SmsSign::find()->where(['id'=>$id, 'uid'=>$uid])->asArray()->one();
+        return SmsTemplate::find()->where(['id'=>$id, 'uid'=>$uid])->asArray()->one();
     }
 }
