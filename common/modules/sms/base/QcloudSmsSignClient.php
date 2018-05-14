@@ -7,7 +7,7 @@ namespace common\modules\sms\base;
 use Qcloud\Sms\SmsSenderUtil;
 use Yii;
 
-class QcloudSmsSignService implements  SmsSignInterface
+class QcloudSmsSignClient implements  SmsSignInterface
 {
     const ADD_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/add_sign';
     const UPDATE_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/mod_sign';

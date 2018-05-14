@@ -7,7 +7,7 @@ namespace common\modules\sms\base;
 use Qcloud\Sms\SmsSenderUtil;
 use Yii;
 
-class QcloudSmsTemplateService implements  SmsTemplateInterface
+class QcloudSmsTemplateClient implements  SmsTemplateInterface
 {
     const ADD_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/add_template';
     const UPDATE_URL = 'https://yun.tim.qq.com/v5/tlssmssvr/mod_template';

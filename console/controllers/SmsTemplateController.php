@@ -9,7 +9,7 @@
 namespace console\controllers;
 
 
-use common\modules\sms\base\QcloudSmsTemplateService;
+use common\modules\sms\base\QcloudSmsTemplateClient;
 use \common\modules\sms\models\SmsSign;
 use common\modules\sms\service\SmsSignService;
 
@@ -40,8 +40,15 @@ class SmsTemplateController extends \yii\console\Controller
         $title = "发货提醒";
         $desc = "快递发货提醒";
         $type = 0;
-        $sms_template = new QcloudSmsTemplateService();
+        $sms_template = new QcloudSmsTemplateClient();
         $result = $sms_template->sms_template_add($content, $type, $desc, $title);
         print_r($result);
+    }
+
+    public function actionTestContent()
+    {
+        $content = "{1}为您的登录验证码，请于{2}分钟内填写。如非本人操作，请忽略本短信。（其中{数字}为可自定义的内容，须从1开始连续编号，如{1}、{2}等。）";
+        preg_match_all("/\{[0-9]\}/is",$content,$matchs);
+        print_r($matchs);
     }
 }

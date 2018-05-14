@@ -673,3 +673,19 @@ CREATE TABLE `sms_sign` (
   KEY `uid` (`uid`),
   KEY `create_at` (`create_at`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
+
+DROP TABLE IF EXISTS `sms`;
+CREATE TABLE `sms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL COMMENT '用户UID',
+  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发送类型0:直接发送 1:模板发送',
+  `mobile` int(11) NOT NULL COMMENT '手机号',
+  `template_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
+  `content` varchar(255) NOT NULL COMMENT '发送内容',
+  `create_at` int(11) NOT NULL,
+  `update_at` int(11) NOT NULL DEFAULT '0',
+  `send_status` int(11) NOT NULL DEFAULT '0' COMMENT '发送结果',
+  `send_desc` varchar(255) NOT NULL DEFAULT '' COMMENT '发送结果说明',
+  `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:不删除 1:删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信发送表';

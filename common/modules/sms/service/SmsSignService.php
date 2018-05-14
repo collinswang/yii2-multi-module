@@ -12,8 +12,8 @@ class SmsSignService
     const SMS_SIGN_API_QCLOUD = 1;
     const SMS_SIGN_API_ALIDAYU = 2;
     protected static $sms_sign_api = [
-        1 => 'common\modules\sms\base\QcloudSmsSignService',
-        2 => 'common\modules\sms\base\AliDayuSmsSignService',
+        1 => 'common\modules\sms\base\QcloudSmsSignClient',
+        2 => 'common\modules\sms\base\AliDayuSmsSignClient',
     ];
 
     public static function get_sms_sign_api()
