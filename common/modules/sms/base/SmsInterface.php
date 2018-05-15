@@ -10,7 +10,7 @@ interface SmsInterface
      * 单次发送模板短信
      * @return mixed
      */
-    function sms_send_template_msg_single();
+    function sms_send_template_msg_single($tpl_id, $params, $mobile);
 
     /**
      * 批量发送模板短信

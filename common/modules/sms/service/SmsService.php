@@ -5,6 +5,7 @@
 namespace common\modules\sms\service;
 
 use common\modules\sms\base\SmsInterface;
+use common\modules\sms\data\SmsData;
 use common\modules\sms\data\SmsSignData;
 
 class SmsService
@@ -35,26 +36,28 @@ class SmsService
     }
 
     /**
-     * 新增签名
-     * @param int    $uid  用户UID
-     * @param string $sign 签名
-     * @param string $desc 签名说明
+     * 新增短信发送
+     * @param int   $uid 用户UID
+     * @param int   $type
+     * @param int   $tpl_id
+     * @param int   $mobile
+     * @param array $params
      * @return array
      */
-    public function add($uid, $sign, $desc)
+    public function add($uid, $type, $tpl_id, $mobile, $params)
     {
-        if (!$uid) {
+        if (!$uid || !$type || !$tpl_id || !$mobile || !$params) {
             return ['status'=>-1, 'desc'=>'UID不能为空'];
         }
         if (empty($sign)) {
             return ['status'=>-2, 'desc'=>'签名不能为空'];
         }
         //添加本地签名记录
-        $model = new SmsSignData();
-        $id = $model->add(['uid'=>$uid,'name'=>$sign, 'desc'=>$desc, 'source'=>1, 'sign_id'=>0, 'create_at'=>time()]);
+        $model = new SmsData();
+        $id = $model->add(['uid'=>$uid, 'type'=>$type, 'template_id'=>$tpl_id, 'mobile'=>$mobile, 'content'=>0, 'create_at'=>time()]);
         if($id){
             //调用API接口提交数据
-            $post_result = $this->model_sign->sms_sign_add($sign, $desc);
+            $post_result = $this->model_sign->sms_send_template_msg_single($tpl_id, $params, $mobile);
             //更新本地签名记录，保存API接口返回结果
             $result = $model->update($id, [
                 'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
