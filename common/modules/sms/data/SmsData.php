@@ -10,6 +10,7 @@ namespace common\modules\sms\data;
 
 use common\modules\sms\models\Sms;
 use Yii;
+use yii\db\Exception;
 
 class SmsData
 {
@@ -18,7 +19,7 @@ class SmsData
     const SEARCH_BY_UID = 2;
 
     /**
-     * 创建签名
+     * 添加发送短信记录
      * @param array     $data
      * @return int
      */
@@ -32,6 +33,21 @@ class SmsData
             var_dump($model->getErrors());
             return false;
         }
+    }
+
+    /**
+     * 批量添加发送短信记录
+     * @param array     $data
+     * @return int
+     */
+    public function batch_add($data)
+    {
+        try {
+            Yii::$app->db->createCommand()->batchInsert('sms', ['name', 'age'], $data)->execute();
+        } catch (Exception $e) {
+        }
+
+        return 1;
     }
 
     /**

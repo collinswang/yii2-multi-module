@@ -10,25 +10,25 @@ interface SmsInterface
      * 单次发送模板短信
      * @return mixed
      */
-    function sms_send_template_msg_single($tpl_id, $params, $mobile);
+    function sms_send_template_msg_single($mobile, $tpl_id, $params);
 
     /**
      * 批量发送模板短信
      * @return mixed
      */
-    function sms_send_template_msg_batch();
+    function sms_send_template_msg_batch($mobile, $tpl_id, $params);
 
     /**
      * 单次发送短信
      * @return mixed
      */
-    function sms_send_msg_single();
+    function sms_send_msg_single($mobile, $params);
 
     /**
      * 批量发送短信
      * @return mixed
      */
-    function sms_send_msg_batch();
+    function sms_send_msg_batch($mobile, $content);
 
     /**
      * 短信发送结果回调
