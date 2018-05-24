@@ -18,7 +18,7 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "feehi/yii2-swoole": ">=0.0.5",
-        "qcloudsms/qcloudsms_php": "0.1.*"
+        "qcloudsms/qcloudsms_php": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -18,11 +18,12 @@ use Yii;
  * @property int $send_status 发送结果
  * @property string $send_desc 发送结果说明
  * @property int $is_hidden 0:不删除 1:删除
+ * @property int $sid 发送回执ID
  */
 class Sms extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -30,19 +31,19 @@ class Sms extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['uid', 'mobile', 'content', 'create_at'], 'required'],
-            [['uid', 'type', 'mobile', 'template_id', 'create_at', 'update_at', 'send_status', 'is_hidden'], 'integer'],
+            [['uid', 'type', 'mobile', 'template_id', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid'], 'integer'],
             [['content', 'send_desc'], 'string', 'max' => 255],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -58,6 +59,7 @@ class Sms extends \yii\db\ActiveRecord
             'send_status' => 'Send Status',
             'send_desc' => 'Send Desc',
             'is_hidden' => 'Is Hidden',
+            'sid' => 'Sid',
         ];
     }
 }

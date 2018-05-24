@@ -51,9 +51,9 @@ class SmsData
     }
 
     /**
-     * 修改签名
-     * @param bool       $id
-     * @param array|null $data
+     * 修改短信
+     * @param int       $id
+     * @param array     $data
      * @return int
      */
     public function update($id, $data)
@@ -63,7 +63,19 @@ class SmsData
     }
 
     /**
-     * 删除签名
+     * 修改短信
+     * @param int       $sid
+     * @param array|null $data
+     * @return int
+     */
+    public function update_status($sid, $data)
+    {
+        $result = Sms::updateAll($data, ['sid'=>$sid]);
+        return $result;
+    }
+
+    /**
+     * 删除短信
      * @param $id
      * @return int
      */

@@ -6,16 +6,14 @@
 namespace common\modules\sms\base;
 
 
-use Qcloud\Sms\SmsSenderUtil;
+use Qcloud\Sms\SmsMobileStatusPuller;
+use Qcloud\Sms\SmsMultiSender;
+use Qcloud\Sms\SmsSingleSender;
+use Qcloud\Sms\SmsStatusPuller;
 use Yii;
 
 class QcloudSmsClient implements SmsInterface
 {
-    const SEND_TEMPLATE_SINGLE = "https://yun.tim.qq.com/v5/tlssmssvr/sendsms";
-    const SEND_TEMPLATE_BATCH = "https://yun.tim.qq.com/v5/tlssmssvr/sendmultisms2";
-    const SEND_CONTENT_SINGLE = "https://yun.tim.qq.com/v5/tlssmssvr/sendsms";
-    const SEND_CONTENT_BATCH = "https://yun.tim.qq.com/v5/tlssmssvr/sendmultisms2";
-
     /**
      * @param mixed $appid
      */
@@ -24,174 +22,160 @@ class QcloudSmsClient implements SmsInterface
     const TEMPLATE_TYPE_SPREAD = 1;
     const TEMPLATE_TYPE_VOICE = 2;
 
-    private $url;
     private $appid;
     private $appkey;
-    private $util;
 
     public function __construct()
     {
         $this->appid = Yii::$app->params['qcloud_sms']['appid'];
         $this->appkey = Yii::$app->params['qcloud_sms']['appkey'];
-        $this->util = new SmsSenderUtil();
     }
 
     /**
      * 单次发送模板短信
      * @link    https://cloud.tencent.com/document/product/382/5976
+     * @param string    $mobile     手机号列表
+     * @param int       $tpl_id     远程平台模板ID
+     * @param array     $params     模板内对应参数表
      * @return mixed
-     * {
+     *     {
      *     "result": 0,
      *     "errmsg": "OK",
      *     "ext": "",
      *     "fee": 1,
      *     "sid": "xxxxxxx"
-     * }
+     *     }
      */
     public function sms_send_template_msg_single($mobile, $tpl_id, $params)
     {
-        $this->url = self::SEND_TEMPLATE_SINGLE;
-        $random = $this->util->getRandom();
-        $curTime = time();
-        $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
+        $single_send = new SmsSingleSender($this->appid, $this->appkey);
 
-        // 按照协议组织 post 包体
-        $data['params'] = $params;      //必填，array，模板参数，若模板没有参数，请提供为空数组
-        $data['time'] = $curTime;   //必填，请求发起时间，unix 时间戳，如果和QQ服务器系统时间相差超过 10 分钟则会返回失败
-        $data['tel']['mobile'] = "$mobile";    //必填，模板备注，比如申请原因，使用场景等
-        $data['tel']['nationcode'] = '86';    //必填，模板备注，比如申请原因，使用场景等
-        $data['tpl_id'] = $tpl_id;    //必填，模板名称
-        $data['sign'] = "";    //可选，短信签名，如果使用默认签名，该字段可缺省
-        $data['ext'] = "";        //可选，用户的 session 内容，腾讯 server 回包中会原样返回，可选字段，不需要就填空
-        $data['extend'] = "";       //可选，短信码号扩展号，格式为纯数字串，其他格式无效。默认没有开通，开通请联系腾迅
-        $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime."&mobile=".$mobile, FALSE);
+        $nationCode = "86";
+        $sign ="";
+        $extend = "";
+        $ext = "";
+        $result = $single_send->sendWithParam($nationCode, $mobile, $tpl_id, $params, $sign, $extend, $ext);
 
-        $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
     }
 
     /**
      * 批量发送模板短信
-     * @param int   $tpl_id     横排ID
-     * @param array $params     模板参数
-     * @param array $mobile     手机号数组，最大200条
+     * @param array     $mobiles    手机号列表
+     * @param int       $tpl_id     远程平台模板ID
+     * @param array     $params     模板内对应参数表
      * @return mixed
      */
-    public function sms_send_template_msg_batch($mobile, $tpl_id, $params)
+    public function sms_send_template_msg_batch($mobiles, $tpl_id, $params)
     {
-        $this->url = self::SEND_TEMPLATE_BATCH;
-        $random = $this->util->getRandom();
-        $curTime = time();
-        $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
+        $multi_send = new SmsMultiSender($this->appid, $this->appkey);
 
-        // 按照协议组织 post 包体
-        $data['params'] = $params;      //必填，array，模板参数，若模板没有参数，请提供为空数组
-        $data['time'] = $curTime;   //必填，请求发起时间，unix 时间戳，如果和QQ服务器系统时间相差超过 10 分钟则会返回失败
-        $mobile_arr = [];
-        if(is_array($mobile)){
-            foreach ($mobile as $item) {
-                $single['mobile'] = "$item";
-                $single['nationcode'] = "86";
-                $data['tel'][] = $single;
-                $mobile_arr[]=$item;
-            }
-        }
-        $mobile_str = implode(",", $mobile_arr);
-        $data['tpl_id'] = $tpl_id;    //必填，模板名称
-        $data['sign'] = "";    //可选，短信签名，如果使用默认签名，该字段可缺省
-        $data['ext'] = "";        //可选，用户的 session 内容，腾讯 server 回包中会原样返回，可选字段，不需要就填空
-        $data['extend'] = "";       //可选，短信码号扩展号，格式为纯数字串，其他格式无效。默认没有开通，开通请联系腾迅
-        $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime."&mobile=".$mobile_str, FALSE);
+        $nationCode = "86";
+        $sign ="";
+        $extend = "";
+        $ext = "";
+        $result = $multi_send->sendWithParam($nationCode, $mobiles, $tpl_id, $params, $sign, $extend, $ext);
 
-        $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
     }
 
     /**
      * 单次发送短信
+     * @param string     $mobile    手机号列表
+     * @param string    $content    短信内容
+     * @param int       $type       短信类型，0 为普通短信，1 营销短信
      * @return mixed
      */
-    public function sms_send_msg_single($mobile, $content)
+    public function sms_send_msg_single($mobile, $content, $type)
     {
-        $this->url = self::SEND_CONTENT_SINGLE;
-        $random = $this->util->getRandom();
-        $curTime = time();
-        $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
+        $single_send = new SmsSingleSender($this->appid, $this->appkey);
 
-        // 按照协议组织 post 包体
-        $data['time'] = $curTime;   //必填，请求发起时间，unix 时间戳，如果和QQ服务器系统时间相差超过 10 分钟则会返回失败
-        $data['tel']['mobile'] = "$mobile";    //必填，模板备注，比如申请原因，使用场景等
-        $data['tel']['nationcode'] = '86';    //必填，模板备注，比如申请原因，使用场景等
-        $data['msg'] = $content;    //必填，模板名称
-        $data['type'] = 0;    //必填，模板名称
-        $data['sign'] = "";    //可选，短信签名，如果使用默认签名，该字段可缺省
-        $data['ext'] = "";        //可选，用户的 session 内容，腾讯 server 回包中会原样返回，可选字段，不需要就填空
-        $data['extend'] = "";       //可选，短信码号扩展号，格式为纯数字串，其他格式无效。默认没有开通，开通请联系腾迅
-        $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime."&mobile=".$mobile, FALSE);
+        $nationCode = "86";
+        $extend = "";
+        $ext = "";
+        $result = $single_send->send($type, $nationCode, $mobile, $content, $extend, $ext);
 
-        $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
     }
 
     /**
      * 批量发送短信
+     * @param array     $mobiles    手机号列表
+     * @param string    $content    短信内容
+     * @param int       $type       短信类型，0 为普通短信，1 营销短信
      * @return mixed
      */
-    public function sms_send_msg_batch($mobile, $content)
+    public function sms_send_msg_batch($mobiles, $content, $type)
     {
-        $this->url = self::SEND_CONTENT_BATCH;
-        $random = $this->util->getRandom();
-        $curTime = time();
-        $wholeUrl = $this->url . "?sdkappid=" . $this->appid . "&random=" . $random;
+        $multi_send = new SmsMultiSender($this->appid, $this->appkey);
 
-        // 按照协议组织 post 包体
+        $nationCode = "86";
+        $extend = "";
+        $ext = "";
+        $result = $multi_send->send($type, $nationCode, $mobiles, $content, $extend, $ext);
 
-        $data['time'] = $curTime;   //必填，请求发起时间，unix 时间戳，如果和QQ服务器系统时间相差超过 10 分钟则会返回失败
-        $mobile_arr = [];
-        if(is_array($mobile)){
-            foreach ($mobile as $item) {
-                $single['mobile'] = "$item";
-                $single['nationcode'] = "86";
-                $data['tel'][] = $single;
-                $mobile_arr[]=$item;
-            }
-        }
-        $mobile_str = implode(",", $mobile_arr);
-        $data['msg'] = $content;    //必填，模板名称
-        $data['type'] = 0;    //必填，模板名称
-        $data['sign'] = "";    //可选，短信签名，如果使用默认签名，该字段可缺省
-        $data['ext'] = "";        //可选，用户的 session 内容，腾讯 server 回包中会原样返回，可选字段，不需要就填空
-        $data['extend'] = "";       //可选，短信码号扩展号，格式为纯数字串，其他格式无效。默认没有开通，开通请联系腾迅
-        $data['sig'] = hash("sha256", "appkey=".$this->appkey."&random=".$random."&time=".$curTime."&mobile=".$mobile_str, FALSE);
-
-        $result = $this->util->sendCurlPost($wholeUrl, $data);
         return json_decode($result, true);
     }
 
     /**
-     * 短信发送结果回调
+     * 获取短信发送结果回调(队列式，同一条短信只返回一次数据)
+     * @param int   $type   0: 短信下发状态, 1: 短信回复
+     * @param $max
      * @return mixed
      */
-    public function sms_send_callback()
+    public function sms_send_callback($type, $max)
     {
+        $spuller = new SmsStatusPuller($this->appid, $this->appkey);
 
+        if($type == 1){
+            // 拉取短信回复
+            $callbackResult = $spuller->pullReply(10);
+        } else {
+            // 拉取短信发送结果
+            $callbackResult = $spuller->pullCallback(10);
+        }
+        $result = json_decode($callbackResult, true);
+
+        return $result;
     }
 
     /**
-     * 获取短信回复
+     * 获取单个手机短信回复
+     * @param     $mobile
+     * @param     $start_time
+     * @param     $end_time
+     * @param int $max
      * @return mixed
      */
-    public function sms_reply_msg()
+    public function sms_reply_msg($mobile, $start_time, $end_time, $max = 100)
     {
+        $nationCode = "86";
+        $mspuller = new SmsMobileStatusPuller($this->appid, $this->appkey);
 
+        // 拉取短信回执
+        $callbackResult = $mspuller->pullReply($nationCode, $mobile, $start_time, $end_time, $max);
+        $result = json_decode($callbackResult, true);
+
+        return $result;
     }
 
     /**
-     * 短信发送结果
+     * 短信单个手机发送结果
+     * @param     $mobile
+     * @param     $start_time
+     * @param     $end_time
+     * @param int $max
      * @return mixed
      */
-    public function sms_send_status()
+    public function sms_send_status($mobile, $start_time, $end_time, $max = 100)
     {
+        $nationCode = "86";
+        $mspuller = new SmsMobileStatusPuller($this->appid, $this->appkey);
 
+        // 拉取短信回执
+        $callbackResult = $mspuller->pullCallback($nationCode, $mobile, $start_time, $end_time, $max);
+        $result = json_decode($callbackResult, true);
+
+        return $result;
     }
 }

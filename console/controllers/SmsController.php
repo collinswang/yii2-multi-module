@@ -38,8 +38,21 @@ class SmsController extends \yii\console\Controller
     {
         $sms_api = SmsService::get_sms_api();
         $model = new SmsService(new $sms_api[1]);
-        $model->send_template_single();
+        $uid=  123;
+        $type = 0;
+        $tpl_id = 1;
+        $mobile = ["13651081267", "13712114574"];
+        $params = ["测试公司A","服务器B","100元"];
+        $result = $model->send_template_batch($uid, $type, $tpl_id, $mobile, $params);
+        print_r($result);
+    }
 
+    public function actionGet()
+    {
+        $sms_api = SmsService::get_sms_api();
+        $model = new SmsService(new $sms_api[1]);
+        $result = $model->pull_status(0, 1);
+        print_r($result);
     }
 
 }

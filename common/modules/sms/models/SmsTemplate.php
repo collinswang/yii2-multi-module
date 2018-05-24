@@ -19,11 +19,12 @@ use Yii;
  * @property int $verify_status 审核状态：0：已通过；1：待审核；2：已拒绝
  * @property string $verify_desc 审核返回说明
  * @property int $is_hidden 0:不删除 1:删除
+ * @property int $type 0:普通短信 1:营销短信
  */
 class SmsTemplate extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -31,20 +32,20 @@ class SmsTemplate extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['uid', 'source', 'content', 'create_at'], 'required'],
-            [['uid', 'source', 'template_id', 'create_at', 'update_at', 'verify_status', 'is_hidden'], 'integer'],
+            [['uid', 'source', 'template_id', 'create_at', 'update_at', 'verify_status', 'is_hidden', 'type'], 'integer'],
             [['content', 'desc', 'verify_desc'], 'string', 'max' => 255],
             [['title'], 'string', 'max' => 50],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -61,6 +62,7 @@ class SmsTemplate extends \yii\db\ActiveRecord
             'verify_status' => 'Verify Status',
             'verify_desc' => 'Verify Desc',
             'is_hidden' => 'Is Hidden',
+            'type' => 'Type',
         ];
     }
 }

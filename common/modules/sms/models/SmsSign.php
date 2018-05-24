@@ -15,14 +15,14 @@ use Yii;
  * @property string $desc 签名描述
  * @property int $create_at
  * @property int $update_at
- * @property int $verify_status 0:未审核通过, 1:审核通过
+ * @property int $verify_status 0：已通过；1：待审核；2：已拒绝
  * @property string $verify_desc 审核返回说明
  * @property int $is_hidden 0:不删除 1:删除
  */
 class SmsSign extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -30,12 +30,12 @@ class SmsSign extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['uid', 'source', 'sign_id', 'name', 'create_at'], 'required'],
+            [['uid', 'source', 'name', 'create_at'], 'required'],
             [['uid', 'source', 'sign_id', 'create_at', 'update_at', 'verify_status', 'is_hidden'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['desc', 'verify_desc'], 'string', 'max' => 255],
@@ -43,7 +43,7 @@ class SmsSign extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
