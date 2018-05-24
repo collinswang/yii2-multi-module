@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 192.168.2.66
-Source Server Version : 50720
-Source Host           : 192.168.2.66:3306
+Source Server         : 192.168.200.66
+Source Server Version : 50722
+Source Host           : 192.168.200.66:3306
 Source Database       : yii2adv
 
 Target Server Type    : MYSQL
-Target Server Version : 50720
+Target Server Version : 50722
 File Encoding         : 65001
 
-Date: 2018-01-19 15:47:43
+Date: 2018-05-24 18:30:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -102,7 +102,7 @@ CREATE TABLE `article` (
 INSERT INTO `article` VALUES ('1', '3', '0', '高效快速地加载 AngularJS 视图', '', '当AngularJS应用程序变大时，很多问题就开始显现出来了，比如多层级视图的加载问题，如果在子视图显示之前没有预加载，则可能在需要展示时，发生视觉闪烁的情况。这种问题在网络缓慢，或者服务器使用较慢的https连接时更容易出现。', '/uploads/article/thumb/2016071211354628.jpg', '高效快速地加载 AngularJS 视图', 'JavaScript, AngularJS', '当AngularJS应用程序变大时，很多问题就开始显现出来了，比如多层级视图的加载问题，如果在子视图显示之前没有预加载，则可能在需要展示时，发生视觉闪烁的情况。这种问题在网络缓慢，或者服务器使用较慢的https连接时更容易出现。', '1', '0', '1', 'admin', '0', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468294546', '1476717356');
 INSERT INTO `article` VALUES ('2', '3', '0', '如何定位 Node.js 的内存泄漏', '', '在 《一次 Node.js 应用内存暴涨分析》中，我们处理了一个 Node.js vm 引发的内存泄漏问题，处理过程也是比较艰辛。而在我们实际开发中，可能经常会碰到内存泄漏的问题，但很多情况下，我们对于这种问题的处理是有些迷茫的，没有一定的操作流程，效率比较低。虽然这种问题对于经验的要求比较高，但如果有一个简单的排查流程，还是会有一定帮助的。', '/uploads/article/thumb/201607121141407.png', '', '', '在 《一次 Node.js 应用内存暴涨分析》中，我们处理了一个 Node.js vm 引发的内存泄漏问题，处理过程也是比较艰辛。而在我们实际开发中，可能经常会碰到内存泄漏的问题，但很多情况下，我们对于这种问题的处理是有些迷茫的，没有一定的操作流程，效率比较低。虽然这种问题对于经验的要求比较高，但如果有一个简单的排查流程，还是会有一定帮助的。', '1', '0', '1', 'admin', '3', '0', '1', '1', '', '0', '0', '0', '1', '0', '0', '0', '1468294900', '1476717356');
 INSERT INTO `article` VALUES ('3', '1', '0', 'Hack：用于HHVM的一种新编程语言', '', '', '/uploads/article/thumb/2016071212382956.jpg', '', 'Facebook, hack, php', '', '1', '0', '1', 'admin', '0', '0', '1', '1', '', '1', '0', '0', '1', '1', '0', '0', '1468298309', '1476717356');
-INSERT INTO `article` VALUES ('4', '3', '0', '抛弃jQuery，拥抱原生JavaScript', '', '原生javascript', '/uploads/article/thumb/2016071212414099.png', '抛弃jQuery，拥抱原生JavaScript', 'jquery,javascript,web', '', '1', '0', '1', 'admin', '0', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468298500', '1476717356');
+INSERT INTO `article` VALUES ('4', '3', '0', '抛弃jQuery，拥抱原生JavaScript', '', '原生javascript', '/uploads/article/thumb/2016071212414099.png', '抛弃jQuery，拥抱原生JavaScript', 'jquery,javascript,web', '', '1', '0', '1', 'admin', '1', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468298500', '1476717356');
 INSERT INTO `article` VALUES ('5', '2', '0', '[JAVA · 初级]：GC-垃圾回收机制', '', '在C++中，对象所占的内存在程序结束运行之前一直被占用，在明确释放之前不能分配给其它对象；而在Java中，当没有对象引用指向原先分配给某个对象的内存时，该内存便成为垃圾。', '/uploads/article/thumb/2016071212441669.jpg', '[JAVA · 初级]：GC-垃圾回收机制', 'gc,垃圾回收,java', '在C++中，对象所占的内存在程序结束运行之前一直被占用，在明确释放之前不能分配给其它对象；而在Java中，当没有对象引用指向原先分配给某个对象的内存时，该内存便成为垃圾。', '1', '0', '1', 'admin', '0', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468298628', '1476717356');
 INSERT INTO `article` VALUES ('6', '1', '0', 'PHP 7.0.2正式版发布：WordPress速度提升3倍！', '', '提到PHP，肯定会有人说这是世界上最好的编程语言。', '/uploads/article/thumb/2016071212472374.jpeg', 'PHP 7.0.2正式版发布：WordPress速度提升3倍！', 'php7,php,wordpress', '提到PHP，肯定会有人说这是世界上最好的编程语言。', '1', '0', '1', 'admin', '1', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468298843', '1476717356');
 INSERT INTO `article` VALUES ('7', '3', '0', '为何要学HTML5开发?HTML5发展前景如何？', '', '', '', '为何要学HTML5开发?HTML5发展前景如何？', 'html,html5', '', '1', '0', '1', 'admin', '1', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468298894', '1476717356');
@@ -612,6 +612,121 @@ INSERT INTO `options` VALUES ('26', '3', 'sidebar_right_1', '{\"ad\":\"\\/upload
 INSERT INTO `options` VALUES ('27', '3', 'sidebar_right_2', '{\"ad\":\"\\/uploads\\/setting\\/ad\\/5a291f9236479_22.jpg\",\"link\":\"\",\"target\":\"_blank\",\"desc\":\"\\u6700\\u597d\\u7684\\u8fd0\\u52a8\\u624b\\u8868\",\"created_at\":1512644498,\"updated_at\":1512647586}', '1', '1', '网站右侧广告位2', '0');
 
 -- ----------------------------
+-- Table structure for `sms`
+-- ----------------------------
+DROP TABLE IF EXISTS `sms`;
+CREATE TABLE `sms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL COMMENT '用户UID',
+  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发送类型0:直接发送 1:模板发送',
+  `mobile` bigint(11) NOT NULL COMMENT '手机号',
+  `template_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
+  `content` varchar(255) NOT NULL COMMENT '发送内容',
+  `create_at` int(11) NOT NULL,
+  `update_at` int(11) NOT NULL DEFAULT '0',
+  `send_status` int(11) NOT NULL DEFAULT '1' COMMENT '发送结果',
+  `send_desc` varchar(255) NOT NULL DEFAULT '' COMMENT '发送结果说明',
+  `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:不删除 1:删除',
+  `sid` int(11) DEFAULT '0' COMMENT '发送回执ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sms
+-- ----------------------------
+INSERT INTO `sms` VALUES ('1', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527130700', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('2', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130766', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('3', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130841', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('4', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130908', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('5', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130927', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('6', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527130963', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('7', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131022', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('8', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131250', '1527131250', '1012', '签名格式错误或者签名未审批', '0', '0');
+INSERT INTO `sms` VALUES ('9', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131595', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('10', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131616', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('11', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527131616', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('12', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131645', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('13', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527131645', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('14', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527149978', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('15', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527149978', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('16', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527150020', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('17', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527150020', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('18', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527150193', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('19', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527150193', '0', '0', '', '0', '0');
+
+-- ----------------------------
+-- Table structure for `sms_sign`
+-- ----------------------------
+DROP TABLE IF EXISTS `sms_sign`;
+CREATE TABLE `sms_sign` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `source` int(11) NOT NULL COMMENT '签名递交平台:1:QCLOUD',
+  `sign_id` int(11) NOT NULL DEFAULT '0' COMMENT '签名ID',
+  `name` varchar(50) NOT NULL COMMENT '签名',
+  `desc` varchar(255) DEFAULT NULL COMMENT '签名描述',
+  `create_at` int(11) NOT NULL,
+  `update_at` int(11) DEFAULT NULL,
+  `verify_status` int(4) NOT NULL DEFAULT '1' COMMENT '0：已通过；1：待审核；2：已拒绝',
+  `verify_desc` varchar(255) DEFAULT NULL COMMENT '审核返回说明',
+  `is_hidden` tinyint(4) DEFAULT '0' COMMENT '0:不删除 1:删除',
+  PRIMARY KEY (`id`),
+  KEY `source` (`source`,`sign_id`),
+  KEY `uid` (`uid`),
+  KEY `create_at` (`create_at`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
+
+-- ----------------------------
+-- Records of sms_sign
+-- ----------------------------
+INSERT INTO `sms_sign` VALUES ('1', '11', '1', '0', '测试', '这是一个测试', '1517550221', null, '0', '\"', '0');
+INSERT INTO `sms_sign` VALUES ('2', '11', '1', '0', '测试', '这是一个测试', '1517550316', null, '1', null, '0');
+INSERT INTO `sms_sign` VALUES ('3', '11', '1', '1', '测试', '这是一个测试', '1517550321', '1517561919', '-8', 'no priv', '0');
+INSERT INTO `sms_sign` VALUES ('4', '11', '1', '0', '测试', '这是一个测试', '1517550380', null, '0', 'not enterprise user, not support.', '0');
+INSERT INTO `sms_sign` VALUES ('5', '11', '1', '0', '测试', '这是一个测试', '1517550414', '1517550414', '0', 'not enterprise user, not support.', '0');
+INSERT INTO `sms_sign` VALUES ('6', '11', '1', '0', '签名', '测试签名', '1517561731', '1517561731', '0', 'not enterprise user, not support.', '0');
+INSERT INTO `sms_sign` VALUES ('7', '11', '1', '0', '签名', '测试签名', '1517561754', '1517561754', '0', 'not enterprise user, not support.', '0');
+INSERT INTO `sms_sign` VALUES ('8', '11', '1', '0', '签名', '测试签名', '1517561868', null, '1', null, '0');
+INSERT INTO `sms_sign` VALUES ('9', '11', '1', '0', '签名', '测试签名', '1517561918', '1517561919', '1007', 'not enterprise user, not support.', '0');
+
+-- ----------------------------
+-- Table structure for `sms_template`
+-- ----------------------------
+DROP TABLE IF EXISTS `sms_template`;
+CREATE TABLE `sms_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `source` int(11) NOT NULL COMMENT '签名递交平台:1:QCLOUD',
+  `template_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
+  `content` varchar(255) NOT NULL COMMENT '模板内容',
+  `desc` varchar(255) DEFAULT NULL COMMENT '模板说明',
+  `title` varchar(50) DEFAULT '' COMMENT '模板名称',
+  `create_at` int(11) NOT NULL,
+  `update_at` int(11) DEFAULT NULL,
+  `verify_status` int(4) NOT NULL DEFAULT '1' COMMENT '审核状态：0：已通过；1：待审核；2：已拒绝',
+  `verify_desc` varchar(255) DEFAULT NULL COMMENT '审核返回说明',
+  `is_hidden` tinyint(4) DEFAULT '0' COMMENT '0:不删除 1:删除',
+  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:普通短信 1:营销短信',
+  PRIMARY KEY (`id`),
+  KEY `source` (`source`,`template_id`),
+  KEY `uid` (`uid`),
+  KEY `create_at` (`create_at`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
+
+-- ----------------------------
+-- Records of sms_template
+-- ----------------------------
+INSERT INTO `sms_template` VALUES ('1', '11', '1', '0', '您的验证码是：{1}', '这是一个测试', '', '1517550221', null, '0', '\"', '0', '0');
+INSERT INTO `sms_template` VALUES ('2', '11', '1', '0', '测试', '这是一个测试', '', '1517550316', null, '1', null, '0', '0');
+INSERT INTO `sms_template` VALUES ('3', '11', '1', '1', '测试', '这是一个测试', '', '1517550321', '1517561919', '-8', 'no priv', '0', '0');
+INSERT INTO `sms_template` VALUES ('4', '11', '1', '0', '测试', '这是一个测试', '', '1517550380', null, '0', 'not enterprise user, not support.', '0', '0');
+INSERT INTO `sms_template` VALUES ('5', '11', '1', '0', '测试', '这是一个测试', '', '1517550414', '1517550414', '0', 'not enterprise user, not support.', '0', '0');
+INSERT INTO `sms_template` VALUES ('6', '11', '1', '0', '签名', '测试签名', '', '1517561731', '1517561731', '0', 'not enterprise user, not support.', '0', '0');
+INSERT INTO `sms_template` VALUES ('7', '11', '1', '0', '签名', '测试签名', '', '1517561754', '1517561754', '0', 'not enterprise user, not support.', '0', '0');
+INSERT INTO `sms_template` VALUES ('8', '11', '1', '0', '签名', '测试签名', '', '1517561868', null, '1', null, '0', '0');
+INSERT INTO `sms_template` VALUES ('9', '11', '1', '0', '签名', '测试签名', '', '1517561918', '1517561919', '1007', 'not enterprise user, not support.', '0', '0');
+
+-- ----------------------------
 -- Table structure for `user`
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
@@ -635,57 +750,3 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-DROP TABLE IF EXISTS `sms_template`;
-CREATE TABLE `sms_template` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL,
-  `source` int(11) NOT NULL COMMENT '签名递交平台:1:QCLOUD',
-  `template_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
-  `content` varchar(255) NOT NULL COMMENT '模板内容',
-  `desc` varchar(255) DEFAULT NULL COMMENT '模板说明',
-  `title` varchar(50) DEFAULT '' COMMENT '模板名称',
-  `create_at` int(11) NOT NULL,
-  `update_at` int(11) DEFAULT NULL,
-  `verify_status` int(4) NOT NULL DEFAULT '1' COMMENT '审核状态：0：已通过；1：待审核；2：已拒绝',
-  `verify_desc` varchar(255) DEFAULT NULL COMMENT '审核返回说明',
-  `is_hidden` tinyint(4) DEFAULT '0' COMMENT '0:不删除 1:删除',
-  PRIMARY KEY (`id`),
-  KEY `source` (`source`,`template_id`),
-  KEY `uid` (`uid`),
-  KEY `create_at` (`create_at`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
-
-DROP TABLE IF EXISTS `sms_sign`;
-CREATE TABLE `sms_sign` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL,
-  `source` int(11) NOT NULL COMMENT '签名递交平台:1:QCLOUD',
-  `sign_id` int(11) NOT NULL DEFAULT '0' COMMENT '签名ID',
-  `name` varchar(50) NOT NULL COMMENT '签名',
-  `desc` varchar(255) DEFAULT NULL COMMENT '签名描述',
-  `create_at` int(11) NOT NULL,
-  `update_at` int(11) DEFAULT NULL,
-  `verify_status` int(4) NOT NULL DEFAULT '1' COMMENT '0：已通过；1：待审核；2：已拒绝',
-  `verify_desc` varchar(255) DEFAULT NULL COMMENT '审核返回说明',
-  `is_hidden` tinyint(4) DEFAULT '0' COMMENT '0:不删除 1:删除',
-  PRIMARY KEY (`id`),
-  KEY `source` (`source`,`sign_id`),
-  KEY `uid` (`uid`),
-  KEY `create_at` (`create_at`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
-
-DROP TABLE IF EXISTS `sms`;
-CREATE TABLE `sms` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL COMMENT '用户UID',
-  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发送类型0:直接发送 1:模板发送',
-  `mobile` int(11) NOT NULL COMMENT '手机号',
-  `template_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
-  `content` varchar(255) NOT NULL COMMENT '发送内容',
-  `create_at` int(11) NOT NULL,
-  `update_at` int(11) NOT NULL DEFAULT '0',
-  `send_status` int(11) NOT NULL DEFAULT '0' COMMENT '发送结果',
-  `send_desc` varchar(255) NOT NULL DEFAULT '' COMMENT '发送结果说明',
-  `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:不删除 1:删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信发送表';
