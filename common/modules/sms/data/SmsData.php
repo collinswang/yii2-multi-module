@@ -10,9 +10,10 @@ namespace common\modules\sms\data;
 
 use common\modules\sms\models\Sms;
 use Yii;
+use yii\base\BaseObject;
 use yii\db\Exception;
 
-class SmsData
+class SmsData extends BaseObject
 {
 
     const SEARCH_BY_ID = 1;

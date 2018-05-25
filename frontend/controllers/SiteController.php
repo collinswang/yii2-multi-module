@@ -63,7 +63,8 @@ class SiteController extends BaseController
     public function actionLogin()
     {
         if (! Yii::$app->getUser()->getIsGuest()) {
-            return $this->goHome();
+            //return $this->goHome();
+            return Yii::$app->getResponse()->redirect(Yii::$app->getHomeUrl());
         }
 
         $model = new LoginForm();

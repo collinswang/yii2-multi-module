@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50722
 File Encoding         : 65001
 
-Date: 2018-05-24 18:30:16
+Date: 2018-05-25 19:01:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -119,7 +119,7 @@ INSERT INTO `article` VALUES ('17', '3', '0', '精简页面的样式文件，去
 INSERT INTO `article` VALUES ('18', '2', '0', 'Java编程入门：前言', '', 'Java编程入门》是一本使用Java作为入门语言的免费计算机编程课本', '/uploads/article/thumb/2016071213165538.jpg', 'Java编程入门：前言', 'java,入门,编程书籍', 'Java编程入门》是一本使用Java作为入门语言的免费计算机编程课本', '1', '0', '1', 'admin', '0', '0', '1', '1', '', '1', '0', '0', '0', '0', '0', '0', '1468300615', '1476717915');
 INSERT INTO `article` VALUES ('19', '2', '0', 'Java 8最快的垃圾搜集器是什么？', '', 'OpenJDK 8 有多种 GC（Garbage Collector）算法，如 Parallel GC、CMS 和 G1。哪一个才是最快的呢？如果在 Java 9 中将 Java 8 默认的 GC 从 Parallel GC 改为 G1 （目前只是建议）将会怎么样呢？让我们对此进行基准测试。', '/uploads/article/thumb/2016071213182356.jpg', 'Java 8最快的垃圾搜集器是什么？', 'java,java8,垃圾收集', 'OpenJDK 8 有多种 GC（Garbage Collector）算法，如 Parallel GC、CMS 和 G1。哪一个才是最快的呢？如果在 Java 9 中将 Java 8 默认的 GC 从 Parallel GC 改为 G1 （目前只是建议）将会怎么样呢？让我们对此进行基准测试。', '1', '0', '1', 'admin', '33', '0', '1', '1', '', '1', '0', '0', '1', '0', '0', '0', '1468300703', '1476717356');
 INSERT INTO `article` VALUES ('20', '2', '0', '使用Memcached改进Java企业级应用性能（1）：架构和设置', '', 'Memcached由Danga Interactive开发，用来提升LiveJournal.com网站性能。Memcached分布式架构支持众多的社交网络应用，Twitter、Facebook还有Wikipedia。在接下来的两部分教程中，Sunil Patil介绍了Memcached分布式哈希表架构，以及利用它帮助你为数据驱动Java企业应用做数据缓存。', '/uploads/article/thumb/201607121325288.png', '使用Memcached改进Java企业级应用性能（1）：架构和设置', 'java,memcached', 'Memcached由Danga Interactive开发，用来提升LiveJournal.com网站性能。Memcached分布式架构支持众多的社交网络应用，Twitter、Facebook还有Wikipedia。在接下来的两部分教程中，Sunil Patil介绍了Memcached分布式哈希表架构，以及利用它帮助你为数据驱动Java企业应用做数据缓存。', '1', '0', '1', 'admin', '1', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468300831', '1476717356');
-INSERT INTO `article` VALUES ('21', '2', '0', 'JVM的相关知识整理和学习', '', '诺依曼体系结构中，指出计算机处理的数据和指令都是二进制数，采用存储程序方式不加区分的存储在同一个存储器里，并且顺序执行，指令由操作码和地址码组成，操作码决定了操作类型和所操作的数的数字类型，地址码则指出地址码和操作数。', '/uploads/article/thumb/2016071213203123.jpg', 'JVM的相关知识整理和学习', 'jvm,java', '诺依曼体系结构中，指出计算机处理的数据和指令都是二进制数，采用存储程序方式不加区分的存储在同一个存储器里，并且顺序执行，指令由操作码和地址码组成，操作码决定了操作类型和所操作的数的数字类型，地址码则指出地址码和操作数。', '1', '0', '1', 'admin', '0', '1', '1', '1', '', '1', '0', '0', '0', '0', '0', '0', '1468300831', '1476717356');
+INSERT INTO `article` VALUES ('21', '2', '0', 'JVM的相关知识整理和学习', '', '诺依曼体系结构中，指出计算机处理的数据和指令都是二进制数，采用存储程序方式不加区分的存储在同一个存储器里，并且顺序执行，指令由操作码和地址码组成，操作码决定了操作类型和所操作的数的数字类型，地址码则指出地址码和操作数。', '/uploads/article/thumb/2016071213203123.jpg', 'JVM的相关知识整理和学习', 'jvm,java', '诺依曼体系结构中，指出计算机处理的数据和指令都是二进制数，采用存储程序方式不加区分的存储在同一个存储器里，并且顺序执行，指令由操作码和地址码组成，操作码决定了操作类型和所操作的数的数字类型，地址码则指出地址码和操作数。', '1', '0', '1', 'admin', '2', '2', '1', '1', '', '1', '0', '0', '0', '0', '0', '0', '1468300831', '1527213387');
 INSERT INTO `article` VALUES ('22', '2', '0', '关于Java集合的小抄', '', '在尽可能短的篇幅里，将所有集合与并发集合的特征，实现方式，性能捋一遍。适合所有”精通Java”其实还不那么自信的人阅读。', '/uploads/article/thumb/2016071213224495.jpg', '关于Java集合的小抄', 'java,java集合', '在尽可能短的篇幅里，将所有集合与并发集合的特征，实现方式，性能捋一遍。适合所有”精通Java”其实还不那么自信的人阅读。', '1', '0', '1', 'admin', '0', '2', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468300964', '1476717385');
 INSERT INTO `article` VALUES ('23', '0', '2', '关于我们', 'about', '', '', '', '', '', '1', '0', '1', 'admin', '0', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468309252', '1476717356');
 INSERT INTO `article` VALUES ('24', '0', '2', '联系方式', 'contact', '', '', '', '', '', '1', '0', '1', 'admin', '0', '0', '1', '1', '', '0', '0', '0', '0', '0', '0', '0', '1468309318', '1476717356');
@@ -456,7 +456,7 @@ CREATE TABLE `comment` (
   PRIMARY KEY (`id`),
   KEY `index_aid` (`aid`),
   CONSTRAINT `fk_comment_aid` FOREIGN KEY (`aid`) REFERENCES `article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of comment
@@ -467,6 +467,196 @@ INSERT INTO `comment` VALUES ('3', '22', '0', '0', '2', 'bbb', '', '', '呵呵�
 INSERT INTO `comment` VALUES ('4', '12', '0', '0', '0', 'ccc', '', '', ' :shock: ', '127.0.0.1', '1', '1476067042', '0');
 INSERT INTO `comment` VALUES ('5', '12', '0', '0', '0', 'aaa', '', '', '嘻嘻嘻', '127.0.0.1', '1', '1476067060', '0');
 INSERT INTO `comment` VALUES ('6', '21', '0', '0', '0', 'aaa', '', '', '流弊哄哄~~~', '127.0.0.1', '1', '1476067093', '0');
+INSERT INTO `comment` VALUES ('7', '21', '1', '0', '0', 'test', '', 'http://', 'test', '127.0.0.1', '1', '1527213387', '1527213387');
+
+-- ----------------------------
+-- Table structure for `finance_account`
+-- ----------------------------
+DROP TABLE IF EXISTS `finance_account`;
+CREATE TABLE `finance_account` (
+  `uid` int(10) unsigned NOT NULL COMMENT '用户UID',
+  `total_usable` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '可用金额',
+  `total_income` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '总充值金额',
+  `total_award` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '总得奖金额',
+  `total_outcome` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '总消费金额',
+  `total_withdraw` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '总提现金额',
+  `total_return` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '总退款金额',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态:1-正常,0-冻结',
+  `admin_id` int(10) unsigned DEFAULT NULL COMMENT '管理员UID',
+  `admin_note` varchar(255) DEFAULT NULL COMMENT '变更理由',
+  `last_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='财务账户表';
+
+-- ----------------------------
+-- Records of finance_account
+-- ----------------------------
+INSERT INTO `finance_account` VALUES ('1', '4.00', '4.00', '0.00', '0.00', '0.00', '0.00', '1', null, null, '1527243926');
+INSERT INTO `finance_account` VALUES ('2', '13.00', '13.00', '0.00', '0.00', '0.00', '0.00', '1', null, null, '1527244096');
+
+-- ----------------------------
+-- Table structure for `finance_award`
+-- ----------------------------
+DROP TABLE IF EXISTS `finance_award`;
+CREATE TABLE `finance_award` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'UID',
+  `total_amount` decimal(10,2) DEFAULT '0.00' COMMENT '金额',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态(1-结算中,2-已结算,3-结算失败)',
+  `admin_id` int(10) unsigned DEFAULT NULL COMMENT '管理员UID',
+  `admin_note` varchar(255) DEFAULT NULL COMMENT '管理员备注',
+  `invisible` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可见(1-正常,0-隐藏)',
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `create_time` (`create_time`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='财务奖励表';
+
+-- ----------------------------
+-- Records of finance_award
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `finance_flow`
+-- ----------------------------
+DROP TABLE IF EXISTS `finance_flow`;
+CREATE TABLE `finance_flow` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL COMMENT '用户UID',
+  `money` decimal(10,2) NOT NULL COMMENT '金额,充值/得奖/退款为正数,提现/报名/送礼/购物为负数',
+  `target_type` tinyint(4) NOT NULL COMMENT '流水类型(1-充值,2-得奖,3-退款,4-提现,5-消费',
+  `target_id` int(11) NOT NULL COMMENT '以上类型所对应表的主键ID',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `invisible` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否可见(1-正常,0-隐藏)',
+  PRIMARY KEY (`id`),
+  KEY `target_type` (`target_type`,`target_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='财务流水明细表';
+
+-- ----------------------------
+-- Records of finance_flow
+-- ----------------------------
+INSERT INTO `finance_flow` VALUES ('1', '1', '4.00', '1', '6', '1527243926', '1');
+INSERT INTO `finance_flow` VALUES ('2', '2', '5.00', '1', '7', '1527243960', '1');
+INSERT INTO `finance_flow` VALUES ('3', '2', '8.00', '1', '8', '1527244096', '1');
+
+-- ----------------------------
+-- Table structure for `finance_income`
+-- ----------------------------
+DROP TABLE IF EXISTS `finance_income`;
+CREATE TABLE `finance_income` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户UID',
+  `payable` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '交易金额',
+  `fee_rate` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '手续费率%',
+  `fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '税费金额',
+  `received` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '到帐金额',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `deal_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
+  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '支付方式(1-支付宝,2-微信支付,3-手动充值)',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '支付状态(1-支付中, 2-成功,3-支付失败,4-退款)',
+  `admin_id` int(10) unsigned DEFAULT '0' COMMENT '管理员UID',
+  `admin_note` varchar(255) DEFAULT NULL COMMENT '管理员备注',
+  `invisible` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否可见(1-正常,0-隐藏)',
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`),
+  KEY `status` (`status`),
+  KEY `create_time` (`create_time`),
+  KEY `deal_time` (`deal_time`),
+  KEY `uid` (`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='充值明细表';
+
+-- ----------------------------
+-- Records of finance_income
+-- ----------------------------
+INSERT INTO `finance_income` VALUES ('1', '1', '10.00', '0.00', '0.00', '10.00', '1527240313', '1527240380', '1', '1', '1', 'test', '0');
+INSERT INTO `finance_income` VALUES ('2', '1', '10.00', '0.00', '0.00', '10.00', '1527240416', '1527240431', '1', '1', '1', 'test', '0');
+INSERT INTO `finance_income` VALUES ('3', '1', '8.00', '0.00', '0.00', '8.00', '1527243537', '1527243557', '1', '1', '1', 'test', '0');
+INSERT INTO `finance_income` VALUES ('4', '1', '5.00', '0.00', '0.00', '5.00', '1527243718', '1527243721', '1', '1', '1', 'test', '0');
+INSERT INTO `finance_income` VALUES ('5', '1', '7.00', '0.00', '0.00', '7.00', '1527243867', '1527243874', '1', '1', '1', 'test', '0');
+INSERT INTO `finance_income` VALUES ('6', '1', '4.00', '0.00', '0.00', '4.00', '1527243919', '1527243926', '1', '2', '1', 'test', '0');
+INSERT INTO `finance_income` VALUES ('7', '2', '5.00', '0.00', '0.00', '5.00', '1527243955', '1527243960', '1', '2', '1', 'test', '0');
+INSERT INTO `finance_income` VALUES ('8', '2', '8.00', '0.00', '0.00', '8.00', '1527244091', '1527244096', '1', '2', '1', 'test', '0');
+
+-- ----------------------------
+-- Table structure for `finance_order`
+-- ----------------------------
+DROP TABLE IF EXISTS `finance_order`;
+CREATE TABLE `finance_order` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'UID',
+  `item_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '产品单价',
+  `item_qty` int(11) DEFAULT '0' COMMENT '产品数量',
+  `order_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '订单总金额',
+  `coupon_id` int(11) DEFAULT '0' COMMENT '优惠券ID',
+  `coupon_amount` decimal(10,2) DEFAULT '0.00' COMMENT '优惠金额',
+  `total_amount` decimal(10,2) DEFAULT '0.00' COMMENT '订单实际金额',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单创建时间',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态(1-结算中,2-已结算,3-结算失败)',
+  `admin_id` int(10) unsigned DEFAULT NULL COMMENT '管理员UID',
+  `admin_note` varchar(255) DEFAULT NULL COMMENT '管理员备注',
+  `invisible` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可见(1-正常,0-隐藏)',
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `create_time` (`create_time`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='财务订单表';
+
+-- ----------------------------
+-- Records of finance_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `finance_return`
+-- ----------------------------
+DROP TABLE IF EXISTS `finance_return`;
+CREATE TABLE `finance_return` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'UID',
+  `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
+  `sms_id` int(11) NOT NULL DEFAULT '0' COMMENT '短信发送ID',
+  `item_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '单价',
+  `item_qty` int(11) DEFAULT '0' COMMENT '数量',
+  `total_amount` decimal(10,2) DEFAULT '0.00' COMMENT '总金额',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态(1-结算中,2-已结算,3-结算失败)',
+  `admin_id` int(10) unsigned DEFAULT NULL COMMENT '管理员UID',
+  `admin_note` varchar(255) DEFAULT NULL COMMENT '管理员备注',
+  `invisible` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可见(1-正常,0-隐藏)',
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `sms_id` (`sms_id`),
+  KEY `order_id` (`order_id`),
+  KEY `create_time` (`create_time`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='财务退款表';
+
+-- ----------------------------
+-- Records of finance_return
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `finance_withdraw`
+-- ----------------------------
+DROP TABLE IF EXISTS `finance_withdraw`;
+CREATE TABLE `finance_withdraw` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'UID',
+  `total_amount` decimal(10,2) DEFAULT '0.00' COMMENT '金额',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态(1-结算中,2-已结算,3-结算失败)',
+  `admin_id` int(10) unsigned DEFAULT NULL COMMENT '管理员UID',
+  `admin_note` varchar(255) DEFAULT NULL COMMENT '管理员备注',
+  `invisible` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可见(1-正常,0-隐藏)',
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `create_time` (`create_time`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='财务提现表';
+
+-- ----------------------------
+-- Records of finance_withdraw
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `friendly_link`
@@ -628,31 +818,32 @@ CREATE TABLE `sms` (
   `send_desc` varchar(255) NOT NULL DEFAULT '' COMMENT '发送结果说明',
   `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:不删除 1:删除',
   `sid` int(11) DEFAULT '0' COMMENT '发送回执ID',
+  `order_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sms
 -- ----------------------------
-INSERT INTO `sms` VALUES ('1', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527130700', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('2', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130766', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('3', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130841', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('4', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130908', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('5', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130927', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('6', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527130963', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('7', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131022', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('8', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131250', '1527131250', '1012', '签名格式错误或者签名未审批', '0', '0');
-INSERT INTO `sms` VALUES ('9', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131595', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('10', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131616', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('11', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527131616', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('12', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131645', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('13', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527131645', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('14', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527149978', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('15', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527149978', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('16', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527150020', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('17', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527150020', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('18', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527150193', '0', '0', '', '0', '0');
-INSERT INTO `sms` VALUES ('19', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527150193', '0', '0', '', '0', '0');
+INSERT INTO `sms` VALUES ('1', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527130700', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('2', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130766', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('3', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130841', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('4', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130908', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('5', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130927', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('6', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527130963', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('7', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131022', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('8', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131250', '1527131250', '1012', '签名格式错误或者签名未审批', '0', '0', '0');
+INSERT INTO `sms` VALUES ('9', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131595', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('10', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131616', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('11', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527131616', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('12', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131645', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('13', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527131645', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('14', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527149978', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('15', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527149978', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('16', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527150020', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('17', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527150020', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('18', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527150193', '0', '0', '', '0', '0', '0');
+INSERT INTO `sms` VALUES ('19', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527150193', '0', '0', '', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `sms_sign`
@@ -745,8 +936,53 @@ CREATE TABLE `user` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES ('1', 'test', '2mdFUAXdLwPggAp9hTDVHfCNT5XoLAVO', '$2y$13$BTJ643lDjhDwRRr4negaguTTEydYMyuNlMDh1CP6OWqH2XASGnL8a', null, 'test@abc.com', '', '10', '1527213283', '1527213283');
+DROP TRIGGER IF EXISTS `finance_change`;
+DELIMITER ;;
+CREATE TRIGGER `finance_change` AFTER INSERT ON `finance_flow` FOR EACH ROW BEGIN
+  DECLARE counts INT(1);
+  SELECT count(*)
+  INTO counts
+  FROM finance_account
+  WHERE uid = new.uid;
+  IF counts <= 0
+  THEN
+    INSERT INTO finance_account (uid) VALUES (new.uid);
+  END IF;
+  IF new.money != 0
+  THEN
+    IF new.target_type = 1
+    THEN
+      UPDATE finance_account
+      SET total_usable = total_usable + new.money, total_income = total_income + new.money, last_time = unix_timestamp(now())
+      WHERE uid = new.uid;
+    ELSEIF new.target_type = 2
+      THEN
+        UPDATE finance_account
+        SET total_usable = total_usable + new.money, total_award = total_award + new.money, last_time = unix_timestamp(now())
+        WHERE uid = new.uid;
+    ELSEIF new.target_type = 3
+      THEN
+        UPDATE finance_account
+        SET total_usable = total_usable + new.money, total_return = total_return + new.money, last_time = unix_timestamp(now())
+        WHERE uid = new.uid;
+    ELSEIF new.target_type = 4
+      THEN
+        UPDATE finance_account
+        SET total_usable = total_usable + new.money, total_withdraw = total_withdraw + new.money, last_time = unix_timestamp(now())
+        WHERE uid = new.uid;
+    ELSEIF new.target_type = 5
+      THEN
+        UPDATE finance_account
+        SET total_usable = total_usable + new.money, total_outcome = total_outcome + new.money, last_time = unix_timestamp(now())
+        WHERE uid = new.uid;
+    END IF;
+  END IF;
+END
+;;
+DELIMITER ;

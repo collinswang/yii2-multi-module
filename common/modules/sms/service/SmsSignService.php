@@ -6,8 +6,9 @@ namespace common\modules\sms\service;
 
 use common\modules\sms\data\SmsSignData;
 use common\modules\sms\base\SmsSignInterface;
+use yii\base\BaseObject;
 
-class SmsSignService
+class SmsSignService extends BaseObject
 {
     const SMS_SIGN_API_QCLOUD = 1;
     const SMS_SIGN_API_ALIDAYU = 2;

@@ -11,8 +11,9 @@ namespace common\modules\sms\data;
 use common\modules\sms\models\SmsSign;
 use common\modules\sms\models\SmsTemplate;
 use Yii;
+use yii\base\BaseObject;
 
-class SmsTemplateData
+class SmsTemplateData extends BaseObject
 {
 
     const SEARCH_BY_ID = 1;
