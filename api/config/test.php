@@ -2,11 +2,13 @@
 return [
     'id' => 'app-api-tests',
     'components' => [
-        'urlManager' => [
-            'showScriptName' => true,
+        'assetManager' => [
+            'basePath' => __DIR__ . '/../web/assets',
         ],
-        'request' => [
-            'cookieValidationKey' => 'test'
-        ]
+        'urlManager' => [
+            'enablePrettyUrl' => false,
+            'showScriptName' => true,
+            'rules' => []
+        ],
     ],
 ];
