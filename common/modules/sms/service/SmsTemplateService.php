@@ -39,13 +39,14 @@ class SmsTemplateService extends BaseObject
     /**
      * 新增模板
      * @param int    $uid     用户UID
+     * @param        $source
      * @param string $content 模板内容签名
      * @param        $type
      * @param string $desc    签名说明
      * @param        $title
      * @return array
      */
-    public function add($uid, $content, $type, $desc, $title)
+    public function add($uid, $source, $content, $type, $desc, $title)
     {
         if (!$uid) {
             return ['status'=>-1, 'desc'=>'UID不能为空'];
@@ -55,7 +56,7 @@ class SmsTemplateService extends BaseObject
         }
         //添加本地签名记录
         $model = new SmsTemplateData();
-        $id = $model->add(['uid'=>$uid, 'content'=>$content, 'title'=>$title, 'desc'=>$desc, 'source'=>1, 'template_id'=>0, 'create_at'=>time()]);
+        $id = $model->add(['uid'=>$uid, 'content'=>$content, 'title'=>$title, 'desc'=>$desc, 'source'=>$source, 'template_id'=>0, 'create_at'=>time()]);
         if($id){
             //调用API接口提交数据
             $post_result = $this->model_sign->sms_template_add($content, $type, $desc, $title);

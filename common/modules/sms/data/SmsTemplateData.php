@@ -19,6 +19,20 @@ class SmsTemplateData extends BaseObject
     const SEARCH_BY_ID = 1;
     const SEARCH_BY_UID = 2;
 
+    public static $source = [1=>"腾迅云", 2=>"阿里云"];
+    const SOURCE_QCLOUD = 1;
+    const SOURCE_ALIYUN = 2;
+
+    //$verify_status
+    public static $verify_status = [0=>'审核成功', 1=>"审核中", 2=>"审核失败"];
+    const VERIFY_STATUS_SUCCESS = 0;
+    const VERIFY_STATUS_PENDING = 1;
+    const VERIFY_STATUS_FAIL = 2;
+
+    public static $type = [0=>"普通短信", 1=>"营销短信"];
+    const TYPE_NORMAL = 0;
+    const TYPE_SPREAD = 1;
+
     /**
      * 创建签名
      * @param array     $data

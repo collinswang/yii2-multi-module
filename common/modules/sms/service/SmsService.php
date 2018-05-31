@@ -15,7 +15,7 @@ class SmsService extends BaseObject
     const SMS_SIGN_API_ALIDAYU = 2;
     protected static $sms_sign_api = [
         1 => 'common\modules\sms\base\QcloudSmsClient',
-        2 => 'common\modules\sms\base\AliDayuSmsClient',
+        2 => 'common\modules\sms\base\AliSmsClient',
     ];
 
     public static function get_sms_api()
@@ -155,7 +155,7 @@ class SmsService extends BaseObject
      * @param $params
      * @return mixed
      */
-    protected function build_content($uid, $tpl_id, $params)
+    public static function build_content($uid, $tpl_id, $params)
     {
         $sms_temp_model = new SmsTemplateData();
         $template = $sms_temp_model->get(SmsTemplateData::SEARCH_BY_ID, intval($tpl_id));
@@ -163,7 +163,13 @@ class SmsService extends BaseObject
         preg_match_all("/\{\d\}/", $temp_content, $temp_keys);
         //生成发送内容
         $content = str_replace( $temp_keys[0], $params, $temp_content);
-        return ['status'=>1,'desc'=>"",'content'=>$content, 'type'=>$template['type']];
+        //模板可接受的参数数量
+        $total_params = count($temp_keys[0]);
+        if($total_params > count($params)){
+            return ['status'=>-1,'desc'=>"少参数",'content'=>$content, 'type'=>$template['type']];
+        } else {
+            return ['status'=>1,'desc'=>"",'content'=>$content, 'type'=>$template['type']];
+        }
     }
 
     /**
