@@ -22,7 +22,6 @@ class SmsTemplateController extends \yii\web\Controller
             'index' => [
                 'class' => IndexAction::className(),
                 'data' => function(){
-                    
                         $dataProvider = new ActiveDataProvider([
                             'query' => SmsTemplate::find(),
                             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],

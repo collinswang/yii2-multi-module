@@ -3,12 +3,15 @@
 namespace common\modules\sms\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "sms".
  *
  * @property int $id
  * @property int $uid 用户UID
+ * @property int $source 来源：1：腾迅云 2：阿里云
  * @property int $type 发送类型0:直接发送 1:模板发送
  * @property int $mobile 手机号
  * @property int $template_id 模板ID
@@ -19,9 +22,25 @@ use Yii;
  * @property string $send_desc 发送结果说明
  * @property int $is_hidden 0:不删除 1:删除
  * @property int $sid 发送回执ID
+ * @property int $order_id
  */
 class Sms extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_at', 'update_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['update_at'],
+                ],
+                // if you're using datetime instead of UNIX timestamp:
+                // 'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -36,8 +55,9 @@ class Sms extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'mobile', 'content', 'create_at'], 'required'],
-            [['uid', 'type', 'mobile', 'template_id', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid'], 'integer'],
+            [['uid', 'mobile', 'content'], 'required'],
+            [['create_at', 'update_at'], 'safe'],
+            [['uid', 'source', 'type', 'mobile', 'template_id', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid', 'order_id'], 'integer'],
             [['content', 'send_desc'], 'string', 'max' => 255],
         ];
     }
@@ -50,6 +70,7 @@ class Sms extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'uid' => 'Uid',
+            'source' => 'Source',
             'type' => 'Type',
             'mobile' => 'Mobile',
             'template_id' => 'Template ID',
@@ -60,6 +81,7 @@ class Sms extends \yii\db\ActiveRecord
             'send_desc' => 'Send Desc',
             'is_hidden' => 'Is Hidden',
             'sid' => 'Sid',
+            'order_id' => 'Order ID',
         ];
     }
 }

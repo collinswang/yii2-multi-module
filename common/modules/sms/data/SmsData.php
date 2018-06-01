@@ -19,6 +19,18 @@ class SmsData extends BaseObject
     const SEARCH_BY_ID = 1;
     const SEARCH_BY_UID = 2;
 
+    public static $source = [1=>"腾迅云", 2=>"阿里云"];
+    const SOURCE_QCLOUD = 1;
+    const SOURCE_ALIYUN = 2;
+
+    public static $send_status = [0=>"发送成功", 1=>"发送失败"];
+    const SEND_SUCCESS = 0;
+    const SEND_FAIL = 1;
+
+    public static $type = [0=>"直接发送", 1=>"模板发送"];
+    const TYPE_DIRECT = 0;
+    const TYPE_TEMPLATE = 1;
+
     /**
      * 添加发送短信记录
      * @param array     $data

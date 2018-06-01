@@ -119,4 +119,29 @@ class SmsTemplateData extends BaseObject
     {
         return SmsTemplate::find()->where(['id'=>$id, 'uid'=>$uid])->asArray()->one();
     }
+
+    /**
+     * 按页获取模板列表
+     * @param     $source
+     * @param int $page
+     * @param int $page_size
+     * @return array
+     */
+    public function get_list($source = 0, $page = 1, $page_size = 20)
+    {
+        $source = intval($source);
+        if($source){
+            $sql = "source = ".intval($source);
+        } else {
+            $sql = "1=1";
+        }
+        $result = [];
+        $list = SmsTemplate::find()->where($sql)->offset(($page-1)*$page_size)->limit($page_size)->asArray()->all();
+        if($list){
+            foreach ($list as $item) {
+                $result[$item['id']] = $item['content'];
+            }
+        }
+        return $result;
+    }
 }

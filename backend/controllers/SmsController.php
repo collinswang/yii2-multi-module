@@ -3,13 +3,15 @@
 namespace backend\controllers;
 
 use Yii;
+use common\modules\sms\models\SmsSearch;
 use common\modules\sms\models\Sms;
 use backend\actions\CreateAction;
 use backend\actions\UpdateAction;
 use backend\actions\IndexAction;
 use backend\actions\DeleteAction;
 use backend\actions\SortAction;
-use yii\data\ActiveDataProvider;
+use backend\actions\ViewAction;
+use \common\modules\sms\data\SmsTemplateData;
 
 /**
  * SmsController implements the CRUD actions for Sms model.
@@ -23,19 +25,18 @@ class SmsController extends \yii\web\Controller
                 'class' => IndexAction::className(),
                 'data' => function(){
                     
-                        $dataProvider = new ActiveDataProvider([
-                            'query' => Sms::find(),
-                            'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
-                            'pagination' => [
-                                'pageSize' => 10,
-                            ],
-                        ]);
-
+                        $searchModel = new SmsSearch();
+                        $dataProvider = $searchModel->search(yii::$app->getRequest()->getQueryParams());
                         return [
                             'dataProvider' => $dataProvider,
+                            'searchModel' => $searchModel,
                         ];
                     
                 }
+            ],
+            'view-layer' => [
+                'class' => ViewAction::className(),
+                'modelClass' => Sms::className(),
             ],
             'create' => [
                 'class' => CreateAction::className(),
@@ -54,5 +55,18 @@ class SmsController extends \yii\web\Controller
                 'modelClass' => Sms::className(),
             ],
         ];
+    }
+
+    /**
+     * 获取指定类型的模板列表
+     * @example ['get-template-list']
+     * @param $type
+     * @return array
+     */
+    public function actionGetTemplateList($type)
+    {
+        $model_template = new SmsTemplateData();
+        $template_list = $model_template->get_list($type);
+        return $template_list;
     }
 }

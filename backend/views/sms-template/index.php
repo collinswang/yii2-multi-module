@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = 'Sms Templates';
                         'title',
                         [
                             'label'=>'source',
+                            'attribute'=>'source',
                             'value'=>function ($data) {
                                 return SmsTemplateData::$source[$data->source]; // 如果是数组数据则为 $data['name'] ，例如，使用 SqlDataProvider 的情形。
                             },
@@ -40,6 +41,7 @@ $this->params['breadcrumbs'][] = 'Sms Templates';
                         // 'is_hidden',
                         [
                             'label'=>'type',
+                            'attribute'=>'type',
                             'value'=>function ($data) {
                                 return SmsTemplateData::$type[$data->type]; // 如果是数组数据则为 $data['name'] ，例如，使用 SqlDataProvider 的情形。
                             },
