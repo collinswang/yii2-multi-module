@@ -34,9 +34,9 @@ class QcloudSmsClient implements SmsInterface
     /**
      * 单次发送模板短信
      * @link    https://cloud.tencent.com/document/product/382/5976
-     * @param string    $mobile     手机号列表
-     * @param int       $tpl_id     远程平台模板ID
-     * @param array     $params     模板内对应参数表
+     * @param string $mobile 手机号列表
+     * @param int    $tpl_id 远程平台模板ID
+     * @param array  $data   模板内对应参数表
      * @return mixed
      *     {
      *     "result": 0,
@@ -46,7 +46,7 @@ class QcloudSmsClient implements SmsInterface
      *     "sid": "xxxxxxx"
      *     }
      */
-    public function sms_send_template_msg_single($mobile, $tpl_id, $params)
+    public function sms_send_template_msg_single($mobile, $tpl_id, $data)
     {
         $single_send = new SmsSingleSender($this->appid, $this->appkey);
 
@@ -54,7 +54,7 @@ class QcloudSmsClient implements SmsInterface
         $sign ="";
         $extend = "";
         $ext = "";
-        $result = $single_send->sendWithParam($nationCode, $mobile, $tpl_id, $params, $sign, $extend, $ext);
+        $result = $single_send->sendWithParam($nationCode, $mobile, $tpl_id, $data, $sign, $extend, $ext);
 
         return json_decode($result, true);
     }

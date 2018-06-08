@@ -9,6 +9,8 @@
 namespace console\controllers;
 
 
+use common\modules\sms\base\AliSmsClient;
+use common\modules\sms\base\SmsInterface;
 use \common\modules\sms\models\SmsSign;
 use common\modules\sms\service\SmsService;
 use common\modules\sms\service\SmsSignService;
@@ -36,14 +38,17 @@ class SmsController extends \yii\console\Controller
 
     public function actionTest()
     {
-        $sms_api = SmsService::get_sms_api();
-        $model = new SmsService(new $sms_api[1]);
-        $uid=  123;
-        $type = 0;
-        $tpl_id = 1;
-        $mobile = ["13651081267", "13712114574"];
-        $params = ["测试公司A","服务器B","100元"];
-        $result = $model->send_template_batch($uid, $type, $tpl_id, $mobile, $params);
+        $attr = SmsService::$sms_sign_api[SmsService::SMS_SIGN_API_ALIDAYU];
+        $model = new $attr();
+        if(!$model instanceof SmsInterface){
+            return ['status'=>-1, 'desc'=>'传入非SmsInterface的实例'];
+        } else {
+            echo 22222;
+        }
+        $mobile = "13651081267";
+        $tpl_id = "SMS_116780127";
+        $params = ['code'=>rand(100000,999999)];
+        $result = $model->sms_send_template_msg_single($mobile, $tpl_id , $params);
         print_r($result);
     }
 

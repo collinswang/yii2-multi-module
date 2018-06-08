@@ -8,6 +8,7 @@
 
 namespace api\controllers;
 
+use InvalidArgumentException;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\form\PasswordResetRequestForm;
@@ -112,7 +113,7 @@ class SiteController extends BaseController
     {
         try {
             $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 

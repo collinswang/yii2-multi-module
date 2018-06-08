@@ -9,8 +9,11 @@
 namespace api\controllers;
 
 use common\modules\sms\data\SmsTemplateData;
+use common\modules\sms\models\Sms;
 use common\modules\sms\service\SmsService;
 use common\modules\sms\service\SmsTemplateService;
+use Yii;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -38,37 +41,33 @@ class SmsController extends BaseController
             return ['status'=>-1, 'desc'=>"无效的模板"];
         }
 
-        $model_sign = SmsService::get_sms_api()[1];
-        $sms_model = new SmsService($model_sign);
+        $sms_model = new SmsService(SmsService::SMS_SIGN_API_ALIDAYU);
 
         $file = $_FILES['list'];
         $sms_list = file_get_contents($file['tmp_name']);
         $sms_list = str_replace(["\r\n", "\r"], "\n", $sms_list);
         $sms_list = explode("\n", $sms_list);
         if($sms_list){
-            $mobile_list = [];
             foreach ($sms_list as $item) {
                 if(!$item){continue;}
                 $item_arr = explode(",", $item);
                 if(count($item_arr)){
-                    unset($item_arr[0]);
-                    $build_result = SmsService::build_content($this->uid, $tpl_id, $item_arr);
-                    if($build_result['status'] == 1){
-                        $content = $build_result['content'];
-                    } else {
-                        return ['status'=>-1, 'desc'=>"模板与所传参数对应不上，请检查"];
+                    $mobile = array_shift($item_arr);
+                    if($mobile){
+                        $single_result = $sms_model->send_template_single($this->uid, $tpl_id, $mobile, $item_arr);
+                        //$single_result['status'] >0 表示成功
                     }
                 }
-                //入库并执行短信发送队列
-                $mobile_list[] = $item_arr[0];
-                unset($item_arr[0]);
-                $params[] = $item_arr;
             }
-
-            $sms_model->send_template_batch($this->uid, $tpl_id, $mobile_list, $params);
         }
-        exit;
         return ['status'=>1, 'desc'=>"11111", 'uid'=>$this->uid];
+    }
+
+    public function actionPush()
+    {
+        $model = new SmsService(SmsService::SMS_SIGN_API_ALIDAYU);
+        $result = $model->send_sms_syn();
+        print_r($result);
     }
 
 }

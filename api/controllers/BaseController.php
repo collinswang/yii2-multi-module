@@ -17,10 +17,10 @@ class BaseController extends Controller
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $action = Yii::$app->requestedAction;
         $url = $action->controller->id;
-        if(false || in_array($url, ["site"])){
-            //根据header头传入的token鉴权
-            $this->token = Yii::$app->request->headers['token'];
-            $this->uid = Yii::$app->request->get()['uid'];
+        //根据header头传入的token鉴权
+        $this->token = Yii::$app->request->headers['token'];
+        $this->uid = Yii::$app->request->get()['uid'];
+        if(!in_array($url, ["site"])){
             $check_token = $this->checkToken();
             if(!$check_token){
                 echo json_encode(['status'=>-1, 'desc'=>'访问错误', 'uid'=>$this->uid,'token'=>$this->token]);

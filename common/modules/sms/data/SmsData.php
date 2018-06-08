@@ -144,4 +144,26 @@ class SmsData extends BaseObject
     {
         return Sms::find()->where(['mobile'=>$mobile, 'uid'=>$uid])->asArray()->one();
     }
+
+    //推荐队列KEY
+    CONST SMS_LIST_KEY = "sms_list_key";
+
+    /**
+     * 设置推荐队列
+     * @param $id
+     */
+    public function setSmsList($id)
+    {
+        $redis = Yii::$app->redis;
+        $redis->executeCommand("RPUSH", [self::SMS_LIST_KEY, $id]);
+    }
+
+    /**
+     * 读取队列
+     */
+    public function getSmsList()
+    {
+        $redis = Yii::$app->redis;
+        return $redis->executeCommand("LPOP", [self::SMS_LIST_KEY]);
+    }
 }

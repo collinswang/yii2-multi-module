@@ -32,6 +32,9 @@ return [
             'class' => yii\console\controllers\ServeController::className(),
             'docroot' => '@frontend/web',
         ],
+        'fixture' => [
+            'class' => 'yii\faker\FixtureController',
+        ],
         'swoole' => [
             'class' => \feehi\console\SwooleController::className(),
             'rootDir' => str_replace('console/config', '', __DIR__ ),//yii2项目根路径

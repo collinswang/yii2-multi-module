@@ -15,6 +15,14 @@ $config = [
             'password' => '123456',
             'charset' => 'utf8',
         ],
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => "192.168.200.66",
+            'port' => "7000",
+            'database' => 0,
+            'dataTimeout' => 10,
+            'connectionTimeout' => 10,
+        ],
         'cache' => [
             'class' => yii\caching\DummyCache::className(),
         ],
