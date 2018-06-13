@@ -8,193 +8,114 @@
 namespace console\controllers;
 
 
-use yii;
+use common\components\Curl;
+use common\modules\collect\data\CollectData;
 use yii\console\Controller;
-use Feehi\Http;
-use console\controllers\scrawls\Jobbole;
-use console\models\Article;
-use yii\helpers\FileHelper;
-use common\models\Category;
-use common\helpers\StringHelper;
-
 
 class ScrawlController extends Controller
 {
+    /**
+     * 美团商家信息URL
+     */
+    const MEI_TUAN_URL = "https://apimobile.meituan.com/group/v1/poi/";
 
-    private $fileName;
+    /**
+     * 饿了吗商家信息URL
+     */
+    const ELM_URL = "https://h5.ele.me/restapi//shopping/restaurant/";
 
-    public function actionBole($type = 'all')
+    /**
+     * TEST URL
+     */
+    const TEST_URL = "http://api.k2.com/?r=bbs/i_bbs_0677_v1/get-test";
+
+
+    /**
+     * php yii scrawl/index 100 10000
+     * @param int $start
+     * @param int $range
+     */
+    public function actionIndex($start = 100, $range = 100)
     {
-        $startTime = time();
-        $articleNum = 0;
-        $this->log("Started scrawl...", 'bole');
-        $urls = [
-            'http://web.jobbole.com/all-posts',
-            'http://python.jobbole.com/all-posts',
-            'http://www.importnew.com/all-posts',
-            'http://blog.jobbole.com/category/php-programmer',
-        ];
-        $obj = new Jobbole();
-        foreach ($urls as $url) {
-            if (strpos($url, 'all-posts') || strpos($url, 'php-programmer')) {
-                $http = new Http();
-                $tryCount = 0;
-                do {
-                    if ($tryCount >= 10) {
-                        $this->log("Error at request $url for $tryCount times, exit");
-                        exit(1);
-                    }
-                    if ($tryCount > 0) {
-                        sleep(1);
-                    }
-                    $html = $http->post($url);
-                } while (strlen($html['body']) < 200);
-                $totalPage = $obj->getTotalPage($html['body']);
+        $end = $start + $range;
+        for($i=$start; $i<$end; $i++){
+            $this->actionCollectMeituan($i);
+        }
+    }
+
+    /**
+     * @param $id
+     * php yii scrawl/collect-meituan 111
+     */
+    public function actionCollectMeituan($id)
+    {
+        $url = self::MEI_TUAN_URL.$id;
+        $curl = new Curl(false);
+        $result_json = true;
+        $result = $curl->setUrl($url)->request($result_json);
+        if(!isset($result['data']) || !isset($result['data'][0])){
+            echo "{$url}\t无数据===\r\n";
+            return;
+        } else {
+            $result = $result['data'][0];
+        }
+
+        $model = new CollectData();
+        if($result['name'] && $result['addr'] && $result['phone']){
+            $data = [];
+            $data['name'] = $result['name'];
+            $data['address'] = $result['addr'];
+            $data['phone'] = $result['phone'];
+            $data['url'] = $url;
+            $data['cityid'] = $result['cityId'];
+            $data['cateName'] = $result['cateName'];
+            $data['areaName'] = $result['areaName'];
+            $data['showType'] = $result['showType'];
+            $data['frontImg'] = $result['frontImg'];
+            $result = $model->add($data);
+            if($result['status'] > 0){
+                echo "{$url}\t采集成功\r\n";
             } else {
-
-            }
-            if ($type == 'new') {
-                $totalPage = 1;
-            }
-            $this->log("Total of discovery $totalPage pages");
-            for ($i = $totalPage; $i >= 1; $i--) {
-                if ($i != 1) {
-                    $urlList = $url . "/page/$i";
-                } else {
-                    $urlList = $url;
-                }
-                $tryCount = 0;
-                do {
-                    if ($tryCount >= 3) {
-                        $this->log("Error at request $urlList for $tryCount times, so jumped");
-                        continue;
-                    }
-                    if ($tryCount > 0) {
-                        sleep(1);
-                    }
-                    $html = $http->post($urlList);
-                    $tryCount++;
-                } while (strlen($html['body']) < 200);
-                $articleUrls = $obj->getListUrl($html['body']);
-                foreach ($articleUrls as $articleUrl) {
-                    $tryCount = 0;
-                    do {
-                        if ($tryCount >= 3) {
-                            $this->log("Error at request $articleUrl for $tryCount times, so jumped");
-                            continue;
-                        }
-                        if ($tryCount > 0) {
-                            sleep(1);
-                        }
-                        $html = $http->post($articleUrl[0]);
-                    } while (strlen($html['body']) < 200);
-                    $data = $obj->getArticle($html['body']);
-                    $article = new Article(['scenario' => 'article']);
-                    if ($temp = $article->findOne([
-                        'title' => $data['title'],
-                        'seo_description' => $data['seo_description'],
-                        'created_at' => $articleUrl[2]
-                    ])
-                    ) {
-                        $this->log("$i -> {$articleUrl[0]} {$data['title']} has been fetched, so jumped");
-                        continue;
-                    }
-                    foreach ($data as $name => $value) {
-                        $article->$name = $value;
-                    }
-                    $article->articleOriginUrl = $articleUrl[0];
-                    if (is_string($articleUrl[1])) {
-                        $article->thumb = $articleUrl[1];
-                    }
-                    if (! is_integer($articleUrl[2])) {
-                        $articleUrl[2] = 0;
-                    }
-                    $article->created_at = $articleUrl[2];
-                    $article->seo_title = $article->title;
-                    $article->seo_keywords = $article->tag;
-                    $article->summary = $article->seo_description;
-                    $categories = Category::find()->asArray()->all();
-                    $temp = [];
-                    foreach ($categories as $c) {
-                        if (in_array($c['name'], ['javascript', 'python', 'java', 'php'])) {
-                            $temp[$c['name']] = $c['id'];
-                        }
-                    }
-                    if (strpos($url, 'http://web') === 0) {
-                        $article->cid = $temp['javascript'];//web
-                        $language = 'javascript';
-                    } else {
-                        if (strpos($url, 'http://python') === 0) {
-                            $article->cid = $temp['python'];//python
-                            $language = 'python';
-                        } else {
-                            if (strpos($url, 'http://www.importnew.com') === 0) {
-                                $article->cid = $temp['java'];//java
-                                $language = 'java';
-                            } else {
-                                if (strpos($url, 'php-programmer')) {
-                                    $article->cid = $temp['php'];
-                                    $language = 'php';
-                                }
-                            }
-                        }
-                    }
-                    $article->type = Article::ARTICLE;
-                    $article->status = Article::ARTICLE_PUBLISHED;
-                    $article->content = StringHelper::encodingWithUtf8($article->content);
-                    $article->content = preg_replace("/<table.*?class=\"crayon-table\">.*?<\/table>/", '', $article->content);
-                    if ($article->cid == $temp['java']) {
-                        $article->content = str_replace([
-                            "          ",
-                            "         ",
-                            "      ",
-                            "  "
-                        ], "\r\n", $article->content);
-                    } else {
-                        $function = function ($matches) use ($language) {
-                            $str = str_replace($matches[0], "<pre class=\"brush:{$language};toolbar:false\">", $matches[0]);
-                            if (isset($matches[1])) {
-                                $str .= str_replace([
-                                    "&nbsp; &nbsp; &nbsp;",
-                                    "&nbsp; &nbsp;",
-                                    "&nbsp;"
-                                ], "\r\n", $matches[1]);
-                                $str = str_replace("    ", "\r\n", $str);
-                                $str = str_replace("/textarea&gt", '', $str);
-                            }
-                            return $str;
-                        };
-                        $article->content = preg_replace_callback("/<textarea wrap=\"soft\" class=\"crayon-plain print-no\".*?>(.*?)</", $function, $article->content);
-                        $article->content = preg_replace("/\/textarea>/", "</pre>", $article->content);
-                    }
-                    if (! $article->save($data)) {
-                        $temp = $article->getErrors();
-                        $errReason = '';
-                        foreach ($temp as $rname => $rreson) {
-                            $errReason .= $rname . '=>' . $rreson[0] . ';';
-                        }
-                        $this->log("Saving page $i -> {$articleUrl[0]} error {$data['title']}. Reason $errReason");
-                    } else {
-                        $this->log("Saving page $i -> {$articleUrl[0]} success {$data['title']}");
-                        $articleNum++;
-                    }
-                }
+                echo "{$url}\t采集失败,原因：{$result['msg']}===\r\n";
             }
         }
-        $endTime = time();
-        $this->log("Finished scrawl.Total use " . ($endTime - $startTime) . " seconds. Total scrawled " . $articleNum . " articles");
     }
 
-    private function log($str, $name = null)
+    public function actionIndex2($start = 100, $range = 100)
     {
-        if ($name != null) {
-            FileHelper::createDirectory(yii::getAlias("@runtime") . '/logs/scrawl/' . $name);
-            $this->fileName = yii::getAlias("@runtime") . '/logs/scrawl/' . $name . '/' . date('Y-m-d-h-i-s') . '.txt';
+        $end = $start + $range;
+        for($i=$start; $i<$end; $i++){
+            $this->actionCollectElm($i);
         }
-        $log = "\r\n" . date('Y-m-d H:i:s') . "   " . $str . "\r\n";
-        $this->stdout($log);
-        file_put_contents($this->fileName, $log, FILE_APPEND);
     }
 
+    public function actionCollectElm($id)
+    {
+        $url = self::ELM_URL .$id;
+        $ua = 'Mozilla/5.0 (Linux; Android 6.0.1; 1605-A01 Build/MMB29M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.143 Crosswalk/24.53.595.0 XWEB/153 MMWEBSDK/21 Mobile Safari/537.36 MicroMessenger/6.6.7.1321(0x26060737) NetType/WIFI Language/zh_CN MicroMessenger/6.6.7.1321(0x26060737) NetType/WIFI Language/zh_CN miniProgram';
+        $cookie = 'perf_ssid=r4pal75ur62uw4aywkcdd5qosmk5bhig_2018-06-11; ubt_ssid=bowg259wnpj005nzxpiljqzazzv5cw0h_2018-06-11; SID=OKK9b5Y4FjO9pE8WBlOtrV1dFPVW6tQu6N2g;';
+        $curl = new Curl(false);
+        $result_json = true;
+        $result = $curl->setUrl($url)->setCookie($cookie)->setUserAgent($ua)->request($result_json);
+        print_r($result);
+        if(!isset($result) || !is_array($result) || (isset($result['name']) && isset($result['message']))){
+            echo "{$url}\t无数据===\r\n";
+            return;
+        }
 
+        $model = new CollectData();
+        if($result['name'] && $result['address'] && $result['phone']){
+            $data = [];
+            $data['name'] = $result['name'];
+            $data['address'] = $result['address'];
+            $data['phone'] = $result['phone'];
+            $data['url'] = $url;
+            $result = $model->add2($data);
+            if($result['status'] > 0){
+                echo "{$url}\t采集成功\r\n";
+            } else {
+                echo "{$url}\t采集失败===\r\n";
+            }
+        }
+    }
 }
