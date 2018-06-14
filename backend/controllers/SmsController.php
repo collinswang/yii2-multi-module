@@ -66,7 +66,7 @@ class SmsController extends \yii\web\Controller
     public function actionGetTemplateList($type)
     {
         $model_template = new SmsTemplateData();
-        $template_list = $model_template->get_list($type);
+        $template_list = $model_template->getList($type);
         return $template_list;
     }
 }

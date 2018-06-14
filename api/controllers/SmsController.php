@@ -21,14 +21,11 @@ use yii\helpers\ArrayHelper;
  */
 class SmsController extends BaseController
 {
-    public function actionIndex()
-    {
-        return ['status'=>1, 'desc'=>"11111", 'uid'=>$this->uid];
-    }
 
     /**
-     * 发送记录
-     * 上传文件说明：格式： “手机号”，“模板字段一”，“模板字段二”
+     * 以上传文件的方式批量发送短信
+     * @var int     tpl_id      短信模板ID
+     * @var string  file        上传文件，格式： “手机号”，“模板字段一”，“模板字段二”
      * @return array
      */
     public function actionSend()
@@ -37,7 +34,7 @@ class SmsController extends BaseController
         $tpl_id = intval($_POST['tpl_id']);
         $model_template = new SmsTemplateData();
         $tpl_detail = $model_template->get(SmsTemplateData::SEARCH_BY_ID, $tpl_id);
-        if(!$tpl_detail){
+        if (!$tpl_detail) {
             return ['status'=>-1, 'desc'=>"无效的模板"];
         }
 
@@ -47,27 +44,22 @@ class SmsController extends BaseController
         $sms_list = file_get_contents($file['tmp_name']);
         $sms_list = str_replace(["\r\n", "\r"], "\n", $sms_list);
         $sms_list = explode("\n", $sms_list);
-        if($sms_list){
+        if ($sms_list) {
             foreach ($sms_list as $item) {
-                if(!$item){continue;}
+                if (!$item) {
+                    continue;
+                }
                 $item_arr = explode(",", $item);
-                if(count($item_arr)){
+                if (count($item_arr)) {
                     $mobile = array_shift($item_arr);
-                    if($mobile){
-                        $single_result = $sms_model->send_template_single($this->uid, $tpl_id, $mobile, $item_arr);
+                    if ($mobile) {
+                        $single_result = $sms_model->sendTemplateSingle($this->uid, $tpl_id, $mobile, $item_arr);
                         //$single_result['status'] >0 表示成功
                     }
                 }
             }
         }
         return ['status'=>1, 'desc'=>"11111", 'uid'=>$this->uid];
-    }
-
-    public function actionPush()
-    {
-        $model = new SmsService(SmsService::SMS_SIGN_API_ALIDAYU);
-        $result = $model->send_sms_syn();
-        print_r($result);
     }
 
 }

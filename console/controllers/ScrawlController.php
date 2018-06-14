@@ -37,15 +37,36 @@ class ScrawlController extends Controller
      */
     public function actionIndex($start = 100, $range = 100)
     {
+        $start_time = time();
         $end = $start + $range;
+        $total_blank = 0;   //最近相连的无数据统计
+        $max_blank = 30;
+        $next_block = 1000;
         for($i=$start; $i<$end; $i++){
-            $this->actionCollectMeituan($i);
+            $status = $this->actionCollectMeituan($i);
+            //判断数据是否存在,不存在则计数器+1
+            if($status){
+                $total_blank = 0;
+            } else {
+                $total_blank++;
+            }
+            //如果计数器超过阀值，则自动跳到下一个区块再试
+            if($total_blank>$max_blank){
+                $i +=$next_block;
+                $total_blank = 0;
+                echo "连续{$max_blank}条无数据，跳到下一个区块{$i}\r\n";
+            }
         }
+        $end_time = time();
+        $total_time = ($end_time-$start_time)/3600;
+        echo "\r\n".date("Y-m-d H:i:s");
+        echo "\r\n用时：{$total_time}小时\r\n";
     }
 
     /**
      * @param $id
      * php yii scrawl/collect-meituan 111
+     * @return int
      */
     public function actionCollectMeituan($id)
     {
@@ -55,7 +76,7 @@ class ScrawlController extends Controller
         $result = $curl->setUrl($url)->request($result_json);
         if(!isset($result['data']) || !isset($result['data'][0])){
             echo "{$url}\t无数据===\r\n";
-            return;
+            return false;
         } else {
             $result = $result['data'][0];
         }
@@ -78,6 +99,7 @@ class ScrawlController extends Controller
             } else {
                 echo "{$url}\t采集失败,原因：{$result['msg']}===\r\n";
             }
+            return true;
         }
     }
 

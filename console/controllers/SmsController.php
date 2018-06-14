@@ -24,7 +24,7 @@ class SmsController extends \yii\console\Controller
     {
         $page_size = 100;
         $sql = "verify_status = 1 and is_hidden=0";
-        $sms_sign_api = SmsSignService::get_sms_sign_api();
+        $sms_sign_api = SmsSignService::getSmsSignApi();
         foreach (SmsSign::find()->where($sql)->asArray()->batch($page_size) as $list) {
             if($list){
                 foreach ($list as $item) {
@@ -48,15 +48,15 @@ class SmsController extends \yii\console\Controller
         $mobile = "13651081267";
         $tpl_id = "SMS_116780127";
         $params = ['code'=>rand(100000,999999)];
-        $result = $model->sms_send_template_msg_single($mobile, $tpl_id , $params);
+        $result = $model->smsSendTemplateMsgSingle($mobile, $tpl_id , $params);
         print_r($result);
     }
 
     public function actionGet()
     {
-        $sms_api = SmsService::get_sms_api();
+        $sms_api = SmsService::getSmsApi();
         $model = new SmsService(new $sms_api[1]);
-        $result = $model->pull_status(0, 1);
+        $result = $model->pullStatus(0, 1);
         print_r($result);
     }
 

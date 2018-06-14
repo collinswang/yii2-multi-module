@@ -53,7 +53,7 @@ class QcloudSmsTemplateClient implements  SmsTemplateInterface
      *                      }
      *                     }
      */
-    public function sms_template_add($content, $type =0, $desc = null, $title = null)
+    public function smsTemplateAdd($content, $type =0, $desc = null, $title = null)
     {
         $this->url = self::ADD_URL;
         $random = $this->util->getRandom();
@@ -91,7 +91,7 @@ class QcloudSmsTemplateClient implements  SmsTemplateInterface
      *             }
      *         }
      */
-    public function sms_template_update($id, $content, $type, $desc = null, $title = null)
+    public function smsTemplateUpdate($id, $content, $type, $desc = null, $title = null)
     {
         $this->url = self::UPDATE_URL;
         $random = $this->util->getRandom();
@@ -120,7 +120,7 @@ class QcloudSmsTemplateClient implements  SmsTemplateInterface
      *                     "msg": "" //result非0时的具体错误信息
      *                     }
      */
-    public function sms_template_del($id)
+    public function smsTemplateDel($id)
     {
         $this->url = self::UPDATE_URL;
         $random = $this->util->getRandom();
@@ -154,7 +154,7 @@ class QcloudSmsTemplateClient implements  SmsTemplateInterface
      *                     ]
      *                     }
      */
-    public function sms_template_check($id)
+    public function smsTemplateCheck($id)
     {
         $this->url = self::CHECK_URL;
         $random = $this->util->getRandom();

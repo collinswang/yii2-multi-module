@@ -17,7 +17,7 @@ class SmsSignService extends BaseObject
         2 => 'common\modules\sms\base\AliDayuSmsSignClient',
     ];
 
-    public static function get_sms_sign_api()
+    public static function getSmsSignApi()
     {
         return self::$sms_sign_api;
     }
@@ -32,6 +32,7 @@ class SmsSignService extends BaseObject
             $this->model_sign = $model_sign;
         }
 
+        parent::__construct();
         return true;
     }
 
@@ -55,7 +56,7 @@ class SmsSignService extends BaseObject
         $id = $model->add(['uid'=>$uid,'name'=>$sign, 'desc'=>$desc, 'source'=>1, 'sign_id'=>0, 'create_at'=>time()]);
         if($id){
             //调用API接口提交数据
-            $post_result = $this->model_sign->sms_sign_add($sign, $desc);
+            $post_result = $this->model_sign->smsSignAdd($sign, $desc);
             //更新本地签名记录，保存API接口返回结果
             $result = $model->update($id, [
                 'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
@@ -104,7 +105,7 @@ class SmsSignService extends BaseObject
         $total = $model->update($id, ['sign_id'=>$sign_id,'name'=>$sign, 'desc'=>$desc, 'update_at'=>time()]);
         //提交到指定平台
         if($total){
-            $post_result = $this->model_sign->sms_sign_add($sign, $desc);
+            $post_result = $this->model_sign->smsSignAdd($sign, $desc);
             //更新提交结果
             $result = $model->update($id, [
                 'sign_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
@@ -137,7 +138,7 @@ class SmsSignService extends BaseObject
             return ['status'=>-2, 'desc'=>'数据不存在'];
         }
 
-        $post_result = $this->model_sign->sms_sign_del([$detail['sign_id']]);
+        $post_result = $this->model_sign->smsSignDel([$detail['sign_id']]);
         //更新提交结果
         $model = new SmsSignData();
         $result = $model->update($id, [
@@ -163,7 +164,7 @@ class SmsSignService extends BaseObject
     public function check($detail)
     {
         $sign_id = $detail['sign_id'];
-        $post_result = $this->model_sign->sms_sign_check([$sign_id]);
+        $post_result = $this->model_sign->smsSignCheck([$sign_id]);
         //如果取返回值成功，则更新DB
         if(isset($post_result['status'])){
             //更新提交结果

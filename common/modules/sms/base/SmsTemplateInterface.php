@@ -14,7 +14,7 @@ interface SmsTemplateInterface
      * @param string    $title
      * @return mixed
      */
-    function sms_template_add($content, $type, $desc, $title);
+    function smsTemplateAdd($content, $type, $desc, $title);
 
     /**
      * 修改短信模板
@@ -25,19 +25,19 @@ interface SmsTemplateInterface
      * @param string    $title      模板标签
      * @return mixed
      */
-    function sms_template_update($id, $content, $type, $desc, $title);
+    function smsTemplateUpdate($id, $content, $type, $desc, $title);
 
     /**
      * 删除短信模板
      * @param array   $id
      * @return mixed
      */
-    function sms_template_del($id);
+    function smsTemplateDel($id);
 
     /**
      * 检查短信模板
      * @param array   $id
      * @return mixed
      */
-    function sms_template_check($id);
+    function smsTemplateCheck($id);
 }

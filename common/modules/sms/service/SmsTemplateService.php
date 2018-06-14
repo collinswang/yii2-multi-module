@@ -18,7 +18,7 @@ class SmsTemplateService extends BaseObject
         2 => 'common\modules\sms\base\AliDayuSmsTemplateClient',
     ];
 
-    public static function get_sms_sign_api()
+    public static function getSmsSignApi()
     {
         return self::$sms_sign_api;
     }
@@ -32,7 +32,7 @@ class SmsTemplateService extends BaseObject
         } else {
             $this->model_sign = $model_sign;
         }
-
+        parent::__construct();
         return true;
     }
 
@@ -59,7 +59,7 @@ class SmsTemplateService extends BaseObject
         $id = $model->add(['uid'=>$uid, 'content'=>$content, 'title'=>$title, 'desc'=>$desc, 'source'=>$source, 'template_id'=>0, 'create_at'=>time()]);
         if($id){
             //调用API接口提交数据
-            $post_result = $this->model_sign->sms_template_add($content, $type, $desc, $title);
+            $post_result = $this->model_sign->smsTemplateAdd($content, $type, $desc, $title);
             if($post_result['data']['id']){
                 //更新本地签名记录，保存API接口返回结果
                 $result = $model->update($id, [
@@ -107,7 +107,7 @@ class SmsTemplateService extends BaseObject
         $total = $model->update($id, ['content'=>$content, 'title'=>$title, 'desc'=>$desc, 'update_at'=>time()]);
         //提交到指定平台
         if($total){
-            $post_result = $this->model_sign->sms_template_update($id, $content, $type, $desc, $title);
+            $post_result = $this->model_sign->smsTemplateUpdate($id, $content, $type, $desc, $title);
             //更新提交结果
             $result = $model->update($id, [
                 'template_id'       => $post_result['data']['id'] ? $post_result['data']['id'] : 0,
@@ -141,7 +141,7 @@ class SmsTemplateService extends BaseObject
             return ['status'=>-2, 'desc'=>'数据不存在或无权限'];
         }
         //删除远端数据
-        $post_result = $this->model_sign->sms_template_del([$detail['template_id']]);
+        $post_result = $this->model_sign->smsTemplateDel([$detail['template_id']]);
         //更新提交结果
         $model = new SmsSignData();
         $result = $model->update($id, [
@@ -176,7 +176,7 @@ class SmsTemplateService extends BaseObject
         }
 
         //获取远端数据
-        $post_result = $this->model_sign->sms_template_check([$detail['template_id']]);
+        $post_result = $this->model_sign->smsTemplateCheck([$detail['template_id']]);
         //如果取返回值成功，则更新DB
         if(isset($post_result['status'])){
             //更新提交结果

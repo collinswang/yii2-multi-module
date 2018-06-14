@@ -31,6 +31,15 @@ class SmsData extends BaseObject
     const TYPE_DIRECT = 0;
     const TYPE_TEMPLATE = 1;
 
+    const QUEUE_KEY = 'SMS.QUEUE.LIST';
+
+    private $redis_con;
+
+    private function Redis(){
+        $this->redis_con==null && $this->redis_con = Yii::$app->redis;;
+        return $this->redis_con;
+    }
+
     /**
      * 添加发送短信记录
      * @param array     $data
@@ -41,6 +50,8 @@ class SmsData extends BaseObject
         $model = new Sms();
         $model->attributes = $data;
         if ($model->save()) {
+            //写入队列
+            $this->setQueue($model->attributes);
             return $model->id;
         } else {
             var_dump($model->getErrors());
@@ -49,18 +60,27 @@ class SmsData extends BaseObject
     }
 
     /**
-     * 批量添加发送短信记录
-     * @param array     $data
-     * @return int
+     * 写入短信发送队列
+     * @param $data
      */
-    public function batch_add($data)
+    public function setQueue($data)
     {
-        try {
-            Yii::$app->db->createCommand()->batchInsert('sms', ['name', 'age'], $data)->execute();
-        } catch (Exception $e) {
-        }
+        $this->Redis()->executeCommand('LPUSH', [self::QUEUE_KEY, json_encode($data)]);
+    }
 
-        return 1;
+    /**
+     * 写入短信发送队列
+     * @return array|mixed
+     */
+    public function getQueue()
+    {
+        $data = $this->Redis()->executeCommand('RPOP', [self::QUEUE_KEY]);
+        if($data){
+            $data = json_decode($data, true);
+        } else {
+            $data = [];
+        }
+        return $data;
     }
 
     /**
@@ -81,7 +101,7 @@ class SmsData extends BaseObject
      * @param array|null $data
      * @return int
      */
-    public function update_status($sid, $data)
+    public function updateStatus($sid, $data)
     {
         $result = Sms::updateAll($data, ['sid'=>$sid]);
         return $result;

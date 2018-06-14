@@ -127,7 +127,7 @@ class SmsTemplateData extends BaseObject
      * @param int $page_size
      * @return array
      */
-    public function get_list($source = 0, $page = 1, $page_size = 20)
+    public function getList($source = 0, $page = 1, $page_size = 20)
     {
         $source = intval($source);
         if($source){

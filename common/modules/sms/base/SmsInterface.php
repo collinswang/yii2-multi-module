@@ -10,7 +10,7 @@ interface SmsInterface
      * 单次发送模板短信
      * @return mixed
      */
-    function sms_send_template_msg_single($mobile, $tpl_id, $data);
+    function smsSendTemplateMsgSingle($mobile, $tpl_id, $data);
 
     /**
      * 批量发送模板短信
@@ -19,7 +19,7 @@ interface SmsInterface
      * @param array     $params     模板内对应参数表
      * @return mixed
      */
-    function sms_send_template_msg_batch($mobiles, $tpl_id, $params);
+    function smsSendTemplateMsgBatch($mobiles, $tpl_id, $params);
 
     /**
      * 单次发送短信
@@ -28,7 +28,7 @@ interface SmsInterface
      * @param $type
      * @return mixed
      */
-    function sms_send_msg_single($mobile, $params, $type);
+    function smsSendMsgSingle($mobile, $params, $type);
 
     /**
      * 批量发送短信
@@ -37,7 +37,7 @@ interface SmsInterface
      * @param int       $type       短信类型，0 为普通短信，1 营销短信
      * @return mixed
      */
-    function sms_send_msg_batch($mobiles, $content, $type);
+    function smsSendMsgBatch($mobiles, $content, $type);
 
     /**
      * 短信发送结果回调(队列)
@@ -45,7 +45,7 @@ interface SmsInterface
      * @param $max
      * @return mixed
      */
-    function sms_send_callback($type, $max);
+    function smsSendCallback($type, $max);
 
     /**
      * 获取指定手机短信回复
@@ -55,7 +55,7 @@ interface SmsInterface
      * @param int           $max            获取最大条数,最大100
      * @return mixed
      */
-    function sms_reply_msg($mobile, $start_time, $end_time, $max);
+    function smsReplyMsg($mobile, $start_time, $end_time, $max);
 
     /**
      * 短信发送结果
@@ -65,5 +65,5 @@ interface SmsInterface
      * @param int           $max            获取最大条数,最大100
      * @return mixed
      */
-    function sms_send_status($mobile, $start_time, $end_time, $max);
+    function smsSendStatus($mobile, $start_time, $end_time, $max);
 }

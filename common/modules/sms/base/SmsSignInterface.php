@@ -12,7 +12,7 @@ interface SmsSignInterface
      * @param string    $desc   说明
      * @return mixed
      */
-    function sms_sign_add($sign, $desc);
+    function smsSignAdd($sign, $desc);
 
     /**
      * 修改签名
@@ -21,19 +21,19 @@ interface SmsSignInterface
      * @param string    $desc       说明
      * @return mixed
      */
-    function sms_sign_update($sign_id,$sign, $desc);
+    function smsSignUpdate($sign_id,$sign, $desc);
 
     /**
      * 删除签名
      * @param array       $sign_id    目标平台签名ID
      * @return mixed
      */
-    function sms_sign_del($sign_id);
+    function smsSignDel($sign_id);
 
     /**
      * 查询签名状态
      * @param array       $sign_id    目标平台签名ID
      * @return mixed
      */
-    function sms_sign_check($sign_id);
+    function smsSignCheck($sign_id);
 }

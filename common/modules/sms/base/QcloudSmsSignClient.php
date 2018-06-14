@@ -40,7 +40,7 @@ class QcloudSmsSignClient implements  SmsSignInterface
      *                     }
      *                     }
      */
-    public function sms_sign_add($sign, $desc)
+    public function smsSignAdd($sign, $desc)
     {
         $this->url = self::ADD_URL;
         $random = $this->util->getRandom();
@@ -73,7 +73,7 @@ class QcloudSmsSignClient implements  SmsSignInterface
      *                     }
      *                     }
      */
-    public function sms_sign_update($sign_id, $sign, $desc)
+    public function smsSignUpdate($sign_id, $sign, $desc)
     {
         $this->url = self::UPDATE_URL;
         $random = $this->util->getRandom();
@@ -100,7 +100,7 @@ class QcloudSmsSignClient implements  SmsSignInterface
      *                     "msg": "" //result非0时的具体错误信息
      *                     }
      */
-    public function sms_sign_del($sign_id)
+    public function smsSignDel($sign_id)
     {
         $this->url = self::UPDATE_URL;
         $random = $this->util->getRandom();
@@ -134,7 +134,7 @@ class QcloudSmsSignClient implements  SmsSignInterface
      *                     ]
      *                     }
      */
-    public function sms_sign_check($sign_id)
+    public function smsSignCheck($sign_id)
     {
         $this->url = self::CHECK_URL;
         $random = $this->util->getRandom();

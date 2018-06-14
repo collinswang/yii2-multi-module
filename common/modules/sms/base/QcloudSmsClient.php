@@ -46,7 +46,7 @@ class QcloudSmsClient implements SmsInterface
      *     "sid": "xxxxxxx"
      *     }
      */
-    public function sms_send_template_msg_single($mobile, $tpl_id, $data)
+    public function smsSendTemplateMsgSingle($mobile, $tpl_id, $data)
     {
         $single_send = new SmsSingleSender($this->appid, $this->appkey);
 
@@ -66,7 +66,7 @@ class QcloudSmsClient implements SmsInterface
      * @param array     $params     模板内对应参数表
      * @return mixed
      */
-    public function sms_send_template_msg_batch($mobiles, $tpl_id, $params)
+    public function smsSendTemplateMsgBatch($mobiles, $tpl_id, $params)
     {
         $multi_send = new SmsMultiSender($this->appid, $this->appkey);
 
@@ -86,7 +86,7 @@ class QcloudSmsClient implements SmsInterface
      * @param int       $type       短信类型，0 为普通短信，1 营销短信
      * @return mixed
      */
-    public function sms_send_msg_single($mobile, $content, $type)
+    public function smsSendMsgSingle($mobile, $content, $type)
     {
         $single_send = new SmsSingleSender($this->appid, $this->appkey);
 
@@ -105,7 +105,7 @@ class QcloudSmsClient implements SmsInterface
      * @param int       $type       短信类型，0 为普通短信，1 营销短信
      * @return mixed
      */
-    public function sms_send_msg_batch($mobiles, $content, $type)
+    public function smsSendMsgBatch($mobiles, $content, $type)
     {
         $multi_send = new SmsMultiSender($this->appid, $this->appkey);
 
@@ -123,7 +123,7 @@ class QcloudSmsClient implements SmsInterface
      * @param $max
      * @return mixed
      */
-    public function sms_send_callback($type, $max)
+    public function smsSendCallback($type, $max)
     {
         $spuller = new SmsStatusPuller($this->appid, $this->appkey);
 
@@ -147,7 +147,7 @@ class QcloudSmsClient implements SmsInterface
      * @param int $max
      * @return mixed
      */
-    public function sms_reply_msg($mobile, $start_time, $end_time, $max = 100)
+    public function smsReplyMsg($mobile, $start_time, $end_time, $max = 100)
     {
         $nationCode = "86";
         $mspuller = new SmsMobileStatusPuller($this->appid, $this->appkey);
@@ -167,7 +167,7 @@ class QcloudSmsClient implements SmsInterface
      * @param int $max
      * @return mixed
      */
-    public function sms_send_status($mobile, $start_time, $end_time, $max = 100)
+    public function smsSendStatus($mobile, $start_time, $end_time, $max = 100)
     {
         $nationCode = "86";
         $mspuller = new SmsMobileStatusPuller($this->appid, $this->appkey);

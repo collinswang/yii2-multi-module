@@ -21,7 +21,7 @@ class SmsSignController extends \yii\console\Controller
     {
         $page_size = 100;
         $sql = "verify_status = 1 and is_hidden=0";
-        $sms_sign_api = SmsSignService::get_sms_sign_api();
+        $sms_sign_api = SmsSignService::getSmsSignApi();
         foreach (SmsSign::find()->where($sql)->asArray()->batch($page_size) as $list) {
             if($list){
                 foreach ($list as $item) {

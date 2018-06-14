@@ -43,7 +43,7 @@ class AliSmsClient implements SmsInterface
      *     "sid": "xxxxxxx"
      *     }
      */
-    public function sms_send_template_msg_single($mobile, $tpl_id, $params)
+    public function smsSendTemplateMsgSingle($mobile, $tpl_id, $params)
     {
         $data = array ();
 
@@ -96,7 +96,7 @@ class AliSmsClient implements SmsInterface
      * @param array     $params     模板内对应参数表
      * @return mixed
      */
-    public function sms_send_template_msg_batch($mobiles, $tpl_id, $params)
+    public function smsSendTemplateMsgBatch($mobiles, $tpl_id, $params)
     {
         $data = array ();
 
@@ -149,7 +149,7 @@ class AliSmsClient implements SmsInterface
      * @param int       $type       短信类型，0 为普通短信，1 营销短信
      * @return mixed
      */
-    public function sms_send_msg_single($mobile, $content, $type)
+    public function smsSendMsgSingle($mobile, $content, $type)
     {
 
     }
@@ -161,7 +161,7 @@ class AliSmsClient implements SmsInterface
      * @param int       $type       短信类型，0 为普通短信，1 营销短信
      * @return mixed
      */
-    public function sms_send_msg_batch($mobiles, $content, $type)
+    public function smsSendMsgBatch($mobiles, $content, $type)
     {
 
     }
@@ -172,7 +172,7 @@ class AliSmsClient implements SmsInterface
      * @param $max
      * @return mixed
      */
-    public function sms_send_callback($type, $max)
+    public function smsSendCallback($type, $max)
     {
 
     }
@@ -185,7 +185,7 @@ class AliSmsClient implements SmsInterface
      * @param int $max
      * @return mixed
      */
-    public function sms_reply_msg($mobile, $start_time, $end_time, $max = 100)
+    public function smsReplyMsg($mobile, $start_time, $end_time, $max = 100)
     {
 
     }
@@ -198,7 +198,7 @@ class AliSmsClient implements SmsInterface
      * @param int $max
      * @return mixed
      */
-    public function sms_send_status($mobile, $start_time, $end_time, $max = 100)
+    public function smsSendStatus($mobile, $start_time, $end_time, $max = 100)
     {
 
     }

@@ -22,7 +22,7 @@ class SmsTemplateController extends \yii\console\Controller
     {
         $page_size = 100;
         $sql = "verify_status = 1 and is_hidden=0";
-        $sms_sign_api = SmsSignService::get_sms_sign_api();
+        $sms_sign_api = SmsSignService::getSmsSignApi();
         foreach (SmsSign::find()->where($sql)->asArray()->batch($page_size) as $list) {
             if($list){
                 foreach ($list as $item) {
@@ -41,7 +41,7 @@ class SmsTemplateController extends \yii\console\Controller
         $desc = "快递发货提醒";
         $type = 0;
         $sms_template = new QcloudSmsTemplateClient();
-        $result = $sms_template->sms_template_add($content, $type, $desc, $title);
+        $result = $sms_template->smsTemplateAdd($content, $type, $desc, $title);
         print_r($result);
     }
 
