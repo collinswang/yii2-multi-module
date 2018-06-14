@@ -58,6 +58,7 @@ class SmsService extends BaseObject
         if ($build_result['status'] <= 0) {
             return ['status' => $build_result['status'], 'desc' => $build_result['desc']];
         }
+        //数组转STRING，这是为了方便异步发送短信
         $content = json_encode($build_result['content']);
         $type = $build_result['type'];
 
@@ -80,34 +81,42 @@ class SmsService extends BaseObject
 
     /**
      * 异步短信发送队列
-     * @return array
+     * @return int
      */
     public function sendSmsSync()
     {
-        $sms_model = new SmsData();
-        $id = $sms_model->getSmsList();
-        if(!$id){
-            return [];
-        }
-        $sms_detail = Sms::find()->asArray()->one();
-        $params = json_decode($sms_detail['content'], true);
-        $post_result = $this->model_sign->smsSendTemplateMsgSingle($sms_detail['mobile'], $sms_detail['tpl_id'], $params);
-
-        //更新本地签名记录，保存API接口返回结果
-        if($post_result){
-            $result = $sms_model->update($id, [
-                'send_status' => isset($post_result['result']) ? $post_result['result'] : 0,
-                'send_desc' => isset($post_result['errmsg']) ? $post_result['errmsg'] : 0,
-                'sid'   => isset($post_result['sid']) ? $post_result['sid'] : 0,
-                'update_at'   => time(),
-            ]);
-            if($result){
-                return ['status'=>1, 'desc'=>'添加成功', 'id' => $id];
-            } else {
-                return ['status'=>1, 'desc'=>'更新失败', 'id' => $id];
+        try{
+            $sms_model = new SmsData();
+            $sms_detail = $sms_model->getQueue();
+            if(!$sms_detail || !isset($sms_detail['content'])){
+                return -1;
             }
-        } else {
-            return ['status'=>1, 'desc'=>'同步发送失败', 'id' => $id];
+            $params = json_decode($sms_detail['content'], true);
+            $post_result = $this->model_sign->smsSendTemplateMsgSingle($sms_detail['mobile'], $sms_detail['template_id'], $params);
+
+            //更新本地签名记录，保存API接口返回结果
+            if($post_result){
+                //防止数据库链接超时
+                $db_con = \Yii::$app->db;
+                $db_con->open();
+                $result = $sms_model->update($sms_detail['id'], [
+                    'send_status' => isset($post_result['result']) ? $post_result['result'] : 0,
+                    'send_desc' => isset($post_result['errmsg']) ? $post_result['errmsg'] : 0,
+                    'sid'   => isset($post_result['sid']) ? $post_result['sid'] : 0,
+                    'update_at'   => time(),
+                ]);
+                $db_con->close();
+                if($result){
+                    return $sms_detail['id'];
+                } else {
+                    return -2;
+                }
+            } else {
+                return -3;
+            }
+        } catch (\Exception $e){
+            print_r($e->getMessage());
+            return -4;
         }
     }
 

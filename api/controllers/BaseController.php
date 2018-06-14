@@ -23,7 +23,7 @@ class BaseController extends Controller
         if(!in_array($url, ["site"])){
             $check_token = $this->checkToken();
             if(!$check_token){
-                echo json_encode(['status'=>-1, 'desc'=>'访问错误', 'uid'=>$this->uid,'token'=>$this->token]);
+                echo json_encode(['status'=>-1, 'desc'=>'fail token', 'uid'=>$this->uid,'token'=>$this->token]);
                 exit;
             }
         }

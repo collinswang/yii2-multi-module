@@ -11,9 +11,11 @@ namespace console\controllers;
 
 use common\modules\sms\base\AliSmsClient;
 use common\modules\sms\base\SmsInterface;
+use common\modules\sms\data\SmsData;
 use \common\modules\sms\models\SmsSign;
 use common\modules\sms\service\SmsService;
 use common\modules\sms\service\SmsSignService;
+use Yii;
 
 class SmsController extends \yii\console\Controller
 {
@@ -33,7 +35,6 @@ class SmsController extends \yii\console\Controller
                 }
             }
         }
-
     }
 
     public function actionTest()
@@ -58,6 +59,21 @@ class SmsController extends \yii\console\Controller
         $model = new SmsService(new $sms_api[1]);
         $result = $model->pullStatus(0, 1);
         print_r($result);
+    }
+
+    public function actionQueue()
+    {
+        $smsService = new SmsService(Yii::$app->params['smsPlatform']);
+        $status = true;
+        while($status){
+            $queueData = $smsService->sendSmsSync();
+            if($queueData == -1){
+                sleep(1);
+                echo "Zzzz..\r\n";
+            } else {
+                echo "处理中..\r\n";
+            }
+        }
     }
 
 }
