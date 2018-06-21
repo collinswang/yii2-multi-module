@@ -9,5 +9,5 @@ return [
     'admin' => [
         'url' => 'http://admin.cms.feehi.com',
     ],
-    'smsPlatform' => 1,
+    'smsPlatform' => 2,
 ];

@@ -96,10 +96,12 @@ class ScrawlController extends Controller
             $result = $model->add($data);
             if($result['status'] > 0){
                 echo "{$url}\t采集成功\r\n";
+                return true;
             } else {
                 echo "{$url}\t采集失败,原因：{$result['msg']}===\r\n";
+                return false;
             }
-            return true;
+
         }
     }
 
@@ -119,7 +121,6 @@ class ScrawlController extends Controller
         $curl = new Curl(false);
         $result_json = true;
         $result = $curl->setUrl($url)->setCookie($cookie)->setUserAgent($ua)->request($result_json);
-        print_r($result);
         if(!isset($result) || !is_array($result) || (isset($result['name']) && isset($result['message']))){
             echo "{$url}\t无数据===\r\n";
             return;

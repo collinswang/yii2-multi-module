@@ -41,20 +41,21 @@ class SmsService extends BaseObject
     /**
      * 发送单条模板短信
      * @param int   $uid 用户UID
-     * @param int   $tpl_id
-     * @param int   $mobile
+     * @param array   $tpl_detail       模板详情
+     * @param string   $mobile
      * @param array $params
      * @return array
      */
-    public function sendTemplateSingle($uid, $tpl_id, $mobile, $params)
+    public function sendTemplateSingle($uid, $tpl_detail, $mobile, $params)
     {
-        if (!$uid || !$tpl_id || !$mobile || !$params) {
+        if (!$uid || !$tpl_detail || !$mobile || !$params) {
             return ['status' => -1, 'desc' => 'UID不能为空'];
         }
-        $mobile = intval($mobile);
+
+        $mobile = intval(str_replace('"', '', $mobile));
 
         //获取消息模板
-        $build_result = $this->buildContent($tpl_id, $params);
+        $build_result = $this->buildContent($tpl_detail, $params);
         if ($build_result['status'] <= 0) {
             return ['status' => $build_result['status'], 'desc' => $build_result['desc']];
         }
@@ -66,7 +67,7 @@ class SmsService extends BaseObject
         $model = new SmsData();
         $id = $model->add(['uid'         => $uid,
                            'type'        => $type,
-                           'template_id' => $tpl_id,
+                           'template_id' => $tpl_detail['template_id'],
                            'mobile'      => $mobile,
                            'content'     => $content,
                            'create_at'   => time(),
@@ -93,7 +94,6 @@ class SmsService extends BaseObject
             }
             $params = json_decode($sms_detail['content'], true);
             $post_result = $this->model_sign->smsSendTemplateMsgSingle($sms_detail['mobile'], $sms_detail['template_id'], $params);
-
             //更新本地签名记录，保存API接口返回结果
             if($post_result){
                 //防止数据库链接超时
@@ -127,20 +127,19 @@ class SmsService extends BaseObject
      * @param $params
      * @return mixed
      */
-    public static function buildContent($tpl_id, $params)
+    public static function buildContent($template, $params)
     {
         $result = [];
-        $sms_temp_model = new SmsTemplateData();
-        $template = $sms_temp_model->get(SmsTemplateData::SEARCH_BY_ID, intval($tpl_id));
         $temp_content = $template['content'];
-        preg_match_all('/\$\{\w*\}/', $temp_content, $temp_keys);
-        $total_params = count($temp_keys[0]);
+        preg_match_all('/\{(\w*)\}/', $temp_content, $temp_keys);
+        $temp_keys = $temp_keys[1];
+        $total_params = count($temp_keys);
         if($total_params > count($params)){
             return ['status'=>-1,'desc'=>"少参数", 'type'=>$template['type']];
         }
 
-        if($temp_keys[0]){
-            foreach ($temp_keys[0] as $key=>$item) {
+        if($temp_keys){
+            foreach ($temp_keys as $key=>$item) {
                 $result[$item] = $params[$key];
             }
         }

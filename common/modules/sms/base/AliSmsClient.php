@@ -15,11 +15,11 @@ class AliSmsClient implements SmsInterface
     private $appkey;
 
     public static $sign = [
-        0 => "阿里云短信测试专用",
+        0 => "云提醒",
     ];
 
     public static $template = [
-        0 => ["id" => "SMS_116780127", "content" => '验证码${code}，您正在尝试变更重要信息，请妥善保管账户信息。'],
+        0 => ["id" => "SMS_137672391", "content" => '您订购的${product}已发货，${express}单号${expressNo}，请注意查收！'],
     ];
 
     public function __construct()

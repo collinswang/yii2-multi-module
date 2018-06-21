@@ -14,7 +14,7 @@ use yii\db\ActiveRecord;
  * @property int $source 来源：1：腾迅云 2：阿里云
  * @property int $type 发送类型0:直接发送 1:模板发送
  * @property int $mobile 手机号
- * @property int $template_id 模板ID
+ * @property string $template_id 模板ID
  * @property string $content 发送内容
  * @property int $create_at
  * @property int $update_at
@@ -57,7 +57,8 @@ class Sms extends \yii\db\ActiveRecord
         return [
             [['uid', 'mobile', 'content'], 'required'],
             [['create_at', 'update_at'], 'safe'],
-            [['uid', 'source', 'type', 'mobile', 'template_id', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid', 'order_id'], 'integer'],
+            [['uid', 'source', 'type', 'mobile', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid', 'order_id'], 'integer'],
+            [['template_id'], 'string', 'max' => 30],
             [['content', 'send_desc'], 'string', 'max' => 255],
         ];
     }

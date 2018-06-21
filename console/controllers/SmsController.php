@@ -19,6 +19,26 @@ use Yii;
 
 class SmsController extends \yii\console\Controller
 {
+
+    /**
+     * 异步推送
+     * php yii sms/queue
+     */
+    public function actionQueue()
+    {
+        $smsService = new SmsService(Yii::$app->params['smsPlatform']);
+        $status = true;
+        while($status){
+            $queueData = $smsService->sendSmsSync();
+            if($queueData == -1){
+                sleep(1);
+                echo "Zzzz..\r\n";
+            } else {
+                echo "处理中..\r\n";
+            }
+        }
+    }
+
     /**
      * 检查签名审核结果
      */
@@ -61,19 +81,6 @@ class SmsController extends \yii\console\Controller
         print_r($result);
     }
 
-    public function actionQueue()
-    {
-        $smsService = new SmsService(Yii::$app->params['smsPlatform']);
-        $status = true;
-        while($status){
-            $queueData = $smsService->sendSmsSync();
-            if($queueData == -1){
-                sleep(1);
-                echo "Zzzz..\r\n";
-            } else {
-                echo "处理中..\r\n";
-            }
-        }
-    }
+
 
 }

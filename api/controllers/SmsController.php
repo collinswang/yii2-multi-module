@@ -62,12 +62,11 @@ class SmsController extends BaseController
                 if (!$item) {
                     continue;
                 }
-                $item_arr = explode(",", $item);
+                $item_arr = explode(",", str_replace('"','', $item));
                 if (count($item_arr)) {
                     $mobile = array_shift($item_arr);
                     if ($mobile) {
-                        $single_result = $sms_model->sendTemplateSingle($this->uid, $tpl_id, $mobile, $item_arr);
-                        print_r($single_result);
+                        $single_result = $sms_model->sendTemplateSingle($this->uid, $tpl_detail, $mobile, $item_arr);
                         //$single_result['status'] >0 表示成功
                         if($single_result['status']>0){
                             $success++;
