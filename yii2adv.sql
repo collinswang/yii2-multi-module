@@ -808,9 +808,10 @@ DROP TABLE IF EXISTS `sms`;
 CREATE TABLE `sms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户UID',
+  `source` tinyint(4) NOT NULL DEFAULT '0' COMMENT '来源：1：腾迅云 2：阿里云',
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发送类型0:直接发送 1:模板发送',
   `mobile` bigint(11) NOT NULL COMMENT '手机号',
-  `template_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
+  `template_id` varchar(30) NOT NULL DEFAULT '0' COMMENT '模板ID',
   `content` varchar(255) NOT NULL COMMENT '发送内容',
   `create_at` int(11) NOT NULL,
   `update_at` int(11) NOT NULL DEFAULT '0',
@@ -820,30 +821,7 @@ CREATE TABLE `sms` (
   `sid` int(11) DEFAULT '0' COMMENT '发送回执ID',
   `order_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of sms
--- ----------------------------
-INSERT INTO `sms` VALUES ('1', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527130700', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('2', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130766', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('3', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130841', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('4', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130908', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('5', '123', '0', '13651081267', '1', '【腾讯云平台】您的验证码是：测试公司A', '1527130927', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('6', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527130963', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('7', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131022', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('8', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131250', '1527131250', '1012', '签名格式错误或者签名未审批', '0', '0', '0');
-INSERT INTO `sms` VALUES ('9', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131595', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('10', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131616', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('11', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527131616', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('12', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527131645', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('13', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527131645', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('14', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527149978', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('15', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527149978', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('16', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527150020', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('17', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527150020', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('18', '123', '0', '13651081267', '1', '您的验证码是：测试公司A', '1527150193', '0', '0', '', '0', '0', '0');
-INSERT INTO `sms` VALUES ('19', '123', '0', '13712114574', '1', '您的验证码是：测试公司A', '1527150193', '0', '0', '', '0', '0', '0');
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for `sms_sign`
@@ -867,18 +845,6 @@ CREATE TABLE `sms_sign` (
   KEY `create_at` (`create_at`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
 
--- ----------------------------
--- Records of sms_sign
--- ----------------------------
-INSERT INTO `sms_sign` VALUES ('1', '11', '1', '0', '测试', '这是一个测试', '1517550221', null, '0', '\"', '0');
-INSERT INTO `sms_sign` VALUES ('2', '11', '1', '0', '测试', '这是一个测试', '1517550316', null, '1', null, '0');
-INSERT INTO `sms_sign` VALUES ('3', '11', '1', '1', '测试', '这是一个测试', '1517550321', '1517561919', '-8', 'no priv', '0');
-INSERT INTO `sms_sign` VALUES ('4', '11', '1', '0', '测试', '这是一个测试', '1517550380', null, '0', 'not enterprise user, not support.', '0');
-INSERT INTO `sms_sign` VALUES ('5', '11', '1', '0', '测试', '这是一个测试', '1517550414', '1517550414', '0', 'not enterprise user, not support.', '0');
-INSERT INTO `sms_sign` VALUES ('6', '11', '1', '0', '签名', '测试签名', '1517561731', '1517561731', '0', 'not enterprise user, not support.', '0');
-INSERT INTO `sms_sign` VALUES ('7', '11', '1', '0', '签名', '测试签名', '1517561754', '1517561754', '0', 'not enterprise user, not support.', '0');
-INSERT INTO `sms_sign` VALUES ('8', '11', '1', '0', '签名', '测试签名', '1517561868', null, '1', null, '0');
-INSERT INTO `sms_sign` VALUES ('9', '11', '1', '0', '签名', '测试签名', '1517561918', '1517561919', '1007', 'not enterprise user, not support.', '0');
 
 -- ----------------------------
 -- Table structure for `sms_template`
@@ -888,12 +854,12 @@ CREATE TABLE `sms_template` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
   `source` int(11) NOT NULL COMMENT '签名递交平台:1:QCLOUD',
-  `template_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
+  `template_id` char(20) NOT NULL DEFAULT '0' COMMENT '模板ID',
   `content` varchar(255) NOT NULL COMMENT '模板内容',
   `desc` varchar(255) DEFAULT NULL COMMENT '模板说明',
   `title` varchar(50) DEFAULT '' COMMENT '模板名称',
-  `create_at` int(11) NOT NULL,
-  `update_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) DEFAULT NULL,
   `verify_status` int(4) NOT NULL DEFAULT '1' COMMENT '审核状态：0：已通过；1：待审核；2：已拒绝',
   `verify_desc` varchar(255) DEFAULT NULL COMMENT '审核返回说明',
   `is_hidden` tinyint(4) DEFAULT '0' COMMENT '0:不删除 1:删除',
@@ -901,21 +867,9 @@ CREATE TABLE `sms_template` (
   PRIMARY KEY (`id`),
   KEY `source` (`source`,`template_id`),
   KEY `uid` (`uid`),
-  KEY `create_at` (`create_at`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
+  KEY `create_at` (`created_at`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='签名审核表';
 
--- ----------------------------
--- Records of sms_template
--- ----------------------------
-INSERT INTO `sms_template` VALUES ('1', '11', '1', '0', '您的验证码是：{1}', '这是一个测试', '', '1517550221', null, '0', '\"', '0', '0');
-INSERT INTO `sms_template` VALUES ('2', '11', '1', '0', '测试', '这是一个测试', '', '1517550316', null, '1', null, '0', '0');
-INSERT INTO `sms_template` VALUES ('3', '11', '1', '1', '测试', '这是一个测试', '', '1517550321', '1517561919', '-8', 'no priv', '0', '0');
-INSERT INTO `sms_template` VALUES ('4', '11', '1', '0', '测试', '这是一个测试', '', '1517550380', null, '0', 'not enterprise user, not support.', '0', '0');
-INSERT INTO `sms_template` VALUES ('5', '11', '1', '0', '测试', '这是一个测试', '', '1517550414', '1517550414', '0', 'not enterprise user, not support.', '0', '0');
-INSERT INTO `sms_template` VALUES ('6', '11', '1', '0', '签名', '测试签名', '', '1517561731', '1517561731', '0', 'not enterprise user, not support.', '0', '0');
-INSERT INTO `sms_template` VALUES ('7', '11', '1', '0', '签名', '测试签名', '', '1517561754', '1517561754', '0', 'not enterprise user, not support.', '0', '0');
-INSERT INTO `sms_template` VALUES ('8', '11', '1', '0', '签名', '测试签名', '', '1517561868', null, '1', null, '0', '0');
-INSERT INTO `sms_template` VALUES ('9', '11', '1', '0', '签名', '测试签名', '', '1517561918', '1517561919', '1007', 'not enterprise user, not support.', '0', '0');
 
 -- ----------------------------
 -- Table structure for `user`
