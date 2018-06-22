@@ -67,13 +67,24 @@ class FinanceIncomeService extends BaseObject
      * @param int    $deal_time
      * @param null   $invisible
      * @return array
-     * @throws \yii\db\Exception
      */
     public function update($id, $status, $admin_id = 0, $admin_note="", $deal_time=0, $invisible=null)
     {
+        try{
+            $model = new FinanceIncomeData();
+            $update_result = $model->update($id, $status, $admin_id, $admin_note, $deal_time, $invisible);
+            return $update_result;
+        } catch (\Exception $e){
+            return ['status'=>-1, 'desc'=>'未知错误'];
+        }
+    }
+
+    public function getOne($id)
+    {
         $model = new FinanceIncomeData();
-        $update_result = $model->update($id, $status, $admin_id, $admin_note, $deal_time, $invisible);
-        return $update_result;
+        $data = ['id' => $id];
+        $detail = $model->get_one($data);
+        return $detail;
     }
 
 }

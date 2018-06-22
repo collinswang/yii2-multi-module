@@ -11,6 +11,8 @@ namespace common\components\wxpay;
 
 use common\components\Tools;
 use common\modules\cfinance\components\FuncCoin;
+use common\modules\finance\data\FinanceIncomeData;
+use common\modules\finance\service\FinanceIncomeService;
 
 class WxPay
 {
@@ -28,10 +30,9 @@ class WxPay
      * @param string $orderName  订单名称
      * @param string $notifyUrl  回调URL
      * @param int    $timestamp
-     * @param int    $type      1:华讯KEY     0：点石KEY
      * @return array
      */
-    public function buildPrepay($totalFee, $outTradeNo, $orderName, $notifyUrl, $timestamp, $type=1)
+    public function buildPrepay($totalFee, $outTradeNo, $orderName, $notifyUrl, $timestamp)
     {
         //echo "==$totalFee, $outTradeNo, $orderName, $notifyUrl, $timestamp==";
         $nonce_str = self::createNonceStr();
@@ -176,7 +177,7 @@ class WxPay
             return ['status'=>0, 'msg'=> '订单ID错误'];
         }
         //验证签名
-        $sign_md5 = self::checkSign($xml, self::APPKEY_HX);
+        $sign_md5 = self::checkSign($xml, self::APPKEY);
         if(!$sign_md5){
             return ['status'=>0, 'msg'=> '验证签名失败'];
         }
@@ -185,17 +186,18 @@ class WxPay
             return ['status'=>0, 'msg'=> '交易结果失败'];
         }
 
-        $order = FuncCoin::coin_income_detail($orderid);
+        $income_model = new FinanceIncomeService();
+        $order = $income_model->getOne($orderid);
         if($order['status'] != 1){
             return ['status'=>1, 'msg'=> '订单已经成功'];
         }
 
-        if(($xml_arr['total_fee']/100) != $order['payable'] || $xml_arr['mch_id'] != self::MCHID_HX){
+        if(($xml_arr['total_fee']/100) != $order['payable'] || $xml_arr['mch_id'] != self::MCHID){
             return ['status'=>0, 'msg'=> '数据验证失败'];
         }
 
-        $re = FuncCoin::coin_income_update($orderid, 2, 0, 0, $xml_arr['transaction_id']);
-        if ($re > 0){
+        $re = $income_model->update($orderid, FinanceIncomeData::STATUS_SUCCESS, 0, "{$xml_arr['transaction_id']}");
+        if ($re['status'] > 0){
             return ['status'=>1, 'msg'=> '更新成功'];
         }else{
             return ['status'=>0, 'msg'=> '更新失败'];

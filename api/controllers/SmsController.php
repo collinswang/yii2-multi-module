@@ -43,7 +43,7 @@ class SmsController extends BaseController
             return ['status'=>-1, 'desc'=>"无效的模板"];
         }
 
-        $sms_model = new SmsService(SmsService::SMS_SIGN_API_ALIDAYU);
+        $sms_model = new SmsService(Yii::$app->params['smsPlatform']);
 
         $file = $_FILES['list'];
         if(!$file){
@@ -82,6 +82,19 @@ class SmsController extends BaseController
         }
 
         return ['status'=>1, 'desc'=>"任务添加成功", 'total'=>$total, 'success'=>$success, 'fail'=>$fail, 'uid'=>$this->uid];
+    }
+
+    /**
+     * 检查短信发送记录
+     */
+    public function actionCheck($page)
+    {
+        $uid = intval($this->uid);
+        $page = intval($page);
+
+        $model = new SmsService(Yii::$app->params['smsPlatform']);
+        $result = $model->getSendList($uid, $page);
+        return $result;
     }
 
 }

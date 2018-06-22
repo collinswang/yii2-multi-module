@@ -59,7 +59,7 @@ class SmsController extends \yii\console\Controller
 
     public function actionTest()
     {
-        $attr = SmsService::$sms_sign_api[SmsService::SMS_SIGN_API_ALIDAYU];
+        $attr = SmsService::$sms_sign_api[Yii::$app->params['smsPlatform']];
         $model = new $attr();
         if(!$model instanceof SmsInterface){
             return ['status'=>-1, 'desc'=>'传入非SmsInterface的实例'];
@@ -75,8 +75,7 @@ class SmsController extends \yii\console\Controller
 
     public function actionGet()
     {
-        $sms_api = SmsService::getSmsApi();
-        $model = new SmsService(new $sms_api[1]);
+        $model = new SmsService(Yii::$app->params['smsPlatform']);
         $result = $model->pullStatus(0, 1);
         print_r($result);
     }

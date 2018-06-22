@@ -186,4 +186,39 @@ class SmsData extends BaseObject
         $redis = Yii::$app->redis;
         return $redis->executeCommand("LPOP", [self::SMS_LIST_KEY]);
     }
+
+    /**
+     * 按页查找短信发送记录
+     * @param $uid
+     * @param $page
+     * @param $page_size
+     * @param $start_time
+     * @param $end_time
+     * @param $source
+     * @param $mobile
+     * @return mixed
+     */
+    public function getSmsSendList($uid, $page=1, $page_size=20, $start_time=0, $end_time=0, $source = null, $mobile = null, $send_status = null)
+    {
+        $sql = "uid = {$uid}";
+        if($start_time){
+            $sql .= " and create_at >= {$start_time}";
+        }
+        if($end_time){
+            $sql .= " and create_at < {$end_time}";
+        }
+        if($source){
+            $sql .= " and source = {$source}";
+        }
+        if($mobile){
+            $sql .= " and mobile = {$mobile}";
+        }
+        if($send_status){
+            $sql .= " and send_status = {$send_status}";
+        }
+
+        $result['total'] = Sms::find()->where($sql)->count();
+        $result['list'] = Sms::find()->where($sql)->offset(($page-1)*$page_size)->limit($page_size)->asArray()->all();
+        return $result;
+    }
 }

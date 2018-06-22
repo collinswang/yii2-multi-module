@@ -11,8 +11,8 @@
 
 /**
  * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
- * @param $para 需要拼接的数组
- * return 拼接完成以后的字符串
+ * @param array     $para 需要拼接的数组
+ * @return string   拼接完成以后的字符串
  */
 function createLinkstring($para) {
 	$arg  = "";
@@ -31,8 +31,8 @@ function createLinkstring($para) {
 
 /**
  * 对数组排序
- * @param $para 排序前的数组
- * return 排序后的数组
+ * @param array $para 排序前的数组
+ * @return array 排序后的数组
  */
 function argSort($para) {
 	ksort($para);
@@ -42,8 +42,8 @@ function argSort($para) {
 
 /**
  * 除去数组中的空值和签名参数
- * @param $para 签名参数组
- * return 去掉空值与签名参数后的新签名参数组
+ * @param array $para 签名参数组
+ * @return array 去掉空值与签名参数后的新签名参数组
  */
 function paraFilter($para) {
 	$para_filter = array();
@@ -68,7 +68,7 @@ function query_timestamp() {
 /**
  * 写日志，方便测试（看网站需求，也可以改成把记录存入数据库）
  * 注意：服务器需要开通fopen配置
- * @param $word 要写入日志里的文本内容 默认值：空值
+ * @param string $word 要写入日志里的文本内容 默认值：空值
  */
 function logResult($word='') {
 	date_default_timezone_set("PRC");
@@ -84,11 +84,11 @@ function logResult($word='') {
  * 注意：
  * 1.使用Crul需要修改服务器中php.ini文件的设置，找到php_curl.dll去掉前面的";"就行了
  * 2.文件夹中cacert.pem是SSL证书请保证其路径有效，目前默认路径是：getcwd().'\\cacert.pem'
- * @param $url 指定URL完整路径地址
- * @param $cacert_url 指定当前工作目录绝对路径
- * @param $para 请求的数据
- * @param $input_charset 编码格式。默认值：空值
- * return 远程输出的数据
+ * @param string    $url 指定URL完整路径地址
+ * @param string    $cacert_url 指定当前工作目录绝对路径
+ * @param array     $para 请求的数据
+ * @param string    $input_charset 编码格式。默认值：空值
+ * @return string 远程输出的数据
  */
 function getHttpResponsePOST($url, $cacert_url, $para, $input_charset = '') {
 
@@ -115,9 +115,9 @@ function getHttpResponsePOST($url, $cacert_url, $para, $input_charset = '') {
  * 注意：
  * 1.使用Crul需要修改服务器中php.ini文件的设置，找到php_curl.dll去掉前面的";"就行了
  * 2.文件夹中cacert.pem是SSL证书请保证其路径有效，目前默认路径是：getcwd().'\\cacert.pem'
- * @param $url 指定URL完整路径地址
- * @param $cacert_url 指定当前工作目录绝对路径
- * return 远程输出的数据
+ * @param string    $url 指定URL完整路径地址
+ * @param string    $cacert_url 指定当前工作目录绝对路径
+ * @return string   远程输出的数据
  */
 function getHttpResponseGET($url,$cacert_url) {
 	$curl = curl_init($url);
@@ -135,10 +135,10 @@ function getHttpResponseGET($url,$cacert_url) {
 
 /**
  * 实现多种字符编码方式
- * @param $input 需要编码的字符串
- * @param $_output_charset 输出的编码格式
- * @param $_input_charset 输入的编码格式
- * return 编码后的字符串
+ * @param string    $input 需要编码的字符串
+ * @param string    $_output_charset 输出的编码格式
+ * @param string    $_input_charset 输入的编码格式
+ * @return string   编码后的字符串
  */
 function charsetEncode($input,$_output_charset ,$_input_charset) {
 	$output = "";
@@ -154,10 +154,10 @@ function charsetEncode($input,$_output_charset ,$_input_charset) {
 }
 /**
  * 实现多种字符解码方式
- * @param $input 需要解码的字符串
- * @param $_output_charset 输出的解码格式
- * @param $_input_charset 输入的解码格式
- * return 解码后的字符串
+ * @param string    $input 需要编码的字符串
+ * @param string    $_output_charset 输出的编码格式
+ * @param string    $_input_charset 输入的编码格式
+ * @return string   解码后的字符串
  */
 function charsetDecode($input,$_input_charset ,$_output_charset) {
 	$output = "";

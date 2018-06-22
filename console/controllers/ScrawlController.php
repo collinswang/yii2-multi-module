@@ -96,13 +96,14 @@ class ScrawlController extends Controller
             $result = $model->add($data);
             if($result['status'] > 0){
                 echo "{$url}\t采集成功\r\n";
-                return true;
             } else {
                 echo "{$url}\t采集失败,原因：{$result['msg']}===\r\n";
-                return false;
             }
-
+        } else {
+            echo "{$url}\t数据不正确===\r\n";
         }
+
+        return true;
     }
 
     public function actionIndex2($start = 100, $range = 100)

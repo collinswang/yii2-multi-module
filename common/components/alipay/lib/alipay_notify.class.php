@@ -37,9 +37,9 @@ class AlipayNotify {
 
     /**
      * 获取返回时的签名验证结果
-     * @param $para_temp 通知返回来的参数数组
-     * @param $sign 返回的签名结果
-     * @return 签名验证结果
+     * @param array		$para_temp 通知返回来的参数数组
+     * @param string	$sign 返回的签名结果
+     * @return bool		签名验证结果
      */
 	function getSignVeryfy($para_temp, $sign) {
 		//除去待签名参数数组中的空值和签名参数
@@ -65,8 +65,8 @@ class AlipayNotify {
 
     /**
      * 获取远程服务器ATN结果,验证返回URL
-     * @param $notify_id 通知校验ID
-     * @return 服务器ATN结果
+     * @param string		$notify_id 通知校验ID
+     * @return string		服务器ATN结果
      * 验证结果集：
      * invalid命令参数不对 出现这个错误，请检测返回处理中partner和key是否为空 
      * true 返回正确信息
