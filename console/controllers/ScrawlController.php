@@ -142,4 +142,69 @@ class ScrawlController extends Controller
             }
         }
     }
+
+    public function actionCheckTom()
+    {
+        $url = "http://mail.tom.com/webmail/register/checkNametomBeautiful.action?userName={name}%40tom.com";
+        $start = ord('a');
+        $end = ord('z');
+        $count = 1;
+        $success = $fail = [];
+        //for character
+//        for($i=$start; $i<$end+1; $i++){
+//            for($j=$start; $j<$end+1; $j++){
+//                for($k=$start; $k<$end+1; $k++){
+//                    echo "$count:";
+//                    $name = chr($i).chr($j).chr($k);
+//                    $url = str_replace('{name}', $name, $url);
+//                    $response = file_get_contents($url);
+//                    if($response){
+//                        $result = json_decode($response, true);
+//                        if($result['isBeUserNameExist'] == 'false'){
+//                            $success[] = $name;
+//                        } else {
+//                            $fail[] = $name;
+//                        }
+//                    }
+//                    $count++;
+//                    if($count>100){
+//                        break 3;
+//                    }
+//                }
+//            }
+//        }
+        //for number
+//        for($k=1; $k<1000; $k++){
+//            echo "$count:";
+//            $url = str_replace('{name}', $k, $url);
+//            $response = file_get_contents($url);
+//            if($response){
+//                $result = json_decode($response, true);
+//                if($result['isBeUserNameExist'] == 'false'){
+//                    $success[] = $k;
+//                } else {
+//                    $fail[] = $k;
+//                }
+//            }
+//            $count++;
+//        }
+        $k = 'crm';
+        $url = str_replace('{name}', $k, $url);
+        $response = file_get_contents($url);
+        if($response){
+            $result = json_decode($response, true);
+            if($result['isBeUserNameExist'] == 'false'){
+                $success[] = $k;
+            } else {
+                $fail[] = $k;
+            }
+        }
+        echo "===========================================";
+        echo "total $count";
+        echo "===========================================";
+        print_r($success);
+        echo "===========================================";
+        print_r($fail);
+
+    }
 }

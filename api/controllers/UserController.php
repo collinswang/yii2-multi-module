@@ -8,19 +8,16 @@
 
 namespace api\controllers;
 
-use InvalidArgumentException;
+use common\components\Tools;
+use common\modules\sms\service\SmsService;
 use Yii;
 use common\models\LoginForm;
-use frontend\models\form\PasswordResetRequestForm;
-use frontend\models\form\ResetPasswordForm;
-use frontend\models\form\SignupForm;
-use yii\web\BadRequestHttpException;
-use yii\web\HttpException;
+use common\models\User;
 
 /**
  * Site controller
  */
-class SiteController extends BaseController
+class UserController extends BaseController
 {
 
 
@@ -44,17 +41,6 @@ class SiteController extends BaseController
         }
     }
 
-    /**
-     * Logs out the current user.
-     *
-     * @return mixed
-     */
-    public function actionLogout()
-    {
-        Yii::$app->getUser()->logout(false);
-
-        return $this->goHome();
-    }
 
     /**
      * Signs user up.
@@ -63,153 +49,44 @@ class SiteController extends BaseController
      */
     public function actionSignup()
     {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->getRequest()->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
+        $post = Yii::$app->getRequest()->post();
+        $mobile = $post['mobile'];
+        $email = $mobile."@test.com";
+        $password = Tools::genVerifyCode();
+
+        //发送验证码
+        $sms_model = new SmsService(Yii::$app->params['smsPlatform']);
+        $login_template = Yii::$app->params['smsRegTemplate'][Yii::$app->params['smsPlatform']];
+        $params = ['code' => $password];
+        $single_result = $sms_model->sendSmsDirect($mobile, $login_template, $params);
+        print_r($single_result);
+        if(strtoupper($single_result['Code']) == 'OK'){
+            //检查用户是否存在
+            $user = User::findByUsername($mobile);
+            print_r($user->attributes);
+            if($user){
+                echo "记录存在\r\n";
+                $user->generateAuthKey();
+                $user->setPassword($password);
+                if ($user->save()) {
+                    return ['status'=>2, 'desc'=>'密码发送成功'];
+                }
+            } else {
+                echo "记录不存在\r\n";
+                $model = new User();
+                $model->username = $mobile;
+                $model->email = $email;
+                $model->created_at = time();
+                $model->generateAuthKey();
+                $model->setPassword($password);
+                $model->updated_at = 0;
+                if ($model->save()) {
+                    return ['status'=>1, 'desc'=>'密码发送成功'];
                 }
             }
         }
+        return ['status'=>0, 'desc'=>'密码发送失败'];
 
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Requests password reset.
-     *
-     * @return mixed
-     */
-    public function actionRequestPasswordReset()
-    {
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->getSession()
-                    ->setFlash('success', yii::t('app', 'Check your email for further instructions.'));
-
-                return $this->goHome();
-            } else {
-                Yii::$app->getSession()
-                    ->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
-            }
-        }
-
-        return $this->render('requestPasswordResetToken', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Resets password.
-     *
-     * @param string $token
-     * @return mixed
-     * @throws BadRequestHttpException
-     */
-    public function actionResetPassword($token)
-    {
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->getSession()->setFlash('success', yii::t('app', 'New password was saved.'));
-
-            return $this->goHome();
-        }
-
-        return $this->render('resetPassword', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * 网站进入维护模式时
-     * 即在后台网站设置中关闭了网站执行此操作
-     *
-     */
-    public function actionOffline()
-    {
-        Yii::$app->getResponse()->statusCode = 503;
-        yii::$app->getResponse()->content = "sorry, the site is temporary unserviceable";
-        yii::$app->getResponse()->send();
-    }
-
-
-    /**
-     * 切换网站视图
-     * 请开发其他网站视图模版，并参照yii2文档配置
-     *
-     */
-    public function actionView()
-    {
-        $view = Yii::$app->getRequest()->get('type');
-        if (isset($view)) {
-            Yii::$app->session['view'] = $view;
-        }
-        $this->goBack( Yii::$app->getRequest()->getHeaders()->get('referer') );
-    }
-
-    /**
-     * 切换语言版本
-     *
-     */
-    public function actionLanguage()
-    {
-        $language = Yii::$app->getRequest()->get('lang');
-        if (isset($language)) {
-            Yii::$app->session['language'] = $language;
-        }
-        $this->redirect( Yii::$app->getRequest()->getHeaders()->get('referer') );
-    }
-
-    /**
-     * http异常捕捉后处理
-     *
-     * @return string
-     */
-    public function actionError()
-    {
-        if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
-            // action has been invoked not from error handler, but by direct route, so we display '404 Not Found'
-            $exception = new HttpException(404, Yii::t('yii', 'Page not found.'));
-        }
-
-        if ($exception instanceof HttpException) {
-            $code = $exception->statusCode;
-        } else {
-            $code = $exception->getCode();
-        }
-        //if ($exception instanceof Exception) {
-        $name = $exception->getName();
-        //} else {
-        //$name = $this->defaultName ?: Yii::t('yii', 'Error');
-        //}
-        if ($code) {
-            $name .= " (#$code)";
-        }
-
-        //if ($exception instanceof UserException) {
-        $message = $exception->getMessage();
-        //} else {
-        //$message = $this->defaultMessage ?: Yii::t('yii', 'An internal server error occurred.');
-        //}
-        $statusCode = $exception->statusCode ? $exception->statusCode : 500;
-        if (Yii::$app->getRequest()->getIsAjax()) {
-            return "$name: $message";
-        } else {
-            return $this->render('error', [
-                'code' => $statusCode,
-                'name' => $name,
-                'message' => $message,
-                'exception' => $exception,
-            ]);
-        }
     }
 
 }

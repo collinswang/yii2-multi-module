@@ -56,4 +56,14 @@ class Tools
         }
         return $ip;
     }
+
+    /**
+     * 生成验证码
+     * @return int
+     */
+    public static function genVerifyCode()
+    {
+        $code = rand(100000,999999);
+        return $code;
+    }
 }

@@ -19,7 +19,8 @@ class AliSmsClient implements SmsInterface
     ];
 
     public static $template = [
-        0 => ["id" => "SMS_137672391", "content" => '您订购的${product}已发货，${express}单号${expressNo}，请注意查收！'],
+        0 => ["id" => "SMS_137672391", "content" => '您订购的${product}已发货，${express}单号${expressNo}，请注意查收！'],   //发货模板
+        1 => ["id" => "SMS_116780131", "content" => '验证码${code}，您正在登录，若非本人操作，请勿泄露。'],
     ];
 
     public function __construct()

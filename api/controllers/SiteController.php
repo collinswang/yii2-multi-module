@@ -21,7 +21,7 @@ use yii\web\HttpException;
  * 用户管理模块
  * User controller
  */
-class UserController extends BaseController
+class SiteController extends BaseController
 {
 
     /**

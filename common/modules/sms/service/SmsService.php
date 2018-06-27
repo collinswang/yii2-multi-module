@@ -93,7 +93,7 @@ class SmsService extends BaseObject
                 return -1;
             }
             $params = json_decode($sms_detail['content'], true);
-            $post_result = $this->model_sign->smsSendTemplateMsgSingle($sms_detail['mobile'], $sms_detail['template_id'], $params);
+            $post_result = $this->sendSmsDirect($sms_detail['mobile'], $sms_detail['template_id'], $params);
             //更新本地签名记录，保存API接口返回结果
             if($post_result){
                 //防止数据库链接超时
@@ -120,10 +120,29 @@ class SmsService extends BaseObject
         }
     }
 
+    /**
+     * 直接发送短信
+     * @param $mobile
+     * @param $template_id
+     * @param $params
+     * @return mixed
+     * Array
+     *     (
+     *     [Message] => OK
+     *     [RequestId] => 0C1FECA0-6B38-479D-BC11-14A346A48803
+     *     [BizId] => 691912330085565202^0
+     *     [Code] => OK
+     *     )
+     */
+    public function sendSmsDirect($mobile, $template_id, $params)
+    {
+        $post_result = $this->model_sign->smsSendTemplateMsgSingle($mobile, $template_id, $params);
+        return $post_result;
+    }
 
     /**
      * 模板模板，自动生成短信内容
-     * @param $tpl_id
+     * @param $template
      * @param $params
      * @return mixed
      */

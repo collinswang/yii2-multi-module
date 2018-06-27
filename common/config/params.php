@@ -10,4 +10,8 @@ return [
         'url' => 'http://admin.cms.feehi.com',
     ],
     'smsPlatform' => 2,
+    'smsRegTemplate' => [
+        1 => '',
+        2 => 'SMS_116780131',
+    ],
 ];

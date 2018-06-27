@@ -57,6 +57,7 @@ class BaseController extends Controller
                 return true;
             }
         }
+        echo "===$verify_token===";
         return false;
     }
 }
