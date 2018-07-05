@@ -10,15 +10,15 @@ $config = [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=192.168.200.66;dbname=yii2adv',
+            'dsn' => 'mysql:host=localhost;dbname=yii2adv',
             'username' => 'root',
             'password' => '123456',
             'charset' => 'utf8',
         ],
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => "192.168.200.66",
-            'port' => "7000",
+            'hostname' => "localhost",
+            'port' => "6379",
             'database' => 0,
             'dataTimeout' => 10,
             'connectionTimeout' => 10,

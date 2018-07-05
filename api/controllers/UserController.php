@@ -12,7 +12,7 @@ use common\components\Tools;
 use common\modules\sms\service\SmsService;
 use Yii;
 use common\models\LoginForm;
-use common\models\User;
+use api\models\User;
 
 /**
  * Site controller
@@ -49,7 +49,13 @@ class UserController extends BaseController
      */
     public function actionSignup()
     {
-        $post = Yii::$app->getRequest()->post();
+        $post = Yii::$app->getRequest()->get();
+        if(!isset($post['mobile'])){
+            return ['status'=>0, 'desc'=>'请填写手机号'];
+        } else{
+            return ['status'=>1, 'desc'=>$post['mobile']];
+        }
+
         $mobile = $post['mobile'];
         $email = $mobile."@test.com";
         $password = Tools::genVerifyCode();
@@ -63,16 +69,16 @@ class UserController extends BaseController
         if(strtoupper($single_result['Code']) == 'OK'){
             //检查用户是否存在
             $user = User::findByUsername($mobile);
-            print_r($user->attributes);
+//            print_r($user->attributes);
             if($user){
-                echo "记录存在\r\n";
+//                echo "记录存在\r\n";
                 $user->generateAuthKey();
                 $user->setPassword($password);
                 if ($user->save()) {
                     return ['status'=>2, 'desc'=>'密码发送成功'];
                 }
             } else {
-                echo "记录不存在\r\n";
+//                echo "记录不存在\r\n";
                 $model = new User();
                 $model->username = $mobile;
                 $model->email = $email;

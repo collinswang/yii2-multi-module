@@ -8,6 +8,7 @@ class BaseController extends Controller
 {
     public $uid = 0;
     public $token = null;
+    public $layout = false;
 
     /**
      * 对所有访问请求鉴权
@@ -15,12 +16,14 @@ class BaseController extends Controller
     public function init()
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $action = Yii::$app->requestedAction;
-        $url = $action->controller->id;
+        $r = $_GET['r'] ? $_GET['r'] : 'site/index';
+        $r_arr = explode('/', $r);
+        $controller = $r_arr[0];
+        $action = $r_arr[1];
         //根据header头传入的token鉴权
         $this->token = Yii::$app->request->headers['token'];
-        $this->uid = Yii::$app->request->get()['uid'];
-        if(!in_array($url, ["site"])){
+        $this->uid = isset($_GET['uid']) ? $_GET['uid'] : 0;
+        if(!in_array($controller, ["site", "user"])){
             $check_token = $this->checkToken();
             if(!$check_token){
                 echo json_encode(['status'=>-1, 'desc'=>'fail token', 'uid'=>$this->uid,'token'=>$this->token]);

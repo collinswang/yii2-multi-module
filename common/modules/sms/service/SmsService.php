@@ -40,13 +40,14 @@ class SmsService extends BaseObject
 
     /**
      * 发送单条模板短信
-     * @param int   $uid 用户UID
-     * @param array   $tpl_detail       模板详情
-     * @param string   $mobile
+     * @param int $uid 用户UID
+     * @param array $tpl_detail 模板详情
+     * @param string $mobile
      * @param array $params
+     * @param $upload_id
      * @return array
      */
-    public function sendTemplateSingle($uid, $tpl_detail, $mobile, $params)
+    public function sendTemplateSingle($uid, $tpl_detail, $mobile, $params, $upload_id)
     {
         if (!$uid || !$tpl_detail || !$mobile || !$params) {
             return ['status' => -1, 'desc' => 'UID不能为空'];
@@ -71,6 +72,7 @@ class SmsService extends BaseObject
                            'mobile'      => $mobile,
                            'content'     => $content,
                            'create_at'   => time(),
+                           'upload_id'   => $upload_id,
         ]);
         if ($id) {
             return ['status' => 1, 'desc' => '添加成功', 'id' => $id];
