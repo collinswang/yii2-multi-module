@@ -74,14 +74,26 @@ class SmsUploadData extends BaseObject
 
     /**
      * 获取列表
-     * @param           $uid
-     * @param int       $page
-     * @param int       $page_size
+     * @param $uid
+     * @param int $page
+     * @param int $page_size
+     * @param $start_time
+     * @param $end_time
+     * @param $source
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function get_list($uid, $page = 1, $page_size = 20)
+    public function get_list($uid, $page = 1, $page_size = 20, $start_time, $end_time, $source)
     {
         $sql = "is_hidden = 0 and uid = $uid";
+        if($start_time){
+            $sql .= " and create_at >= {$start_time}";
+        }
+        if($end_time){
+            $sql .= " and create_at < {$end_time}";
+        }
+        if($source){
+            $sql .= " and source = {$source}";
+        }
         $result['total'] = SmsUpload::find()->where($sql)->count();
         $result['list'] = SmsUpload::find()->where($sql)->offset(($page-1)*$page_size)->limit($page_size)->orderBy("id desc")->asArray()->all();
         return $result;

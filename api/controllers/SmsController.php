@@ -75,19 +75,6 @@ class SmsController extends BaseController
     }
 
     /**
-     * 检查短信发送记录
-     */
-    public function actionCheck($page)
-    {
-        $uid = intval($this->uid);
-        $page = intval($page);
-
-        $model = new SmsService(Yii::$app->params['smsPlatform']);
-        $result = $model->getSendList($uid, $page);
-        return $result;
-    }
-
-    /**
      * 添加入sms_upload表
      * @param $uid
      * @param $source
@@ -141,6 +128,39 @@ class SmsController extends BaseController
             $total++;
         }
         return ['total'=>$total, 'success'=>$success, 'fail'=>$fail];
+    }
+
+    /**
+     * 检查短信上传记录
+     * @param $page
+     * @return array
+     */
+    public function actionCheckUpload($page = 1)
+    {
+        $uid = intval($this->uid);
+        $uid = 1;
+        $page = intval($page);
+
+        $model = new SmsService(Yii::$app->params['smsPlatform']);
+        $result = $model->getUploadList($uid, $page);
+        return $result;
+    }
+
+    /**
+     * 检查短信发送记录
+     * @param $page
+     * @param $upload_id
+     * @return array
+     */
+    public function actionCheck($page = 1, $upload_id = 0)
+    {
+        $uid = intval($this->uid);
+        $page = intval($page);
+        $upload_id = intval($upload_id);
+
+        $model = new SmsService(Yii::$app->params['smsPlatform']);
+        $result = $model->getSendList($uid, $page, $upload_id);
+        return $result;
     }
 
 }

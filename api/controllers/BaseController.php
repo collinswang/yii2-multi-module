@@ -44,23 +44,39 @@ class BaseController extends Controller
         return $token;
     }
 
-    /**
-     * 检查TOKEN
-     * @return int
-     */
+//    /**
+//     * 检查TOKEN
+//     * @return int
+//     */
+//    public function checkToken()
+//    {
+//        if (!$this->uid) {
+//            return false;
+//        }
+//        $user = User::findOne(['id'=>$this->uid]);
+//        if($user){
+//            $verify_token = md5($this->uid.$user->updated_at);
+//            if($verify_token == $this->token){
+//                return true;
+//            }
+//        }
+//        echo "===$verify_token===";
+//        return false;
+//    }
+
     public function checkToken()
     {
-        if (!$this->uid) {
+        $mobile=$_POST['mobile'];
+        $token=strtolower($_POST['token']);
+        $mac_address=trim($_POST['mac']);
+        $disk_id=trim($_POST['did']);;
+        $border_id=trim($_POST['bid']);
+
+        $new_token = md5($mobile.$mac_address.$disk_id.$border_id);
+        if($token == $new_token){
+            return true;
+        }else{
             return false;
         }
-        $user = User::findOne(['id'=>$this->uid]);
-        if($user){
-            $verify_token = md5($this->uid.$user->updated_at);
-            if($verify_token == $this->token){
-                return true;
-            }
-        }
-        echo "===$verify_token===";
-        return false;
     }
 }

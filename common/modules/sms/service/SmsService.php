@@ -7,6 +7,7 @@ namespace common\modules\sms\service;
 use common\modules\sms\base\SmsInterface;
 use common\modules\sms\data\SmsData;
 use common\modules\sms\data\SmsTemplateData;
+use common\modules\sms\data\SmsUploadData;
 use common\modules\sms\models\Sms;
 use yii\base\BaseObject;
 
@@ -200,11 +201,34 @@ class SmsService extends BaseObject
      * @param int  $start_time
      * @param int  $end_time
      * @param null $source
+     * @return array
+     */
+    public function getUploadList($uid, $page=1, $page_size=20, $start_time=0, $end_time=0, $source = null)
+    {
+        $model = new SmsUploadData();
+        $page = intval($page);
+        $page_size = intval($page_size);
+        $start_time = intval($start_time);
+        $end_time = intval($end_time);
+        $source = intval($source);
+        $result = $model->get_list($uid, $page, $page_size, $start_time, $end_time,$source);
+        return $result;
+    }
+
+    /**
+     * 按页查询短信发送记录
+     * @param int $uid
+     * @param int $page
+     * @param $upload_id
+     * @param int $page_size
+     * @param int $start_time
+     * @param int $end_time
+     * @param null $source
      * @param null $mobile
      * @param null $send_status
      * @return array
      */
-    public function getSendList($uid, $page=1, $page_size=20, $start_time=0, $end_time=0, $source = null, $mobile = null, $send_status = null)
+    public function getSendList($uid, $page=1, $upload_id, $page_size=20, $start_time=0, $end_time=0, $source = null, $mobile = null, $send_status = null)
     {
         $model = new SmsData();
         $page = intval($page);
@@ -213,8 +237,9 @@ class SmsService extends BaseObject
         $end_time = intval($end_time);
         $source = intval($source);
         $mobile = intval($mobile);
+        $upload_id = intval($upload_id);
         $send_status = $send_status ? 0 : 1;
-        $result = $model->getSmsSendList($uid, $page, $page_size, $start_time, $end_time,$source, $mobile, $send_status);
+        $result = $model->getSmsSendList($uid, $page, $upload_id, $page_size, $start_time, $end_time,$source, $mobile, $send_status);
         return $result;
     }
 
