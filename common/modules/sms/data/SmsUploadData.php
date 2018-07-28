@@ -30,6 +30,7 @@ class SmsUploadData extends BaseObject
         $model = new SmsUpload();
         $model->attributes = $data;
         if ($model->save()) {
+            //同时扣除用户相应金额
             return $model->id;
         } else {
             var_dump($model->getErrors());

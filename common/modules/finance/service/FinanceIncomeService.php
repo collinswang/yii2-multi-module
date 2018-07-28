@@ -87,4 +87,30 @@ class FinanceIncomeService extends BaseObject
         return $detail;
     }
 
+    public function getList($uid, $page, $page_size = 20, $start_time = null, $end_time = null)
+    {
+        $model = new FinanceIncomeData();
+        $page = intval($page);
+        $page_size = intval($page_size);
+        $start_time = intval($start_time);
+        $end_time = intval($end_time);
+        $result = $model->get_list($uid, $page, $page_size, $start_time, $end_time);
+        if($result['list']){
+            $list = [];
+            //["id"=>"主键ID", "received"=>"实收", "deal_time"=> "支付时间","type"=>"充值方式", "admin_note"=>"回执ID"];
+            foreach ($result['list'] as $key=>$item) {
+                $single['id'] = $item['id'];
+                $single['type'] = FinanceIncomeData::$type_arr[$item['type']];
+                $single['received'] = number_format($item['received'], 2, '.', '');
+                $single['deal_time'] =  date("Y-m-d H:i:s", $item['deal_time']);
+                $single['admin_note'] = $item['admin_note'];
+                $list[] = $single;
+            }
+            $result['list'] = $list;
+        }
+        $result['total'] = ceil($result['total']/$page_size);
+
+        return $result;
+    }
+
 }

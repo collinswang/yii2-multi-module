@@ -9,6 +9,8 @@
 namespace console\controllers;
 
 
+use common\modules\finance\data\FinanceAccountData;
+use common\modules\finance\service\FinanceAccountService;
 use common\modules\finance\service\FinanceIncomeService;
 use \yii\console\Controller;
 
@@ -35,6 +37,16 @@ class FinanceIncomeController extends Controller
         $invisible = 0;
         $model = new FinanceIncomeService();
         $result = $model->update($id, $status, $admin_id, $admin_note, $deal_time, $invisible);
+        print_r($result);
+    }
+
+    public function actionList($uid)
+    {
+        $model = new FinanceAccountService();
+        $detail = $model->get_one($uid);
+        $model = new FinanceIncomeService();
+        $result = $model->getList($uid, 1);
+        $result['detail'] = $detail;
         print_r($result);
     }
 

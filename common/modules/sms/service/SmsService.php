@@ -212,6 +212,23 @@ class SmsService extends BaseObject
         $end_time = intval($end_time);
         $source = intval($source);
         $result = $model->get_list($uid, $page, $page_size, $start_time, $end_time,$source);
+        if($result['list']){
+            $list = [];
+            //["source"=>"渠道", "template_id"=>"模板", "total"=> "发送数量","total_success"=>"成功数量", "start_time"=>"发送时间"];
+            foreach ($result['list'] as $key=>$item) {
+                $single['id'] = $item['id'];
+                $single['source'] = SmsData::$source[$item['source']];
+                $single['template_id'] = $item['template_id'];
+                $single['total'] = $item['total'];
+                $single['total_success'] = $item['total_success'];
+                $single['start_time'] = date("Y-m-d H:i:s", $item['create_at']);
+                $single['operate'] = "查看详情";
+                $list[] = $single;
+            }
+            $result['list'] = $list;
+        }
+        $result['total'] = ceil($result['total']/$page_size);
+
         return $result;
     }
 
@@ -240,7 +257,36 @@ class SmsService extends BaseObject
         $upload_id = intval($upload_id);
         $send_status = $send_status ? 0 : 1;
         $result = $model->getSmsSendList($uid, $page, $upload_id, $page_size, $start_time, $end_time,$source, $mobile, $send_status);
+        if($result['list']){
+            $list = [];
+            //["source"=>"渠道", "template_id"=>"模板", "total"=> "发送数量","total_success"=>"成功数量", "start_time"=>"发送时间"];
+            foreach ($result['list'] as $key=>$item) {
+                $single['source'] = SmsData::$source[$item['source']];
+                $single['template_id'] = $item['template_id'];
+                $single['mobile'] = str_replace(substr($item['mobile'], 3,4), "xxxx", $item['mobile']);
+                $single['send_status'] = $item['send_status'] == 0 ? "成功": "失败：".$item['send_status'];
+                $single['send_time'] = date("Y-m-d H:i:s", $item['update_at']);
+                $single['content'] = $this->content_to_string($item['content']);
+                $list[] = $single;
+            }
+            $result['list'] = $list;
+        }
+        $result['total'] = ceil($result['total']/$page_size);
         return $result;
+    }
+
+    /**
+     * @param $content
+     * @return string
+     */
+    public function content_to_string($content)
+    {
+        $str = "";
+        $arr = json_decode($content, true);
+        foreach ($arr as $key => $value) {
+            $str .= "{$key}:{$value}, ";
+        }
+        return $str;
     }
 
 }

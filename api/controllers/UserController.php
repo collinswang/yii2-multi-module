@@ -27,27 +27,38 @@ class UserController extends BaseController
     }
 
     /**
-     * Logs in a user.
+     * 登录
      *
      * @return mixed
      */
     public function actionLogin()
     {
+        $uid = $token = 0;
         $model = new LoginForm();
         $post = Yii::$app->getRequest()->post();
+        //检查手机号
+        $check_mobile = Tools::check_mobile($post["mobile"]);
+        $check_verify = Tools::check_input($post["verify"]);
+        if(!$check_mobile || !$check_verify){
+            return  ['status'=>-1, 'desc'=>'参数错误', 'uid'=>$uid, 'token'=>$token];
+        }
+
+        //检查验证码
         if ($post['mobile'] && $post['verify']) {
             $model->username = $post['mobile'];
             $model->password = $post['verify'];
             if($model->login()){
-                return ['status'=>1, 'desc'=>'登录成功'];
+                $uid = yii::$app->user->identity->getId();
+                $token = self::buildToken();
+                return ['status'=>1, 'desc'=>'登录成功', 'uid'=>$uid, 'token'=>$token];
             }
         }
-        return ['status'=>-1, 'desc'=>'登录失败'];
+        return ['status'=>-1, 'desc'=>'登录失败', 'uid'=>$uid, 'token'=>$token];
     }
 
 
     /**
-     * Signs user up.
+     * 发送验证码
      *
      * @return mixed
      */

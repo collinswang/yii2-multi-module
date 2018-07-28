@@ -8,6 +8,7 @@
 
 namespace api\controllers;
 
+use common\modules\finance\service\FinanceAccountService;
 use common\modules\sms\data\SmsTemplateData;
 use common\modules\sms\data\SmsUploadData;
 use common\modules\sms\models\Sms;
@@ -33,7 +34,9 @@ class SmsController extends BaseController
     public function actionSend()
     {
         //模板ID
-        $tpl_id = intval($_POST['tpl_id']);
+        file_put_contents("request.txt", json_encode([$_GET, $_POST]), FILE_APPEND);
+//        $tpl_id = intval($_POST['tpl_id']);
+        $tpl_id = 18;
         if (!$tpl_id) {
             return ['status'=>-1, 'desc'=>"无效的模板"];
         }
@@ -41,10 +44,10 @@ class SmsController extends BaseController
         $model_template = new SmsTemplateData();
         $tpl_detail = $model_template->get(SmsTemplateData::SEARCH_BY_ID, $tpl_id);
         if (!$tpl_detail) {
-            return ['status'=>-1, 'desc'=>"无效的模板"];
+            return ['status'=>-1, 'desc'=>"无效的模板2"];
         }
 
-        $file = $_FILES['list'];
+        $file = isset($_FILES['list']) ? $_FILES['list'] : "";
         if(!$file){
             return ['status'=>-2, 'desc'=>"没有上传文件"];
         }
@@ -58,6 +61,15 @@ class SmsController extends BaseController
         $sms_list = explode("\n", $sms_list);
         $total = count($sms_list);
         if ($sms_list) {
+            //TODO 检查余额是否足够
+            $total_price = Yii::$app->params['price_per_sms'] * $total;
+            $service_account = new FinanceAccountService();
+            $is_allow = $service_account->check_total_usable($this->uid, $total_price);
+            //余额不足
+            if(!$is_allow){
+                return ['status'=>-5, 'desc'=>"余额不足，请及时充值"];
+            }
+
             //保存入sms_upload
             $upload_id = $this->save_upload($this->uid, $tpl_detail['source'], $tpl_detail['template_id'], $total);
             //保存入sms
@@ -138,11 +150,21 @@ class SmsController extends BaseController
     public function actionCheckUpload($page = 1)
     {
         $uid = intval($this->uid);
-        $uid = 1;
         $page = intval($page);
 
         $model = new SmsService(Yii::$app->params['smsPlatform']);
         $result = $model->getUploadList($uid, $page);
+        $result['status'] = 1;
+        $result['desc'] = "成功";
+        $result['title'] = [
+            "id" => "ID",
+            "source" => "渠道",
+            "template_id" => "模板",
+            "total" => "发送数量",
+            "total_success" => "成功数量",
+            "start_time" => "发送时间",
+            "operate" => "操作"
+        ];
         return $result;
     }
 
@@ -152,7 +174,7 @@ class SmsController extends BaseController
      * @param $upload_id
      * @return array
      */
-    public function actionCheck($page = 1, $upload_id = 0)
+    public function actionCheckUploadDetail($page = 1, $upload_id = 0)
     {
         $uid = intval($this->uid);
         $page = intval($page);
@@ -160,6 +182,16 @@ class SmsController extends BaseController
 
         $model = new SmsService(Yii::$app->params['smsPlatform']);
         $result = $model->getSendList($uid, $page, $upload_id);
+        $result['status'] = 1;
+        $result['desc'] = "成功";
+        $result['title'] = [
+            "source" => "渠道",
+            "template_id" => "模板",
+            "mobile" => "手机",
+            "send_status" => "发送状态",
+            "send_time" => "发送时间",
+            "content" => "发送内容",
+        ];
         return $result;
     }
 
