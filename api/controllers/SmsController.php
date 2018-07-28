@@ -72,12 +72,16 @@ class SmsController extends BaseController
 
             //保存入sms_upload
             $upload_id = $this->save_upload($this->uid, $tpl_detail['source'], $tpl_detail['template_id'], $total);
-            //保存入sms
-            $save_result = $this->save_sms($this->uid, $tpl_detail, $sms_list, $upload_id);
-            //更新sms_upload数量
-            if($upload_id && $save_result['total']){
-                $model = new SmsUploadData();
-                $model->update($upload_id, ['total'=>$save_result['total']]);
+            if($upload_id){
+                //保存入sms
+                $save_result = $this->save_sms($this->uid, $tpl_detail, $sms_list, $upload_id);
+                //更新sms_upload数量
+                if($upload_id && $save_result['total']){
+                    $model = new SmsUploadData();
+                    $model->update($upload_id, ['total'=>$save_result['total']]);
+                }
+            } else {
+                return ['status'=>-3, 'desc'=>"上传失败"];
             }
         } else {
             return ['status'=>-3, 'desc'=>"上传的文件为空或格式不对"];

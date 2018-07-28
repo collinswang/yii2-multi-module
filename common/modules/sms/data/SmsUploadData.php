@@ -8,10 +8,10 @@
  */
 namespace common\modules\sms\data;
 
+use common\modules\finance\models\FinanceFlow;
 use common\modules\sms\models\SmsUpload;
 use Yii;
 use yii\base\BaseObject;
-use yii\db\Exception;
 
 class SmsUploadData extends BaseObject
 {
@@ -27,15 +27,37 @@ class SmsUploadData extends BaseObject
      */
     public function add($data)
     {
-        $model = new SmsUpload();
-        $model->attributes = $data;
-        if ($model->save()) {
-            //同时扣除用户相应金额
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            $model = new SmsUpload();
+            $model->attributes = $data;
+            if ($model->save()) {
+                //同时扣除用户相应金额
+                $flow = new FinanceFlow();
+                $flow->uid = $data['uid'];
+                $flow->money = $data['uid'];
+                $flow->target_type = $data['uid'];
+                $flow->target_id = $data['uid'];
+                $flow->create_time = time();
+                $flow->invisible = 0;
+                if($flow->save()){
+                    $flow_id = $flow->id;
+                } else {
+                    $transaction->rollBack();
+                    return false;
+                }
+
+            } else {
+                $transaction->rollBack();
+                return false;
+            }
+            $transaction->commit();
             return $model->id;
-        } else {
-            var_dump($model->getErrors());
+        } catch(\Exception $e){
+            $transaction->rollBack();
             return false;
         }
+
     }
 
     /**
