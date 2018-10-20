@@ -15,7 +15,7 @@ use yii\base\BaseObject;
 class FinanceFlowData extends BaseObject
 {
     //支付方式  1-充值,2-得奖,3-退款,4-提现,5-消费
-    public static $target_type = [1=>"充值", 2=>"得奖", 3=>"退款", 4=>"提现", 5=>"消费"];
+    public static $target_type = [1=>"充值", 2=>"赠送", 3=>"退款", 4=>"提现", 5=>"消费"];
     const TARGET_TYPE_INCOME = 1;
     const TARGET_TYPE_REWARD = 2;
     const TARGET_TYPE_RETURN = 3;

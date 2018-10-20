@@ -8,6 +8,7 @@
  */
 namespace common\modules\sms\data;
 
+use common\modules\finance\data\FinanceFlowData;
 use common\modules\finance\models\FinanceFlow;
 use common\modules\sms\models\SmsUpload;
 use Yii;
@@ -27,6 +28,10 @@ class SmsUploadData extends BaseObject
      */
     public function add($data)
     {
+        $total_money = floatval($data['total']* Yii::$app->params['price_per_sms']);
+        if(!$total_money){
+            return false;
+        }
         $transaction = Yii::$app->db->beginTransaction();
         try{
             $model = new SmsUpload();
@@ -35,25 +40,27 @@ class SmsUploadData extends BaseObject
                 //同时扣除用户相应金额
                 $flow = new FinanceFlow();
                 $flow->uid = $data['uid'];
-                $flow->money = $data['uid'];
-                $flow->target_type = $data['uid'];
+                $flow->money = -$total_money;   //消费为负数
+                $flow->target_type = FinanceFlowData::TARGET_TYPE_OUTCOME;
                 $flow->target_id = $data['uid'];
                 $flow->create_time = time();
                 $flow->invisible = 0;
                 if($flow->save()){
                     $flow_id = $flow->id;
                 } else {
+                    //print_r($flow->getErrors());
                     $transaction->rollBack();
                     return false;
                 }
-
             } else {
+                //print_r($model->getErrors());
                 $transaction->rollBack();
                 return false;
             }
             $transaction->commit();
             return $model->id;
         } catch(\Exception $e){
+            //print_r($e->getMessage());
             $transaction->rollBack();
             return false;
         }

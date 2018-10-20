@@ -58,7 +58,8 @@ class Sms extends \yii\db\ActiveRecord
         return [
             [['uid', 'mobile', 'content'], 'required'],
             [['create_at', 'update_at'], 'safe'],
-            [['uid', 'source', 'type', 'mobile', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid', 'order_id', 'upload_id'], 'integer'],
+            [['uid', 'source', 'type', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid', 'order_id', 'upload_id'], 'integer'],
+            [['mobile'], 'string', 'max' => 11],
             [['template_id'], 'string', 'max' => 30],
             [['content', 'send_desc'], 'string', 'max' => 255],
         ];

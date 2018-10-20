@@ -44,7 +44,7 @@ class FinanceAccountService extends BaseObject
     public function check_total_usable($uid, $total)
     {
         $account = $this->get_one($uid);
-        if($account['total_usable'] >= $total){
+        if($account && $account['total_usable'] >= $total){
             return true;
         } else {
             return false;

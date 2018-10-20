@@ -19,7 +19,7 @@ class SmsData extends BaseObject
     const SEARCH_BY_ID = 1;
     const SEARCH_BY_UID = 2;
 
-    public static $source = [1=>"腾迅云", 2=>"阿里云"];
+    public static $source = [0=>"未知渠道", 1=>"腾迅云", 2=>"阿里云"];
     const SOURCE_QCLOUD = 1;
     const SOURCE_ALIYUN = 2;
 
@@ -54,7 +54,7 @@ class SmsData extends BaseObject
             $this->setQueue($model->attributes);
             return $model->id;
         } else {
-            var_dump($model->getErrors());
+            //var_dump($model->getErrors());
             return false;
         }
     }
