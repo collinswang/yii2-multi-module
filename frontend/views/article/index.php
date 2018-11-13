@@ -27,6 +27,10 @@ $this->title = yii::$app->feehi->website_title;
 $this->registerMetaTag(['keywords' => yii::$app->feehi->seo_keywords]);
 $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
 ?>
+<div class="container">
+    <div class="col-md-3">left</div>
+    <div class="col-md-9">right</div>
+</div>
 <div class="content-wrap">
     <div class="content">
         <div class="slick_bor">

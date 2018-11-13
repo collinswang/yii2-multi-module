@@ -22,6 +22,8 @@ class LoginForm extends Model
 
     public $rememberMe = true;
 
+    public $captcha;
+
     private $_user;
 
 
@@ -37,6 +39,12 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            [
+                'captcha',
+                'captcha',
+                'captchaAction' => 'site/captcha',
+                'message' => yii::t('app', 'Verification code error.')
+            ],
         ];
     }
 

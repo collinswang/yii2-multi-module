@@ -1,4 +1,8 @@
 <?php
+
+use yii\filters\ContentNegotiator;
+use yii\web\Response;
+
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -9,8 +13,21 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log',
+        [
+            'class' => ContentNegotiator::className(),
+            'formats' => [
+                'application/json' => Response::FORMAT_JSON,
+                'application/xml' => Response::FORMAT_XML,
+            ],
+            'languages' => [
+                'en-US',
+                'de',
+            ],
+        ],
+        ],
     'controllerNamespace' => 'frontend\controllers',
+    'defaultRoute' => 'index/index',
     'components' => [
         'user' => [
             'identityClass' => common\models\User::className(),
@@ -42,22 +59,22 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'cache' => [
-            'class' => yii\caching\FileCache::className(),//使用文件缓存，可根据需要改成apc redis memcache等其他缓存方式
-            'keyPrefix' => 'frontend',       // 唯一键前缀
-        ],
-//        'urlManager' => [
-//            'enablePrettyUrl' => false,
-//            'showScriptName' => false,//隐藏index.php
-//            'enableStrictParsing' => false,
-//            //'suffix' => '.html',//后缀，如果设置了此项，那么浏览器地址栏就必须带上.html后缀，否则会报404错误
+//        'cache' => [
+//            'class' => yii\caching\FileCache::className(),//使用文件缓存，可根据需要改成apc redis memcache等其他缓存方式
+//            'keyPrefix' => 'frontend',       // 唯一键前缀
+//        ],
+        'urlManager' => [
+            'enablePrettyUrl' => false,
+            'showScriptName' => true,//隐藏index.php
+            'enableStrictParsing' => false,
+            //'suffix' => '.html',//后缀，如果设置了此项，那么浏览器地址栏就必须带上.html后缀，否则会报404错误
 //            'rules' => [
-//                //'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-//                //'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>?id=<id>'
-//                //'detail/<id:\d+>' => 'site/detail?id=$id',
-//                //'post/22'=>'site/detail',
-//                //'<controller:detail>/<id:\d+>' => '<controller>/index',
-//                '' => 'article/index',
+//                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+//                '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>?id=<id>',
+//                'detail/<id:\d+>' => 'site/detail?id=$id',
+//                'post/22'=>'site/detail',
+//                '<controller:detail>/<id:\d+>' => '<controller>/index',
+//                '' => 'index/index',
 //                '<page:\d+>' => 'article/index',
 //                'login' => 'site/login',
 //                'signup' => 'site/signup',
@@ -68,8 +85,8 @@ return [
 //                'tag/<tag:\w+>' => 'search/tag',
 //                'rss' => 'article/rss',
 //                'list/<page:\d+>' => 'site/index',
-//            ],
-//        ],
+ //           ],
+        ],
         'i18n' => [
             'translations' => [
                 'app*' => [
@@ -92,6 +109,15 @@ return [
 
                     ],
                 ],
+                'menu' => [
+                    'class' => yii\i18n\PhpMessageSource::className(),
+                    'basePath' => '@frontend/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'app' => 'menu.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
             ],
         ],
         'assetManager' => [
@@ -102,8 +128,10 @@ return [
                 ],
                 frontend\assets\AppAsset::className() => [
                     'css' => [
-                        'a' => 'static/css/style.css',
-                        'b' => 'static/plugins/toastr/toastr.min.css',
+                        'a' => 'static/css/bootstrap.min14ed.css?v=3.3.6',
+                        'b' => 'static/css/font-awesome.min93e3.css?v=4.4.0',
+                        'c' => 'static/css/style.css',
+                        'd' => 'static/plugins/toastr/toastr.min.css',
                     ],
                     'js' => [
                         'a' => 'static/js/jquery.min.js',

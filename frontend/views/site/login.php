@@ -10,6 +10,7 @@
 /* @var $form \yii\bootstrap\ActiveForm*/
 /* @var $model \common\models\LoginForm */
 
+use yii\captcha\Captcha;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
@@ -40,7 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'username', ['template' => "<div style='position:relative'>{label}{input}\n{error}\n{hint}</div>"])->textInput(['autofocus' => true]) ?>
 
                 <?= $form->field($model, 'password', ['template' => "<div style='position:relative'>{label}{input}\n{error}\n{hint}</div>"])->passwordInput() ?>
-
+                <?= $form->field($model, 'captcha', ['template' => '<div style="position:relative">{input}{error}{hint}</div>'])->widget(Captcha::classname(), [
+                    'template' => '{input}{image}',
+                    'options' => [
+                        "class"=>"form-control",
+                        'style' => "width:300px;height:34px;position:relative;top:2px",
+                    ],
+                    'imageOptions' => [
+                        "style" => "cursor:pointer;right:0px"
+                    ]
+                ]) ?>
                 <?= $form->field($model, 'rememberMe', ['labelOptions'=>['style'=>'width:117px;margin-left:79px;position:relative;left:34px;top:3px']])->checkbox(['style'=>'margin-right:0px;position:relative;top:-2px'])?>
 
                 <div class="form-group" style="color:#999;margin-right: 120px;">
