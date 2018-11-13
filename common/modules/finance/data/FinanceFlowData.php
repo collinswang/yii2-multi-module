@@ -22,4 +22,29 @@ class FinanceFlowData extends BaseObject
     const TARGET_TYPE_WITHDRAW = 4;
     const TARGET_TYPE_OUTCOME = 5;
 
+    /**
+     * @param $uid
+     * @param int $page
+     * @param int $page_size
+     * @param null $target_type
+     * @param null $start_time
+     * @param null $end_time
+     * @return mixed
+     */
+    public function get_list($uid, $page = 1, $page_size = 20, $target_type = null, $start_time = null, $end_time=null)
+    {
+        $sql = "invisible = 1 and uid = {$uid}";
+        if($start_time){
+            $sql .= " and create_time >= {$start_time}";
+        }
+        if($end_time){
+            $sql .= " and create_time < {$end_time}";
+        }
+        if($target_type){
+            $sql .= " and target_type = {$target_type}";
+        }
+        $result['total'] = FinanceFlow::find()->where($sql)->count();
+        $result['list'] = FinanceFlow::find()->where($sql)->offset(($page-1)*$page_size)->orderBy("id desc")->limit($page_size)->asArray()->all();
+        return $result;
+    }
 }

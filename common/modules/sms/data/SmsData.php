@@ -190,15 +190,17 @@ class SmsData extends BaseObject
     /**
      * 按页查找短信发送记录
      * @param $uid
-     * @param $page
-     * @param $page_size
-     * @param $start_time
-     * @param $end_time
+     * @param int $page
+     * @param $upload_id
+     * @param int $page_size
+     * @param int $start_time
+     * @param int $end_time
      * @param $source
      * @param $mobile
+     * @param null $send_status
      * @return mixed
      */
-    public function getSmsSendList($uid, $page=1, $page_size=20, $start_time=0, $end_time=0, $source = null, $mobile = null, $send_status = null)
+    public function getSmsSendList($uid, $page=1, $upload_id, $page_size=20, $start_time=0, $end_time=0, $source = null, $mobile = null, $send_status = null)
     {
         $sql = "uid = {$uid}";
         if($start_time){
@@ -215,6 +217,9 @@ class SmsData extends BaseObject
         }
         if($send_status){
             $sql .= " and send_status = {$send_status}";
+        }
+        if($upload_id){
+            $sql .= " and upload_id = {$upload_id}";
         }
 
         $result['total'] = Sms::find()->where($sql)->count();

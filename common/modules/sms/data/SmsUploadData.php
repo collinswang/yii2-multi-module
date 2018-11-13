@@ -8,10 +8,10 @@
  */
 namespace common\modules\sms\data;
 
+use common\modules\finance\models\FinanceFlow;
 use common\modules\sms\models\SmsUpload;
 use Yii;
 use yii\base\BaseObject;
-use yii\db\Exception;
 
 class SmsUploadData extends BaseObject
 {
@@ -27,14 +27,37 @@ class SmsUploadData extends BaseObject
      */
     public function add($data)
     {
-        $model = new SmsUpload();
-        $model->attributes = $data;
-        if ($model->save()) {
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            $model = new SmsUpload();
+            $model->attributes = $data;
+            if ($model->save()) {
+                //同时扣除用户相应金额
+                $flow = new FinanceFlow();
+                $flow->uid = $data['uid'];
+                $flow->money = $data['uid'];
+                $flow->target_type = $data['uid'];
+                $flow->target_id = $data['uid'];
+                $flow->create_time = time();
+                $flow->invisible = 0;
+                if($flow->save()){
+                    $flow_id = $flow->id;
+                } else {
+                    $transaction->rollBack();
+                    return false;
+                }
+
+            } else {
+                $transaction->rollBack();
+                return false;
+            }
+            $transaction->commit();
             return $model->id;
-        } else {
-            var_dump($model->getErrors());
+        } catch(\Exception $e){
+            $transaction->rollBack();
             return false;
         }
+
     }
 
     /**
@@ -74,14 +97,26 @@ class SmsUploadData extends BaseObject
 
     /**
      * 获取列表
-     * @param           $uid
-     * @param int       $page
-     * @param int       $page_size
+     * @param $uid
+     * @param int $page
+     * @param int $page_size
+     * @param $start_time
+     * @param $end_time
+     * @param $source
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function get_list($uid, $page = 1, $page_size = 20)
+    public function get_list($uid, $page = 1, $page_size = 20, $start_time, $end_time, $source)
     {
         $sql = "is_hidden = 0 and uid = $uid";
+        if($start_time){
+            $sql .= " and create_at >= {$start_time}";
+        }
+        if($end_time){
+            $sql .= " and create_at < {$end_time}";
+        }
+        if($source){
+            $sql .= " and source = {$source}";
+        }
         $result['total'] = SmsUpload::find()->where($sql)->count();
         $result['list'] = SmsUpload::find()->where($sql)->offset(($page-1)*$page_size)->limit($page_size)->orderBy("id desc")->asArray()->all();
         return $result;

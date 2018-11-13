@@ -195,4 +195,26 @@ class FinanceIncomeData extends BaseObject
     {
 
     }
+
+    /**
+     * @param $uid
+     * @param $page
+     * @param $page_size
+     * @param $start_time
+     * @param $end_time
+     */
+    public function get_list($uid, $page, $page_size, $start_time, $end_time)
+    {
+        $sql = "invisible = 1 and status = 2 and uid = {$uid}";
+        if($start_time){
+            $sql .= " and deal_time >= {$start_time}";
+        }
+        if($end_time){
+            $sql .= " and deal_time < {$end_time}";
+        }
+        echo $sql,"\r\n";
+        $result['total'] = FinanceIncome::find()->where($sql)->count();
+        $result['list'] = FinanceIncome::find()->where($sql)->offset(($page-1)*$page_size)->orderBy("id desc")->limit($page_size)->asArray()->all();
+        return $result;
+    }
 }

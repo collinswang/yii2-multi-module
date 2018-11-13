@@ -27,14 +27,30 @@ class Tools
         return $content;
     }
 
+    /**
+     * 过滤SQL注入字符
+     * @param $content
+     * @return mixed
+     */
     public static function filter_sql($content) {
-        $sql = array("select", 'insert', 'from', "update", "delete", "\'", "\/\*",
-            "\.\.\/", "\.\/", "union", "into", "load_file", "outfile");
-        $sql_re = array("","","","","","","","","","","","");
-        $content = str_replace($sql, $sql_re, strtolower($content));
+        $sql = array("select", 'insert', 'from', "update", "delete", "union", "into", "load_file", "outfile", "SELECT", 'INSERT', 'FROM', "UPDATE", "DELETE", "UNION", "INTO", "LOAD_FILE", "OUTFILE", "\'", "\/\*", "\.\.\/", "\.\/");
+        $content = str_replace($sql, "", $content);
         return $content;
     }
 
+    /**
+     * 检查手机号
+     * @param $mobile
+     * @return bool
+     */
+    public static function check_mobile($mobile)
+    {
+        if(preg_match("/^1\d{10}$/",$mobile)){
+            return true;
+        }else{
+            return false;
+        }
+    }
     /**
      * 获取用户IP
      * @return string
