@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\Captcha;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\form\PasswordResetRequestForm;
@@ -95,6 +96,30 @@ class SiteController extends BaseController
             return $this->renderPartial('login', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    /**
+     * Logs in a user.
+     *
+     * @return mixed
+     */
+    public function actionSendCode()
+    {
+        Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+        if (!Yii::$app->getUser()->getIsGuest()) {
+            return Yii::$app->getResponse()->redirect(['/user/index']);
+        }
+
+        $model = new Captcha();
+        $model->mobile = Yii::$app->getRequest()->get()['mobile'];
+        $model->captcha = Yii::$app->getRequest()->get()['captcha'];
+        $model->sendSms();
+        if ($model->validate() && $model->sendSms()) {
+            return ['status'=>0, 'msg'=>'ok'];
+        } else {
+            $errors = $model->errors;
+            return ['status'=>-1, 'msg'=>$errors];
         }
     }
 

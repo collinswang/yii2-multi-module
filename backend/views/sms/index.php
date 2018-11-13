@@ -26,11 +26,10 @@ $this->params['breadcrumbs'][] = 'Sms';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
-                        ['class' => CheckboxColumn::className()],
                         'id',
                         'uid',
                         [
-                            'label'=>'source',
+                            'label'=>'发送渠道',
                             'attribute' => 'source',
                             'value'=>function ($data) {
                                 return SmsData::$source[$data->source]; // 如果是数组数据则为 $data['name'] ，例如，使用 SqlDataProvider 的情形。
@@ -56,12 +55,12 @@ $this->params['breadcrumbs'][] = 'Sms';
                         ],
                         [
                             'class'=> \backend\grid\DateColumn::className(),
-                            'label'=>'create_at',
+                            'label'=>'发送时间',
                             'attribute' => 'create_at',
                         ],
                         // 'update_at',
                         [
-                            'label'=>'send_status',
+                            'label'=>'发送状态',
                             'attribute' => 'send_status',
                             'value'=>function ($data) {
                                 return SmsData::$send_status[$data->send_status]; // 如果是数组数据则为 $data['name'] ，例如，使用 SqlDataProvider 的情形。
