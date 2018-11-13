@@ -245,36 +245,3 @@ use yii\helpers\Url;
     </div>
 
 </div>
-<?php JsBlock::begin() ?>
-<script>
-$(document).ready(function () {
-    $.ajax({
-        dataType:"jsonp",
-        url:"//api.feehi.com/cms/notify",
-        success:function (dataAll) {
-            data = dataAll.rows;
-            $("#notify").empty();
-            for(var index in data){
-                var label = '';
-                if( data[index].label ){
-                    label = data[index].label;
-                }
-                $("#notify").append("\
-                    <li class=\"list-group-item\"> \
-                        <p>\
-                            <a target='_blank' class='pull-left' href=\" " + data[index].href +" \"> " + data[index].title + " </a>\
-                            " + label +  "\
-                            <small class=\"block text-muted pull-right\">" + data[index].createdAt + "</small> \
-                        </p> \
-                    </li>"
-                );
-            }
-        },
-        error:function (data) {
-            $("#notify").empty();
-            $("#notify").append("<li class='list-group-item'>Connect error</li>");
-        }
-    });
-})
-</script>
-<?php JsBlock::end() ?>

@@ -19,7 +19,9 @@
         "yiisoft/yii2-swiftmailer": "*",
         "feehi/yii2-swoole": ">=0.0.5",
         "qcloudsms/qcloudsms_php": "*",
-        "yiisoft/yii2-redis": "^2.0"
+        "yiisoft/yii2-redis": "^2.0",
+        "xutl/yii2-wechat": "~2.0",
+        "yiisoft/yii2-jui": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

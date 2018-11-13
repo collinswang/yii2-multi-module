@@ -14,6 +14,7 @@ use frontend\models\form\PasswordResetRequestForm;
 use frontend\models\form\ResetPasswordForm;
 use frontend\models\form\SignupForm;
 use yii\base\InvalidParamException;
+use yii\captcha\CaptchaAction;
 use yii\web\BadRequestHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -55,6 +56,25 @@ class SiteController extends BaseController
         ];
     }
 
+    public function actions()
+    {
+        $captcha = [
+            'class' => CaptchaAction::className(),
+            'backColor' => 0x66b3ff,//背景颜色
+            'maxLength' => 4,//最大显示个数
+            'minLength' => 4,//最少显示个数
+            'padding' => 6,//验证码字体大小，数值越小字体越大
+            'height' => 34,//高度
+            'width' => 100,//宽度
+            'foreColor' => 0xffffff,//字体颜色
+            'offset' => 13,//设置字符偏移量
+        ];
+        if( YII_ENV_TEST ) $captcha = array_merge($captcha, ['fixedVerifyCode'=>'testme']);
+        return [
+            'captcha' => $captcha,
+        ];
+    }
+
     /**
      * Logs in a user.
      *
@@ -72,7 +92,7 @@ class SiteController extends BaseController
             return $this->goBack();
         } else {
             yii::$app->getUser()->setReturnUrl(yii::$app->getRequest()->getHeaders()->get('referer'));
-            return $this->render('login', [
+            return $this->renderPartial('login', [
                 'model' => $model,
             ]);
         }
@@ -209,6 +229,7 @@ class SiteController extends BaseController
      */
     public function actionError()
     {
+        $this->layout = false;
         if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
             // action has been invoked not from error handler, but by direct route, so we display '404 Not Found'
             $exception = new HttpException(404, Yii::t('yii', 'Page not found.'));
