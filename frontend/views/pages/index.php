@@ -995,6 +995,9 @@ $this->params['breadcrumbs'][] = 'Index';
     <li>
         <?=Html::a('UserCenter',  Url::toRoute(['/user/index']))?>
     </li>
+    <li>
+        <?=Html::a('Logout',  Url::toRoute(['/site/logout']))?>
+    </li>
 </ul>
 <?=$this->render('footer');?>
 

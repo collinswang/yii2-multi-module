@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\Captcha;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\form\PasswordResetRequestForm;
@@ -95,6 +96,101 @@ class SiteController extends BaseController
             return $this->renderPartial('login', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    public static $builtInValidators = [
+        'boolean'  => 'yii\validators\BooleanValidator',
+        'captcha'  => 'yii\captcha\CaptchaValidator',
+        'compare'  => 'yii\validators\CompareValidator',
+        'date'     => 'yii\validators\DateValidator',
+        'datetime' => [
+            'class' => 'yii\validators\DateValidator',
+            'type'  => \yii\validators\DateValidator::TYPE_DATETIME,
+        ],
+        'time'     => [
+            'class' => 'yii\validators\DateValidator',
+            'type'  => \yii\validators\DateValidator::TYPE_TIME,
+        ],
+        'default'  => 'yii\validators\DefaultValueValidator',
+        'double'   => 'yii\validators\NumberValidator',
+        'each'     => 'yii\validators\EachValidator',
+        'email'    => 'yii\validators\EmailValidator',
+        'exist'    => 'yii\validators\ExistValidator',
+        'file'     => 'yii\validators\FileValidator',
+        'filter'   => 'yii\validators\FilterValidator',
+        'image'    => 'yii\validators\ImageValidator',
+        'in'       => 'yii\validators\RangeValidator',
+        'integer'  => [
+            'class'       => 'yii\validators\NumberValidator',
+            'integerOnly' => true,
+        ],
+        'match'    => 'yii\validators\RegularExpressionValidator',
+        'number'   => 'yii\validators\NumberValidator',
+        'required' => 'yii\validators\RequiredValidator',
+        'safe'     => 'yii\validators\SafeValidator',
+        'string'   => 'yii\validators\StringValidator',
+        'trim'     => [
+            'class'       => 'yii\validators\FilterValidator',
+            'filter'      => 'trim',
+            'skipOnArray' => true,
+        ],
+        'unique'   => 'yii\validators\UniqueValidator',
+        'url'      => 'yii\validators\UrlValidator',
+        'ip'       => 'yii\validators\IpValidator',
+    ];
+
+    /**
+     * Signs user up.
+     *
+     * @return mixed
+     */
+    public function actionReg()
+    {
+        if (!Yii::$app->getUser()->getIsGuest()) {
+            return Yii::$app->getResponse()->redirect(['/user/index']);
+        }
+
+        $model = new SignupForm();
+        $model->setScenario('create');
+        if ($model->load(Yii::$app->getRequest()->post())) {
+            if ($user = $model->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+        }
+
+        return $this->render('reg', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Logs in a user.
+     *
+     * @return mixed
+     */
+    public function actionSendCode()
+    {
+        Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+        if (!Yii::$app->getUser()->getIsGuest()) {
+            return Yii::$app->getResponse()->redirect(['/user/index']);
+        }
+
+        $model = new SignupForm();
+        $model->setScenario('sms');
+        $model->load(Yii::$app->getRequest()->post());
+        if ($model->validate()) {
+            if($code = $model->sendSms()){
+                return ['status'=>0, 'msg'=>'ok'.$code];
+            } else {
+                return ['status'=>-1, 'msg'=>'code send fail'];
+            }
+
+        } else {
+            $errors = $model->errors;
+            return ['status'=>-1, 'msg'=>$errors];
         }
     }
 

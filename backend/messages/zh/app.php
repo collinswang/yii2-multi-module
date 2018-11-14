@@ -28,7 +28,7 @@ return [
     'Type' => '类型',
     'Icon' => '图标',
     'Email' => '邮箱',
-    'Username' => '用户名',
+    'Username' => '手机号',
     'Admin' => '管理员',
     'Password' => '密码',
     'Avatar' => '头像',

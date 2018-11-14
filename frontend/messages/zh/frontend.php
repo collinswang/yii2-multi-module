@@ -10,6 +10,11 @@ return [
     /*public*/
     'Hi, Log in' => 'Hi, 请登录',
     'Log out' => '退出登陆',
+    'Captcha' => '验证码',
+    'Verify Code' => '短信验证码',
+    'Verify Code Error' => '短信验证码错误',
+    'Password' => '登录密码',
+    'Repeat Password' => '确认登录密码',
     'Sign up' => '注册',
     'About us' => '关于我们',
     'Contact us' => '联系我们',
@@ -54,13 +59,13 @@ return [
     'Subscribe' => '订阅',
     ' said' => ' 说',
     ' Comments' => '评论',
-    'This username has already been taken' => '用户名已经被使用了',
+    'This username has already been taken' => '该手机号已经注册过了',
     'This email address has already been taken' => '邮箱已经被使用了',
     'Please fill out the following fields to signup' => '请填写下面信息完成注册',
     'Signup' => '注册',
     "None category named {name}" => '未找到分类{name}',
     "Login" => "登录",
-    "Incorrect username or password." => "用户名或者密码错误",
+    "Incorrect username or password." => "手机号或者密码错误",
     /*site*/
 
     /*article*/
