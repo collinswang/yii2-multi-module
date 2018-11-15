@@ -8,6 +8,7 @@
 
 namespace api\controllers;
 
+use common\components\Tools;
 use common\modules\finance\service\FinanceAccountService;
 use common\modules\sms\data\SmsTemplateData;
 use common\modules\sms\data\SmsUploadData;
@@ -29,12 +30,12 @@ class SmsController extends BaseController
      * @var int     tpl_id      短信模板ID
      * @var string  file        上传文件，格式： “手机号”，“模板字段一”，“模板字段二”
      * @return array
-     * @example curl -F "tpl_id=13" -F "list=@file.csv" -H "token:98f5c8c4bdce974a90d177261f1db082" "http://api.k5.com/?r=sms/send&uid=1"
+     * @example curl -F "tpl_id=13" -F "upfile=@file.csv" "http://api.k3.com/?r=sms/send&uid=8&mobile=13651081267&token=8fb3662c974479460f8bb4f960baa500&bid=%31%5a%53%4b%4d%33%33%57%34%42%36&dev=%34%37%37%65%33%38%63%64%30%35%33%65%34%33%61%37%35%37%61%39%64%66%34%33%34%30%63%30%34%36%34%64&did=%57%44%43%20%57%44%31%30%53%50%5a%58%2d%30%30%5a%31%30%54%30%20%41%54%41%20%44%65%76%69%63%65&mac=%36%43%3a%38%38%3a%31%34%3a%32%37%3a%38%44%3a%41%43"
      */
     public function actionSend()
     {
         //模板ID
-        file_put_contents("request.txt", json_encode([$_GET, $_POST]), FILE_APPEND);
+        file_put_contents("request.txt", json_encode([$_GET, $_POST, $_FILES])."\r\n", FILE_APPEND);
 //        $tpl_id = intval($_POST['tpl_id']);
         $tpl_id = 18;
         if (!$tpl_id) {
@@ -47,7 +48,7 @@ class SmsController extends BaseController
             return ['status'=>-1, 'desc'=>"无效的模板2"];
         }
 
-        $file = isset($_FILES['list']) ? $_FILES['list'] : "";
+        $file = isset($_FILES['upfile']) ? $_FILES['upfile'] : "";
         if(!$file){
             return ['status'=>-2, 'desc'=>"没有上传文件"];
         }
@@ -122,7 +123,7 @@ class SmsController extends BaseController
      */
     private function save_sms($uid, $tpl_detail, $sms_list, $upload_id)
     {
-        $success = $fail = $total = 0;
+        $success = $fail = $total = $err = 0;
         $sms_model = new SmsService(Yii::$app->params['smsPlatform']);
         foreach ($sms_list as $item) {
             if (!$item) {
@@ -131,6 +132,10 @@ class SmsController extends BaseController
             $item_arr = explode(",", str_replace('"','', $item));
             if (count($item_arr)) {
                 $mobile = array_shift($item_arr);
+                if(!Tools::check_mobile($mobile)){
+                    $err++;
+                    continue;
+                }
                 if ($mobile) {
                     $single_result = $sms_model->sendTemplateSingle($uid, $tpl_detail, $mobile, $item_arr, $upload_id);
                     //$single_result['status'] >0 表示成功
@@ -143,7 +148,7 @@ class SmsController extends BaseController
             }
             $total++;
         }
-        return ['total'=>$total, 'success'=>$success, 'fail'=>$fail];
+        return ['total'=>$total, 'success'=>$success, 'fail'=>$fail, 'err'=>$err];
     }
 
     /**

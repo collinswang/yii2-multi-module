@@ -4,6 +4,7 @@
  */
 namespace common\modules\sms\service;
 
+use common\components\Tools;
 use common\modules\sms\base\SmsInterface;
 use common\modules\sms\data\SmsData;
 use common\modules\sms\data\SmsTemplateData;
@@ -54,7 +55,9 @@ class SmsService extends BaseObject
             return ['status' => -1, 'desc' => 'UID不能为空'];
         }
 
-        $mobile = intval(str_replace('"', '', $mobile));
+        if(!Tools::check_mobile($mobile)){
+            return ['status' => -2, 'desc' => '手机号错误'];
+        }
 
         //获取消息模板
         $build_result = $this->buildContent($tpl_detail, $params);
@@ -68,6 +71,7 @@ class SmsService extends BaseObject
         //添加本地签名记录
         $model = new SmsData();
         $id = $model->add(['uid'         => $uid,
+                           'source'        => $tpl_detail['source'],
                            'type'        => $type,
                            'template_id' => $tpl_detail['template_id'],
                            'mobile'      => $mobile,
@@ -264,7 +268,7 @@ class SmsService extends BaseObject
                 $single['source'] = SmsData::$source[$item['source']];
                 $single['template_id'] = $item['template_id'];
                 $single['mobile'] = str_replace(substr($item['mobile'], 3,4), "xxxx", $item['mobile']);
-                $single['send_status'] = $item['send_status'] == 0 ? "成功": "失败：".$item['send_status'];
+                $single['send_status'] = $item['send_status'] == 0 ? "成功": "失败";
                 $single['send_time'] = date("Y-m-d H:i:s", $item['update_at']);
                 $single['content'] = $this->content_to_string($item['content']);
                 $list[] = $single;
