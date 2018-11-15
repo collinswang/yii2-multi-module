@@ -48,6 +48,11 @@ return [
     'Guest' => '游客',
     /*public*/
 
+    /*sms*/
+    'Select Sms Template' => '请选择短信模板',
+    'template_id' => '短信模板',
+    'file' => '发送列表',
+
     /*site*/
     'Hot Recommends' => '热门推荐',
     'Clound Tags' => '云标签',
@@ -62,6 +67,9 @@ return [
     'This username has already been taken' => '该手机号已经注册过了',
     'This email address has already been taken' => '邮箱已经被使用了',
     'Please fill out the following fields to signup' => '请填写下面信息完成注册',
+    'Please fill out the following fields to reset' => '请填写下面信息完成重置密码',
+    'This username not exist' => '用户不存在',
+    'Reset Password' => '重置密码',
     'Signup' => '注册',
     "None category named {name}" => '未找到分类{name}',
     "Login" => "登录",

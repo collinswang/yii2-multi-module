@@ -6,15 +6,13 @@
  * Created at: 2017-03-15 21:16
  */
 
-use common\widgets\JsBlock;
-
 if (Yii::$app->getSession()->hasFlash('success')) {
-    $successTitle = yii::t('app', 'Success');
-    $info = Yii::$app->getSession()->getFlash('success');
+    $successTitle = addslashes( yii::t('app', 'Success') );
+    $info = addslashes( Yii::$app->getSession()->getFlash('success') );
     $str = <<<EOF
        toastr.options = {
           "closeButton": true,
-          "debug": true,
+          "debug": false,
           "progressBar": true,
           "positionClass": "toast-top-center",
           "showDuration": "400",
@@ -28,17 +26,15 @@ if (Yii::$app->getSession()->hasFlash('success')) {
        };
        toastr.success("{$successTitle}", "{$info}");
 EOF;
-    JsBlock::begin();
-    echo $str;
-    JsBlock::end();
+    $this->registerJs($str);
 }
 if (Yii::$app->getSession()->hasFlash('error')) {
-    $errorTitle = yii::t('app', 'Error');
-    $info = Yii::$app->getSession()->getFlash('error');
+    $errorTitle = addslashes( yii::t('app', 'Error') );
+    $info = addslashes( Yii::$app->getSession()->getFlash('error') );
     $str = <<<EOF
        toastr.options = {
           "closeButton": true,
-          "debug": true,
+          "debug": false,
           "progressBar": true,
           "positionClass": "toast-top-center",
           "showDuration": "400",
@@ -52,8 +48,6 @@ if (Yii::$app->getSession()->hasFlash('error')) {
        };
        toastr.error("{$errorTitle}", "{$info}");
 EOF;
-    JsBlock::begin();
-    echo $str;
-    JsBlock::end();
+    $this->registerJs($str);
 }
 ?>

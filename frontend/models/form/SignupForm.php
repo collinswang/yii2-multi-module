@@ -9,6 +9,7 @@ namespace frontend\models\form;
 
 use yii;
 use common\models\User;
+use yii\base\InvalidParamException;
 use yii\base\Model;
 
 /**
@@ -43,7 +44,15 @@ class SignupForm extends Model
                 'username',
                 'unique',
                 'targetClass' => User::className(),
-                'message' => yii::t('frontend', 'This username has already been taken')
+                'message' => yii::t('frontend', 'This username has already been taken'),
+                'on' =>['create', 'sms']
+            ],
+            [
+                'username',
+                'exist',
+                'targetClass' => User::className(),
+                'message' => yii::t('frontend', 'This username not exist'),
+                'on' =>['reset','sms_reset']
             ],
             ['username','match','pattern'=>'/^1[0-9]{10}$/','message'=>'{attribute}必须为1开头的11位数字'],
 
@@ -74,6 +83,8 @@ class SignupForm extends Model
         return [
             'create' => ['username', 'password', 'verify_code'],
             'sms' => ['username', 'captcha'],
+            'reset' => ['username', 'password', 'verify_code'],
+            'sms_reset' => ['username', 'captcha'],
         ];
     }
 
@@ -127,7 +138,12 @@ class SignupForm extends Model
         return $code;
     }
 
-
+    /**
+     * 校验短信验证码
+     * @param $attribute
+     * @param $params
+     * @return bool
+     */
     public function checkVerifyCode($attribute, $params)
     {
         $verify_code = Yii::$app->redis->executeCommand("GET", [$this->username]);
@@ -137,5 +153,23 @@ class SignupForm extends Model
             $this->addError($attribute, yii::t('frontend', 'Verify Code Error'));
             return false;
         }
+    }
+
+    /**
+     * Resets password.
+     *
+     * @return boolean if password was reset.
+     */
+    public function resetPassword()
+    {
+        $user = User::findByUsername($this->username);
+        if (!$user) {
+            $this->addError('username', yii::t('frontend', 'Verify Code Error'));
+            return false;
+        }
+        $user->setPassword($this->password);
+        $user->removePasswordResetToken();
+
+        return $user->save(false);
     }
 }
