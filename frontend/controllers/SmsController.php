@@ -13,11 +13,12 @@ use backend\actions\DeleteAction;
 use backend\actions\IndexAction;
 use backend\actions\SortAction;
 use backend\actions\UpdateAction;
+use common\modules\sms\data\SmsTaskData;
 use common\modules\sms\data\SmsTemplateData;
 use common\modules\sms\data\SmsUploadData;
 use common\modules\sms\models\SmsTemplate;
 use common\modules\sms\service\SmsService;
-use frontend\models\SmsForm;
+use frontend\models\SmsTaskForm;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
@@ -49,15 +50,15 @@ class SmsController extends BaseController
 //            ],
             'update' => [
                 'class' => UpdateAction::className(),
-                'modelClass' => SmsForm::className(),
+                'modelClass' => SmsTaskForm::className(),
             ],
             'delete' => [
                 'class' => DeleteAction::className(),
-                'modelClass' => SmsForm::className(),
+                'modelClass' => SmsTaskForm::className(),
             ],
             'sort' => [
                 'class' => SortAction::className(),
-                'modelClass' => SmsForm::className(),
+                'modelClass' => SmsTaskForm::className(),
             ],
         ];
     }
@@ -68,6 +69,7 @@ class SmsController extends BaseController
      * @var int     tpl_id      短信模板ID
      * @var string  file        上传文件，格式： “手机号”，“模板字段一”，“模板字段二”
      * @return string|\yii\console\Response|\yii\web\Response
+     * @throws \yii\base\Exception
      */
     public function actionSend()
     {
@@ -76,16 +78,25 @@ class SmsController extends BaseController
             return Yii::$app->getResponse()->redirect(['/site/login']);
         }
 
-        $model = new SmsForm();
+        $model = new SmsTaskForm();
         if (Yii::$app->getRequest()->getIsPost()) {
             $model->load(Yii::$app->getRequest()->post());
             $model->file = UploadedFile::getInstances($model, 'file');
-            if ($id = $model->saveNotConfirm()) {
-
+            $result = $model->saveNotConfirm();
+            if ($result['status']>=0) {
                 // 文件上传成功
-                return $this->render('send-confirm', [
-                    'model' => $model,
+                return $this->render('confirm', [
+                    'list' => $result['list'],
+                    'info' => $result['info'],
+                    'id'   => $result['id'],
                 ]);
+            } else {
+                $errors = $model->getErrors();
+                $err = '';
+                foreach ($errors as $v) {
+                    $err .= $v[0] . '<br>';
+                }
+                Yii::$app->getSession()->setFlash('error', $err);
             }
         }
 
@@ -93,6 +104,42 @@ class SmsController extends BaseController
             'model' => $model,
         ]);
 
+    }
+
+    //确认执行任务: 付款,完成后入库
+    public function actionConfirm()
+    {
+        $status = 1;
+        if(!$status){    //支付错误
+        }
+
+        $model = new SmsTaskForm();
+        if (Yii::$app->getRequest()->getIsPost()) {
+            $model->load(Yii::$app->getRequest()->post());
+
+            $result = $model->submitTask();
+            if ($result['status']>=0) {
+                // 文件上传成功
+                return $this->redirect(['confirm',
+                    'list' => $result['list'],
+                    'info' => $result['info'],
+                    'id'   => $result['id'],
+                ]);
+            } else {
+                $errors = $model->getErrors();
+                $err = '';
+                foreach ($errors as $v) {
+                    $err .= $v[0] . '<br>';
+                }
+                Yii::$app->getSession()->setFlash('error', $err);
+            }
+        }
+
+        return $this->render('confirm', [
+            'list' => $result['list'],
+            'info' => $result['info'],
+            'id'   => $result['id'],
+        ]);
     }
 
     /**

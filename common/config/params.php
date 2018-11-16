@@ -14,5 +14,5 @@ return [
         1 => '',
         2 => 'SMS_116780131',
     ],
-    'price_per_sms' => 0.10,
+    'price_per_sms' => 8,
 ];

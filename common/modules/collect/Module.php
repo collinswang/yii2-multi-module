@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\sms;
+namespace common\modules\collect;
 
 class Module extends \yii\base\Module
 {

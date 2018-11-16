@@ -9,7 +9,9 @@ namespace frontend\models;
 
 
 use common\modules\finance\service\FinanceAccountService;
+use common\modules\sms\data\SmsTaskData;
 use common\modules\sms\data\SmsUploadData;
+use common\modules\sms\models\SmsTask;
 use common\modules\sms\models\SmsTemplate;
 use common\modules\sms\service\SmsService;
 use Yii;
@@ -17,7 +19,7 @@ use yii\base\Model;
 use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
-class SmsForm extends Model
+class SmsTaskForm extends Model
 {
     public $template_id;
 
@@ -73,24 +75,36 @@ class SmsForm extends Model
 
     }
 
-
+    /**
+     * @return array|bool
+     * @throws \yii\base\Exception
+     */
     public function saveNotConfirm()
     {
         $upload = UploadedFile::getInstance($this, 'file');
         if ($upload !== null) {
             $uploadPath = yii::getAlias('@sms_dir/'.date("Y_m_d").'/');
             if (!FileHelper::createDirectory($uploadPath)) {
-                $this->addError('ad', "Create directory failed " . $uploadPath);
+                $this->addError('sms_task', "Create directory failed " . $uploadPath);
                 return false;
             }
             $fullName = $uploadPath . date('YmdHis') . '_' . uniqid() . '.' . $upload->getExtension();
             if (! $upload->saveAs($fullName)) {
-                $this->addError('ad', yii::t('app', 'Upload {attribute} error: ' . $upload->error, ['attribute' => yii::t('app', 'Ad')]) . ': ' . $fullName);
+                $this->addError('sms_task', yii::t('app', 'Upload {attribute} error: ' . $upload->error, ['attribute' => yii::t('app', 'Ad')]) . ': ' . $fullName);
                 return false;
             }
             $this->file = str_replace($uploadPath, '', $fullName);
         }
+
         //保存入库,且返回
+        $model = new SmsTaskData();
+        $result = $model->add(Yii::$app->getUser()->getId(), $this->template_id, $this->file);
+        if($result['error']){
+            $this->addError('sms_task', $result['error']);
+            return false;
+        } else {
+            return $result;
+        }
     }
 
     public function save()
