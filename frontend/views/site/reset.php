@@ -14,7 +14,7 @@ use yii\captcha\Captcha;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = yii::t('frontend', 'Sign up') . '-' . yii::$app->feehi->website_title;
+$this->title = yii::t('frontend', 'Reset Password') . '-' . yii::$app->feehi->website_title;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerMetaTag(['keywords' => yii::$app->feehi->seo_keywords]);
@@ -45,11 +45,11 @@ $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
 <div class="content-wrap">
     <div class="site-signup article-content">
         <h1 class="center"><?= Html::encode($this->title) ?></h1>
-        <p class="center"><?= yii::t('frontend', 'Please fill out the following fields to signup') ?>:</p>
+        <p class="center"><?= yii::t('frontend', 'Please fill out the following fields to reset') ?>:</p>
 
         <div class="row">
             <div class="col-lg-5">
-                <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+                <?php $form = ActiveForm::begin(['id' => 'form-reset']); ?>
 
                 <?= $form->field($model, 'username', ['template' => "<div style='position:relative'>{label}{input}\n{error}\n{hint}</div>"])->textInput(['autofocus' => true]) ?>
 
@@ -70,7 +70,7 @@ $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
                 <?= $form->field($model, 'password_repeat', ['template' => "<div style='position:relative'>{label}{input}\n{error}\n{hint}</div>"])->textInput(['placeholder'=>'再次输入登录密码']) ?>
 
                 <div class="form-group" style="text-align: center">
-                    <?= Html::submitButton(yii::t('frontend', 'Signup'), ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                    <?= Html::submitButton(yii::t('frontend', 'Reset Password'), ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>
@@ -86,7 +86,7 @@ $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
         console.log(mobile);
         $.get({
             url:'/?r=site/send-code',
-            data:'&SignupForm[username]='+mobile+'&SignupForm[captcha]='+captcha+'&_csrf='+$("input[name=_csrf]").val(),
+            data:'&source=2&SignupForm[username]='+mobile+'&SignupForm[captcha]='+captcha+'&_csrf='+$("input[name=_csrf]").val(),
             type:1,
             method:'post',
             success:function (data) {
@@ -94,12 +94,19 @@ $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
                     console.log(data);
                     $("#sendSmsResult").html("");
                     $(".field-captcha").removeClass('has-error');
+                    $(".field-signupform-username p").html("");
+                    $(".field-signupform-username").removeClass('has-error');
                     $("#captcha-image").click();
                     countDown(60);
                 } else {
                     if(data.msg.captcha){
                         $("#sendSmsResult").html(data.msg.captcha);
                         $(".field-captcha").addClass('has-error');
+                        $("#captcha-image").click();
+                    }
+                    if(data.msg.username){
+                        $(".field-signupform-username p").html(data.msg.username);
+                        $(".field-signupform-username").addClass('has-error');
                         $("#captcha-image").click();
                     }
                     console.log('fail:'+data.msg);
@@ -110,6 +117,7 @@ $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
             }
         })
     });
+
 
     function countDown(second) { // 如果秒数还是大于0，则表示倒计时还没结束
         var obj =  $("#sendSms");
@@ -129,5 +137,4 @@ $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
             obj.html(buttonDefaultValue);
         }
     }
-
 </script>

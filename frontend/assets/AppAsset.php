@@ -26,12 +26,6 @@ class AppAsset extends \yii\web\AssetBundle
     ];
 
     public $js = [
-        'static/js/feehi.js',
-        'static/js/plugins/sweetalert/sweetalert.min.js',
-        'static/js/plugins/layer/laydate/laydate.js',
-        'static/js/plugins/layer/layer.min.js',
-        'static/js/plugins/prettyfile/bootstrap-prettyfile.js',
-        'static/js/plugins/toastr/toastr.min.js',
     ];
 
     public $depends = [

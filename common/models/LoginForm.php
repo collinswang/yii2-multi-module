@@ -63,6 +63,7 @@ class LoginForm extends Model
             'created_at' => yii::t('app', 'Created At'),
             'updated_at' => yii::t('app', 'Updated At'),
             'rememberMe' => yii::t('frontend', 'Remember Me'),
+            'captcha' => yii::t('frontend', 'Captcha'),
         ];
     }
 

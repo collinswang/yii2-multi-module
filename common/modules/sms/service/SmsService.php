@@ -174,6 +174,32 @@ class SmsService extends BaseObject
     }
 
     /**
+     * 模板模板，自动生成短信内容
+     * @param $template
+     * @param $params
+     * @return mixed
+     */
+    public static function buildContentString($template, $params)
+    {
+        $result = [];
+        $temp_content = $template['content'];
+        preg_match_all('/(\$\{\w*\})/', $temp_content, $temp_keys);
+        $temp_keys = $temp_keys[1];
+        $total_params = count($temp_keys);
+        if($total_params > count($params)){
+            return ['status'=>-1,'desc'=>"少参数", 'type'=>$template['type']];
+        }
+
+        if($temp_keys){
+            foreach ($temp_keys as $key=>$item) {
+                $result[$item] = $params[$key];
+            }
+        }
+
+        return str_replace(array_keys($result), $result, $temp_content);
+    }
+
+    /**
      * 以队列形式获取短信发送结果
      * @param $type
      * @param $max
