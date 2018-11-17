@@ -1,5 +1,5 @@
-/*新版样式*/
 @charset "utf-8";
+/*新版样式*/
 /* CSS Document */
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,select,p,blockquote,th,td,hr { margin: 0; padding: 0; font-family: "microsoft yahei";}
@@ -55,7 +55,7 @@ body .transparent{background-color: transparent;}
 .ft_nav ul li { float: left; margin: 0px 18px; font-size: 16px; position: relative; line-height: 60px; }
 .ft_nav ul li a { display: inline-block; color: #fff;border-bottom: 2px transparent solid; padding: 0px 5px;line-height: 60px;}
 .ft_nav ul li.active a,.ft_nav ul li:hover a { border-color: #2FB26A;}
-.ft_log {width:208.6px;overflow: hidden;line-height: 60px;height: 60px; float:right; display: inline;}
+.ft_log {width:250px;overflow: hidden;line-height: 60px;height: 60px; float:right; display: inline;}
 .ft_log a {  font-size: 16px;display: inline-block; text-align: center; margin-left: 3px; color: #fff;}
 .ft_log a:hover { color: #2fb26a;}
 .ft_log a.log{ width: 78px; height: 28px; line-height: 28px;}
@@ -64,7 +64,6 @@ body .transparent{background-color: transparent;}
 .ft_log a.admin_center{ height: 60px; line-height: 60px;;width:120px;border: 1px #2fb26a solid; background: #2fb26a; color: #fff;}
 .ft_log a.admin_center:hover{background-color:#40C57C;}
 .ft_header_nologin{display: inline-block;height: 60px;}
-.ft_header_islogin{display: none;}
 /*菜单menu*/
 .ft_menu { background: #fff; position: fixed; top: 60px; left: 0px; width: 100%; z-index: 1009;background: url(../images/bg-blur.png) 0px 0px repeat;}
 .ft_menu a{color: #fff;}

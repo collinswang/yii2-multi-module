@@ -18,8 +18,9 @@ use yii\helpers\Url;
                 <?=Html::a('注册有礼',  Url::toRoute(['/site/reg']), ['class'=>'reg', 'id'=>'pubRegister'])?>
             </span>
             <?php } else { ?>
-            <span class="ft_header_islogin">
-					<a href="/controlHtmls/pages/account/account.html" title="管理中心" class="admin_center">开发者控制台</a>
+            <span class="ft_header_nologin">
+                <?=Html::a('管理中心',  Url::toRoute(['/user/index']), ['class'=>'reg', 'id'=>'user_center'])?>
+                <?=Html::a('退出登录',  Url::toRoute(['/site/login']), ['class'=>'log', 'id'=>'logout'])?>
 			</span>
             <?php }?>
         </div>
