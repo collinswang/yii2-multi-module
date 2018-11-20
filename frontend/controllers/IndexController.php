@@ -24,7 +24,7 @@ class IndexController extends BaseController
 
     public function actionIndex()
     {
-        return $this->render('/pages/index');
+        return $this->renderPartial('/pages/index');
     }
 
 }

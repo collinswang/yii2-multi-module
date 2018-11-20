@@ -9,7 +9,7 @@
                 电话咨询
                 <div class="pub-fun-tip">
                     <span class="arrow"></span>
-                    请拨打400-777-6698
+                    请拨打(010)5843-5890
                 </div>
             </a>
         </li>
@@ -27,7 +27,7 @@
     <div class="footer_box">
         <div class="footer_add_wp">
             <ul class="clearfix">
-                <li class="item item1"><img src="images/foot-bm-phone.gif" alt="电话图标" />服务咨询<span>400-777-6698</span></li>
+                <li class="item item1"><img src="images/foot-bm-phone.gif" alt="电话图标" />服务咨询<span>(010)5843-5890</span></li>
                 <li class="item item2">一对一贵宾级服务</li>
                 <li class="item item3">7X24小时技术保障</li>
             </ul>
@@ -67,42 +67,34 @@
                 <dd><a href="/about/items.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_用户协议'])">用户协议</a></dd>
             </dl>
             <dl class="share">
-                <dt>关注云之讯</dt>
+                <dt>关注云提醒</dt>
                 <dd>
-                    <img src="images/wx_code.png" />
-                    <span>云之讯官方微信</span>
+                    <img src="/pages/images/wx_code.png" />
+                    <span>云提醒官方微信</span>
                 </dd>
             </dl>
         </div>
         <div class="relate_links">
             <div class="relate_wp">
                 <span  target="_blank">友情链接</span><i class="first"></i>
-                <a href="http://www.apicloud.com"  target="_blank" rel="nofollow">APICloud</a><i></i>
-                <a href="http://www.appcan.cn"  target="_blank" rel="nofollow">AppCan</a><i></i>
-                <a href="http://www.niaoyun.com/"  target="_blank" rel="nofollow">小鸟云</a><i></i>
-                <a href="http://www.jisuanke.com"  target="_blank" rel="nofollow">计蒜客</a><i></i>
-                <a href="http://www.tenxcloud.com"  target="_blank" rel="nofollow">时速云</a><i></i>
-                <a href="http://www.bestsdk.com"  target="_blank" rel="nofollow">BestSDK</a><i></i>
-                <a href="http://www.ineice.com"  target="_blank" rel="nofollow">爱内测</a><i></i>
-                <a href="http://www.lecloud.com/"  target="_blank" rel="nofollow">乐视云</a><i></i>
-                <a href="http://www.geetest.com/"  target="_blank" rel="nofollow">极验验证</a><i></i>
-                <a href="https://xiaoman.cn/"  target="_blank" rel="nofollow">小满</a><i></i>
-                <a href="http://www.ctiforum.com/"  target="_blank" rel="nofollow">CTI论坛</a><i></i>
-                <a href="http://www.wex5.com/wex5/"  target="_blank" rel="nofollow">WeX5</a><i></i>
-                <a href="http://tool.lu/"  target="_blank" rel="nofollow">在线工具</a><i></i>
-                <a href="http://www.dui.ai/"  target="_blank" rel="nofollow">思必驰 </a><i></i>
-                <a href="http://www.kefeizhu.com/"  target="_blank" rel="nofollow">可飞猪 </a>
+                <?php
+                use common\models\FriendlyLink;
+
+                $links = FriendlyLink::find()->where(['status' => FriendlyLink::DISPLAY_YES])->orderBy("sort asc, id asc")->asArray()->all();
+                foreach ($links as $link) {
+                    echo "<a target='_blank' href='{$link['url']}'>{$link['name']}</a><i></i>";
+                }
+                ?>
             </div>
         </div>
 
         <div class="copyright">
             <div class="ft_footer_wp">
                 <p>
-                    ? 2016 深圳市云之讯网络技术有限公司
-                    <span class="icp"><a href="http://www.miitbeian.gov.cn/"  target="_blank">粤ICP备14046848号</a></span>
-                    <span class="icp">增值电信业务经营许可证：粤B2-20140246</span>
+                    2018 北京世恒绿都科技有限公司
+                    <span class="icp"><a href="http://www.miitbeian.gov.cn/"  target="_blank">京ICP备14046848号</a></span>
                     <!--工商网监图标-->
-                    <a href="http://szcert.ebs.org.cn/4a131819-50e3-42d5-82a1-52d9d59221d0" target="_blank"><img src="http://szcert.ebs.org.cn/Images/govIcon.gif" title="深圳市市场监督管理局企业主体身份公示" alt="深圳市市场监督管理局企业主体身份公示" width="18" height="25" border="0" style="border-width:0px;border:hidden; border:none;"></a>
+                    <a href="#" target="_blank"><img src="/pages/images/govIcon.gif" width="18" height="25" border="0" style="border-width:0;border:none;"></a>
                     <!--工商网监图标-->
 
                 </p>
@@ -116,9 +108,6 @@
 <script type="text/javascript" src="/pages/js/base.js"></script>
 
 <script charset="utf-8" type="text/javascript" >
-    $("#wosign_div_1").find("img").hide();
-    BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 4007776698, selector: 'BizQQWPA'});
-
     $(function(){
 
         //咨询图标位置
@@ -136,28 +125,5 @@
         })
     })
 </script>
-<!--
-<script type='text/javascript'>
-      var _vds = _vds || [];
-      window._vds = _vds;
-      (function(){
-        _vds.push(['setAccountId', '8afa0e6761242783']);
-        (function() {
-          var vds = document.createElement('script');
-          vds.type='text/javascript';
-          vds.async = true;
-          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(vds, s);
-        })();
-      })();
-  </script>   -->
-
-<!--公共底部 ft_footer bof-->
 
 <script type="text/javascript" src="/pages/js/index.js"></script>
-<script type="text/javascript">
-    $(function() {
-        $(".ft_nav ul li").removeClass('active');
-    });
-</script>

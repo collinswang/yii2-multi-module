@@ -7,8 +7,7 @@ use yii\helpers\Url;
     <div class="ft_header_wp clearfix">
         <div class="ft_logo">
             <h1>
-                <a href="/" title="返回首页"><img src="/pages/images/logo.png" alt="云之讯开放平台"
-                                              onclick="_hmt.push(['_trackEvent', '官网', 'click', '顶部menu菜单_本层_顶部_图片_logo首页'])"></a>
+                <a href="/" title="返回首页"><img src="/pages/images/logo.png" alt="云提醒开放平台"></a>
             </h1>
         </div>
         <div class="ft_log">
@@ -26,14 +25,11 @@ use yii\helpers\Url;
         </div>
         <div class="ft_nav">
             <ul class="clearfix">
-                <li t_nav="home" id="pubHome"><a href="/service/sms_promote.html" target="_blank">最新活动</a>
-                </li>
-                <li t_nav="product"><a href="javascript:void(0)" id="pubAppAndService">产品</a></li>
-                <li t_nav="experience"><a href="/experience" target="_blank" id="pubService">免费体验</a>
-                </li>
-                <li t_nav="support"><a href="javascript:void(0)" id="pubDoc">技术支持</a>
-                </li>
-                <li t_nav="headerAdv"><a href="/about/index.html" target="_blank" id="pubZone">关于我们</a>
+                <li id="pubHome"><a href="/" target="_blank">首页</a></li>
+                <li><a href="#">通知短信</a></li>
+                <li><a href="#">群发短信</a></li>
+                <li><a href="#">技术支持</a></li>
+                <li><a href="#">关于我们</a>
                 </li>
             </ul>
 
