@@ -45,7 +45,7 @@ $this->title = yii::t('app', 'Backend Manage System');
                         </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">
-                                <span class="block m-t-xs">当前用户:<strong class="font-bold"><?= yii::$app->getUser()->getIdentity()->username ?></strong></span>
+                                <span class="block m-t-xs">当前用户:<strong class="font-bold"><?= yii::$app->getUser()->getIdentity()->username.'<br>'.Yii::$app->getUser()->getId(); ?></strong></span>
                             </span>
                         </a>
                     </div>

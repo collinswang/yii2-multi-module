@@ -5,12 +5,12 @@ namespace common\modules\sms\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\modules\sms\models\Sms;
+use common\modules\sms\models\SmsTask;
 
 /**
- * SmsSearch represents the model behind the search form about `common\modules\sms\models\Sms`.
+ * SmsTaskSearch represents the model behind the search form about `common\modules\sms\models\SmsTask`.
  */
-class SmsSearch extends Sms
+class SmsTaskSearch extends SmsTask
 {
     /**
      * @inheritdoc
@@ -18,8 +18,9 @@ class SmsSearch extends Sms
     public function rules()
     {
         return [
-            [['id', 'uid', 'source', 'type', 'mobile', 'template_id', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid', 'task_id'], 'integer'],
-            [['content', 'send_desc'], 'safe'],
+            [['id', 'uid', 'source', 'template_id', 'total', 'total_success', 'create_at', 'update_at', 'is_hidden', 'status'], 'integer'],
+            [['file'], 'safe'],
+            [['single_price', 'total_price'], 'number'],
         ];
     }
 
@@ -41,16 +42,12 @@ class SmsSearch extends Sms
      */
     public function search($params)
     {
-        $query = Sms::find();
+        $query = SmsTask::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
-            'pagination' => [
-                'pageSize' => 20,
-            ],
         ]);
 
         $this->load($params);
@@ -66,19 +63,19 @@ class SmsSearch extends Sms
             'id' => $this->id,
             'uid' => $this->uid,
             'source' => $this->source,
-            'type' => $this->type,
-            'mobile' => $this->mobile,
             'template_id' => $this->template_id,
+            'total' => $this->total,
+            'total_success' => $this->total_success,
             'create_at' => $this->create_at,
             'update_at' => $this->update_at,
-            'send_status' => $this->send_status,
             'is_hidden' => $this->is_hidden,
-            'sid' => $this->sid,
-            'task_id' => $this->task_id,
+            'status' => $this->status,
+            'single_price' => $this->single_price,
+            'total_price' => $this->total_price,
         ]);
 
-        $query->andFilterWhere(['like', 'content', $this->content])
-            ->andFilterWhere(['like', 'send_desc', $this->send_desc]);
+        $query->andFilterWhere(['like', 'file', $this->file]);
+        $query->orderBy('id desc');
 
         return $dataProvider;
     }

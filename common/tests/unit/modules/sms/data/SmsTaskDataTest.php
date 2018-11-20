@@ -1,8 +1,10 @@
 <?php
 namespace common\tests\unit\modules\sms\data;
 
+use common\events\SmsTaskEvent;
 use common\modules\sms\data\SmsTaskData;
 use common\modules\sms\data\SmsTemplateData;
+use common\modules\sms\models\SmsTask;
 
 
 /**
@@ -33,5 +35,36 @@ class SmsTaskDataTest extends \Codeception\Test\Unit
         $model = new SmsTaskData();
         $result = $model->add(self::TEST_UID,self::TEMPLATE_ID,self::FILE);
         expect('判断是否为真，但传递过来的结果为正', $result['id']>0)->true();
+    }
+
+    public function testSaveToQueue()
+    {
+        $task_id = 31;
+        $model = new SmsTaskData();
+        $event = new SmsTaskEvent();
+        $event->task_id = $task_id;
+        $result = $model->saveToQueue($event);
+        expect('直接写入队列', $result)->true();
+    }
+
+    public function testConfirmTask()
+    {
+        $task_id = 31;
+        $update_status = SmsTask::updateAll(['status'=>0], ['id'=>$task_id]);
+        //expect('任务初始化', $update_status>0)->true();
+        $model = new SmsTaskData();
+        $result = $model->confirmTask($task_id);
+        expect('任务确认执行', $result['status'] == 1)->true();
+
+    }
+
+    public function testProcessTaskQueue()
+    {
+        $task_id = 31;
+        SmsTask::updateAll(['status'=>1], ['id'=>$task_id]);
+
+        $model = new SmsTaskData();
+        $result = $model->processTaskQueue($task_id);
+        expect('任务写入发送队列', $result['status'] == 1)->true();
     }
 }
