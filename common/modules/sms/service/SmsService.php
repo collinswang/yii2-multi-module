@@ -107,8 +107,8 @@ class SmsService extends BaseObject
                 $db_con = \Yii::$app->db;
                 $db_con->open();
                 $result = $sms_model->update($sms_detail['id'], [
-                    'send_status' => isset($post_result['result']) ? $post_result['result'] : 0,
-                    'send_desc' => isset($post_result['errmsg']) ? $post_result['errmsg'] : 0,
+                    'send_status' => isset($post_result['result']) ? SmsData::SEND_FAIL : SmsData::SEND_SUCCESS,
+                    'send_desc' => isset($post_result['errmsg']) ? $post_result['result'].':'.$post_result['errmsg'] : 0,
                     'sid'   => isset($post_result['sid']) ? $post_result['sid'] : 0,
                     'update_at'   => time(),
                 ]);
@@ -122,7 +122,7 @@ class SmsService extends BaseObject
                 return -3;
             }
         } catch (\Exception $e){
-            print_r($e->getMessage());
+            //print_r($e->getMessage());
             return -4;
         }
     }
@@ -157,7 +157,7 @@ class SmsService extends BaseObject
     {
         $result = [];
         $temp_content = $template['content'];
-        preg_match_all('/\{(\w*)\}/', $temp_content, $temp_keys);
+        preg_match_all('/(\{\w*\})/', $temp_content, $temp_keys);
         $temp_keys = $temp_keys[1];
         $total_params = count($temp_keys);
         if($total_params > count($params)){
@@ -183,7 +183,7 @@ class SmsService extends BaseObject
     {
         $result = [];
         $temp_content = $template['content'];
-        preg_match_all('/(\$\{\w*\})/', $temp_content, $temp_keys);
+        preg_match_all('/(\{\w*\})/', $temp_content, $temp_keys);
         $temp_keys = $temp_keys[1];
         $total_params = count($temp_keys);
         if($total_params > count($params)){

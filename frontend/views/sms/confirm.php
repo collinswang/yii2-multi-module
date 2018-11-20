@@ -11,9 +11,7 @@
  * @var $model frontend\models\User
  */
 use backend\widgets\ActiveForm;
-use common\libs\Constants;
 use common\modules\sms\models\SmsTemplate;
-use common\widgets\JsBlock;
 use yii\helpers\Html;
 
 $this->title = '短信群发';
@@ -31,7 +29,7 @@ foreach ($template_list as $item) {
     <div class="ibox">
         <?= $this->render('/widgets/_ibox-title') ?>
         <div class="ibox-content">
-            <?php $form = ActiveForm::begin(['id' => 'form-confirm', 'class'=>'form-horizontal']); ?>
+            <?php $form = ActiveForm::begin(['action'=>['sms/confirm', 'id'=>$id], 'method'=>'post','id' => 'form-confirm', 'class'=>'form-horizontal']); ?>
             <?= Html::input('hidden', 'task_id', $id)?>
             <div class="form-group field-adform-tips required">
                 <label class="col-sm-2 control-label" for="total">发送数量</label>
@@ -42,9 +40,9 @@ foreach ($template_list as $item) {
             <div class="hr-line-dashed"></div>
 
             <div class="form-group field-adform-tips required">
-                <label class="col-sm-2 control-label" for="single_price">每条价格(分)</label>
+                <label class="col-sm-2 control-label" for="single_price">每条价格(元)</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="single_price" value="<?=$info['single_price']?>" aria-required="true" disabled="disabled">
+                    <input type="text" class="form-control" name="single_price" value="<?=$info['single_price']/100?>" aria-required="true" disabled="disabled">
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
@@ -57,11 +55,12 @@ foreach ($template_list as $item) {
             </div>
             <div class="hr-line-dashed"></div>
 
-            <div class="form-group field-adform-tips required">
+            <div class="form-group field-adform-tips required <?php if($finance['total_usable'] < $info['total_price']/100){ echo 'has-error';}?>">
                 <label class="col-sm-2 control-label" for="total_usable">帐户当前余额:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="total_usable" value="<?=$info['total_price']?>" aria-required="true" disabled="disabled">
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" name="total_usable" value="<?=$finance['total_usable']?>" aria-required="true" disabled="disabled">
                 </div>
+                <div class="col-sm-1"><?=Html::a('充值', ['finance/income'], ['class'=>'btn btn-danger'])?></div>
             </div>
             <div class="hr-line-dashed"></div>
 
@@ -80,7 +79,7 @@ foreach ($template_list as $item) {
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
-            <?= $form->defaultButtons() ?>
+            <?= $form->defaultButtons(['value'=>'确认执行任务']) ?>
             <?php ActiveForm::end(); ?>
         </div>
     </div>

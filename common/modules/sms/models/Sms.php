@@ -22,8 +22,7 @@ use yii\db\ActiveRecord;
  * @property string $send_desc 发送结果说明
  * @property int $is_hidden 0:不删除 1:删除
  * @property int $sid 发送回执ID
- * @property int $order_id
- * @property int $upload_id 批量上传ID
+ * @property int $task_id 批量上传ID
  */
 class Sms extends \yii\db\ActiveRecord
 {
@@ -58,7 +57,7 @@ class Sms extends \yii\db\ActiveRecord
         return [
             [['uid', 'mobile', 'content'], 'required'],
             [['create_at', 'update_at'], 'safe'],
-            [['uid', 'source', 'type', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid', 'order_id', 'upload_id'], 'integer'],
+            [['uid', 'source', 'type', 'create_at', 'update_at', 'send_status', 'is_hidden', 'sid', 'task_id'], 'integer'],
             [['mobile'], 'string', 'max' => 11],
             [['template_id'], 'string', 'max' => 30],
             [['content', 'send_desc'], 'string', 'max' => 255],
@@ -84,8 +83,7 @@ class Sms extends \yii\db\ActiveRecord
             'send_desc' => 'Send Desc',
             'is_hidden' => 'Is Hidden',
             'sid' => 'Sid',
-            'order_id' => 'Order ID',
-            'upload_id' => '批量上传ID',
+            'task_id' => '批量上传ID',
         ];
     }
 }

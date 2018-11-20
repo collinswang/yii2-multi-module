@@ -13,20 +13,44 @@
 namespace common\modules\sms\data;
 
 use common\components\Tools;
+use common\events\SmsTaskEvent;
 use common\modules\finance\data\FinanceFlowData;
 use common\modules\finance\models\FinanceFlow;
+use common\modules\finance\service\FinanceAccountService;
 use common\modules\sms\models\SmsTask;
 use common\modules\sms\service\SmsService;
 use Yii;
 use yii\base\BaseObject;
+use yii\base\Event;
 
 class SmsTaskData extends BaseObject
 {
+    const TASK_QUEUE = 'RL.SMS.TASK';
+
+    //EVENT
+    const EVENT_CONFIRM_TASK = 1;
+
+    const EVENT_PROCESS_TASK = 2;
 
     public static $source = [1=>"腾迅云", 2=>"阿里云"];
     const SOURCE_QCLOUD = 1;
     const SOURCE_ALIYUN = 2;
 
+    //任务状态:0.待确认 1:已确认执行中 2:执行完成 3:执行失败
+    public static $status_arr=[
+        0=>'待确认',
+        1=>'已确认,发送中',
+        2=>'发送完成',
+        3=>'发送失败',
+    ];
+
+    const STATUS_PEDING = 0;
+    const STATUS_CONFIRM = 1;
+    const STATUS_SUCCESS = 2;
+    const STATUS_FAIL = 3;
+
+    const TYPE_TEMPLATE = 1;
+    const TYPE_DIRECT = 0;
 
     /**
      * 保存任务
@@ -38,19 +62,16 @@ class SmsTaskData extends BaseObject
     public function add($uid, $template_id, $file)
     {
 
-        $template_model = new SmsTemplateData();
-        $template_info = $template_model->get(SmsTemplateData::SEARCH_BY_ID, $template_id);
-        if(!$template_info && $template_info['status'] == 1 && $template_info['verify_status'] <> 0){
+        //分析上传文件,获取总条数和EXAMPLE
+        $check_result = $this->check_task_list($template_id, $file);
+        if($check_result['status'] <=0){
             return ['status'=>-1, 'error'=>'模板不存在', 'id'=>0];
         }
-
-        //分析上传文件,获取总条数和EXAMPLE
-        $check_result = $this->check_task_list($template_info, $file);
 
         $model = new SmsTask();
         $model->uid = $uid;
         $model->template_id = $template_id;
-        $model->source = $template_info['source'];
+        $model->source = $check_result['template']['source'];
         $model->is_hidden = 0;
         $model->total = $check_result['total'];
         $model->file = $file;
@@ -65,12 +86,20 @@ class SmsTaskData extends BaseObject
     }
 
     /**
-     * @param $template_info
+     * 检查提交的任务,返回总数量及前几条发送内容
+     * @param $template_id
      * @param $file
      * @return array
      */
-    public function check_task_list($template_info, $file)
+    public function check_task_list($template_id, $file)
     {
+
+        $template_model = new SmsTemplateData();
+        $template_info = $template_model->get(SmsTemplateData::SEARCH_BY_ID, $template_id);
+        if(!$template_info && $template_info['status'] == 1 && $template_info['verify_status'] <> 0){
+            return ['status'=>-1, 'msg'=>'模板不存在'];
+        }
+
         $result = [];
         $success = $fail = $total = $err = 0;
         $sms_list = @file_get_contents($file);
@@ -95,34 +124,41 @@ class SmsTaskData extends BaseObject
             $total++;
         }
 
-        return ['total'=> $total, 'list' => $result];
+        return ['status'=>1, 'msg'=>'ok', 'total'=> $total, 'list' => $result, 'template'=>$template_info];
     }
 
     /**
-     * 添加发送短信记录
-     * @param $uid
+     * 确认执行任务:  扣款并写入异步队列
      * @param $task_id
-     * @return int
+     * @return array
      * @throws \yii\db\Exception
      */
-    public function confirmTask($uid, $task_id)
+    public function confirmTask($task_id)
     {
         $task = SmsTask::findOne($task_id);
-        if(!$task || $task->status){
+        $task->on(self::EVENT_CONFIRM_TASK, [$this, 'setTaskQueue'], ['task_id' =>$task_id]);
 
+        if(!$task || $task->status){
+            return ['status'=>-1, 'msg'=>'task not exists'];
+        }
+
+        $service_account = new FinanceAccountService();
+        $is_allow = $service_account->check_total_usable($task->uid, $task->total_price/100);
+        //余额不足
+        if(!$is_allow){
+            return ['status'=>-5, 'msg'=>"余额不足，请及时充值"];
         }
 
         $transaction = Yii::$app->db->beginTransaction();
         try{
-            $model = new SmsTask();
-            $model->attributes = $data;
-            if ($model->save()) {
+            $task->status = self::STATUS_CONFIRM;
+            if ($task->save()) {
                 //同时扣除用户相应金额
                 $flow = new FinanceFlow();
-                $flow->uid = $data['uid'];
-                $flow->money = -$total_money;   //消费为负数
+                $flow->uid = $task->uid;
+                $flow->money = -$task->total_price/100;   //消费为负数
                 $flow->target_type = FinanceFlowData::TARGET_TYPE_OUTCOME;
-                $flow->target_id = $data['uid'];
+                $flow->target_id = $task->id;
                 $flow->create_time = time();
                 $flow->invisible = 0;
                 if($flow->save()){
@@ -130,94 +166,120 @@ class SmsTaskData extends BaseObject
                 } else {
                     //print_r($flow->getErrors());
                     $transaction->rollBack();
-                    return false;
+                    return ['status'=>-2, 'msg'=>$flow->getErrors()];
                 }
             } else {
                 //print_r($model->getErrors());
                 $transaction->rollBack();
-                return false;
+                return ['status'=>-3, 'msg'=>$task->getErrors()];
             }
             $transaction->commit();
-            return $model->id;
+
+            $task->trigger(self::EVENT_CONFIRM_TASK);
+
+            return ['status'=>1, 'msg'=>'success', 'id'=>$task->id];
         } catch(\Exception $e){
             //print_r($e->getMessage());
+            //throwException(new \Exception('task confirm transaction running fail'));
             $transaction->rollBack();
-            return false;
+            return ['status'=>-4, 'msg'=>$e->getMessage()];
         }
 
     }
 
     /**
-     * 修改短信
-     * @param int       $id
-     * @param array     $data
+     * 写入队列
+     * @param $event
+     */
+    public function setTaskQueue($event)
+    {
+        Yii::$app->redis->executeCommand('LPUSH', [self::TASK_QUEUE, $event->data['task_id']]);
+    }
+
+    /**
+     * 读取队列
      * @return int
      */
-    public function update($id, $data)
+    public function getTaskQueue()
     {
-        $result = SmsTask::updateAll($data, ['id'=>$id]);
-        return $result;
-    }
-
-    /**
-     * 修改短信
-     * @param int       $sid
-     * @param array|null $data
-     * @return int
-     */
-    public function updateStatus($sid, $data)
-    {
-        $result = SmsTask::updateAll($data, ['sid'=>$sid]);
-        return $result;
-    }
-
-    /**
-     * 删除短信
-     * @param $id
-     * @return int
-     */
-    public function del($id)
-    {
-        $result = SmsTask::updateAll(['is_hidden'=>1], ['id'=>$id]);
-        return $result;
-    }
-
-    /**
-     * 获取列表
-     * @param $uid
-     * @param int $page
-     * @param int $page_size
-     * @param $start_time
-     * @param $end_time
-     * @param $source
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public function get_list($uid, $page = 1, $page_size = 20, $start_time, $end_time, $source)
-    {
-        $sql = "is_hidden = 0 and uid = $uid";
-        if($start_time){
-            $sql .= " and create_at >= {$start_time}";
+        $task_id = Yii::$app->redis->executeCommand('RPOP', [self::TASK_QUEUE]);
+        if($task_id){
+            return $task_id;
+        } else {
+            return 0;
         }
-        if($end_time){
-            $sql .= " and create_at < {$end_time}";
-        }
-        if($source){
-            $sql .= " and source = {$source}";
-        }
-        $result['total'] = SmsTask::find()->where($sql)->count();
-        $result['list'] = SmsTask::find()->where($sql)->offset(($page-1)*$page_size)->limit($page_size)->orderBy("id desc")->asArray()->all();
-        return $result;
     }
 
     /**
-     * 根据主键ID查询详情
-     * @param $id
-     * @return array|null|\yii\db\ActiveRecord
-     * @internal param $uid
-     * @internal param $mobile
+     * 批量入库并入发送队列
+     * @param $task_id
+     * @return array
      */
-    public function get_detail($id)
+    public function processTaskQueue($task_id)
     {
-        return SmsTask::find()->where(['id'=>$id])->asArray()->one();
+        $task = SmsTask::findOne($task_id);
+
+        //已确认
+        if($task->status == 1 && $task->file){
+
+            $template_model = new SmsTemplateData();
+            $template_info = $template_model->get(SmsTemplateData::SEARCH_BY_ID, $task->template_id);
+            if(!$template_info && $template_info['status'] == 1 && $template_info['verify_status'] <> 0){
+                return ['status'=>-2, 'msg'=>'模板不存在'];
+            }
+
+            $success = $fail = $total = $err = 0;
+            $sms_list = @file_get_contents($task->file);
+            $sms_list = str_replace(["\r\n", "\r"], "\n", $sms_list);
+            $sms_list = explode("\n", $sms_list);
+            foreach ($sms_list as $item) {
+                if (!$item) {
+                    continue;
+                }
+                $item_arr = explode(",", str_replace('"','', $item));
+                if (count($item_arr)) {
+                    $mobile = array_shift($item_arr);
+                    if(!Tools::check_mobile($mobile)){
+                        $err++;
+                        continue;
+                    }
+
+                    //生成
+                    $build_result = SmsService::buildContent($template_info, $item_arr);
+                    if ($build_result['status'] <= 0) {
+                        $err++;
+                        continue;
+                    }
+
+                    //获取
+                    $model = new SmsData();
+                    $id = $model->add(['uid'         => $task->uid,
+                                       'source'        => $template_info['source'],
+                                       'type'        => self::TYPE_TEMPLATE,
+                                       'template_id' => $template_info['template_id'],
+                                       'mobile'      => $mobile,
+                                       'content'     => json_encode($build_result['content']),  //param item
+                                       'create_at'   => time(),
+                                       'task_id'   => $task->id,
+                    ]);
+
+                    if ($id) {
+                        $success++;
+                    } else {
+                        $err++;
+                    }
+                }
+                $total++;
+            }
+
+            $updates = ['total'=>$total, 'status'=>self::STATUS_SUCCESS];
+
+            $result = SmsTask::updateAll($updates, ['id'=>$task_id]);
+
+            return ['status'=>1, 'msg'=>'success', 'total'=>$total, 'success'=>$success, 'err'=>$err];
+        } else {
+            return ['status'=>-1, 'msg'=>'任务状态错误或没有文件'];
+        }
     }
+
 }

@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     .site-login{
         width: 400px;
-        padding: 20px;
+        padding: 40px;
         background: #eeeeee;
         margin: 0 auto;
     }
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="site-login article-content">
         <h1 class="center"><?= Html::encode($this->title) ?></h1>
         <div class="row">
-            <div class="col-lg-5">
+            <div>
                 <?php $form = ActiveForm::begin(['id' => 'form-login']); ?>
 
                 <?= $form->field($model, 'username', ['template' => "<div style='position:relative'>{label}{input}\n{error}\n{hint}</div>"])->textInput(['autofocus' => true]) ?>

@@ -23,9 +23,10 @@ class SmsData extends BaseObject
     const SOURCE_QCLOUD = 1;
     const SOURCE_ALIYUN = 2;
 
-    public static $send_status = [0=>"发送成功", 1=>"发送失败"];
+    public static $send_status = [0=>"发送成功", 1=>"发送中", 2=>'发送失败'];
     const SEND_SUCCESS = 0;
-    const SEND_FAIL = 1;
+    const SENDING = 1;
+    const SEND_FAIL = 2;
 
     public static $type = [0=>"直接发送", 1=>"模板发送"];
     const TYPE_DIRECT = 0;
@@ -54,7 +55,7 @@ class SmsData extends BaseObject
             $this->setQueue($model->attributes);
             return $model->id;
         } else {
-            //var_dump($model->getErrors());
+            return ($model->getErrors());
             return false;
         }
     }
