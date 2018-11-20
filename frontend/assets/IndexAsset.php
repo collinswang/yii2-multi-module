@@ -3,34 +3,15 @@
  * Author: lf
  * Blog: https://blog.feehi.com
  * Email: job@feehi.com
- * Created at: 2016-08-12 22:37
+ * Created at: 2017-03-15 21:16
  */
 
 namespace frontend\assets;
 
+use yii;
+use yii\web\AssetBundle;
 
-use Yii;
-
-class IndexAsset extends \yii\web\AssetBundle
+class IndexAsset extends AssetBundle
 {
-//    public function init()
-//    {
-//        parent::init();
-//        if( yii::$app->getRequest()->getBaseUrl() !== "" ){
-//            $this->sourcePath = '@frontend/web';
-//        }
-//    }
-
-    public $css = [
-        'static/css/bootstrap.min.css',
-        'static/css/font-awesome.min93e3.css',
-    ];
-
-    public $js = [
-    ];
-
-    public $depends = [
-        'yii\web\YiiAsset',
-        'yii\web\JqueryAsset',
-    ];
+    
 }

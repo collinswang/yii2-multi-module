@@ -36,7 +36,7 @@ $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
     }
     .site-signup{
         width: 400px;
-        padding: 20px;
+        padding: 40px;
         background: #eeeeee;
         margin: 0 auto;
     }
@@ -48,7 +48,7 @@ $this->registerMetaTag(['description' => yii::$app->feehi->seo_description]);
         <p class="center"><?= yii::t('frontend', 'Please fill out the following fields to reset') ?>:</p>
 
         <div class="row">
-            <div class="col-lg-5">
+            <div>
                 <?php $form = ActiveForm::begin(['id' => 'form-reset']); ?>
 
                 <?= $form->field($model, 'username', ['template' => "<div style='position:relative'>{label}{input}\n{error}\n{hint}</div>"])->textInput(['autofocus' => true]) ?>
