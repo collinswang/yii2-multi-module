@@ -160,7 +160,7 @@ class SmsTaskData extends BaseObject
                 $flow->target_type = FinanceFlowData::TARGET_TYPE_OUTCOME;
                 $flow->target_id = $task->id;
                 $flow->create_time = time();
-                $flow->invisible = 0;
+                $flow->invisible = FinanceFlowData::INVISIBLE_SHOW;
                 if($flow->save()){
                     $flow_id = $flow->id;
                 } else {

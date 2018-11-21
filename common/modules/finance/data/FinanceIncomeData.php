@@ -108,7 +108,7 @@ class FinanceIncomeData extends BaseObject
      * @return array
      * @throws \yii\db\Exception
      */
-    public function update($id, $status, $admin_id = 0, $admin_note="", $deal_time=0, $invisible)
+    public function update($id, $status, $admin_id = 0, $admin_note="", $deal_time=0, $invisible = 1)
     {
         if(!$id){
             return ['status'=>-1, 'desc'=>'记录无效'];

@@ -15,4 +15,5 @@ return [
         2 => 'SMS_116780131',
     ],
     'price_per_sms' => 8,
+    'fee_rate'=>0.01,
 ];

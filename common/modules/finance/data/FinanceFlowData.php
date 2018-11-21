@@ -22,6 +22,9 @@ class FinanceFlowData extends BaseObject
     const TARGET_TYPE_WITHDRAW = 4;
     const TARGET_TYPE_OUTCOME = 5;
 
+    public static $invisible_arr = [0=>'隐藏', 1=>'显示'];
+    const INVISIBLE_HIDDEN = 0;
+    const INVISIBLE_SHOW = 1;
     /**
      * @param $uid
      * @param int $page
@@ -46,5 +49,30 @@ class FinanceFlowData extends BaseObject
         $result['total'] = FinanceFlow::find()->where($sql)->count();
         $result['list'] = FinanceFlow::find()->where($sql)->offset(($page-1)*$page_size)->orderBy("id desc")->limit($page_size)->asArray()->all();
         return $result;
+    }
+
+
+    public static function get_target_detail($target_type)
+    {
+        $action = '';
+        switch ($target_type){
+            case self::TARGET_TYPE_INCOME:
+                $action = '/finance/income';
+                break;
+            case self::TARGET_TYPE_REWARD:
+                $action = '/finance/reward';
+                break;
+            case self::TARGET_TYPE_RETURN:
+                $action = '/finance/return';
+                break;
+            case self::TARGET_TYPE_WITHDRAW:
+                $action = '/finance/withdraw';
+                break;
+            case self::TARGET_TYPE_OUTCOME:
+                $action = '/finance/outcome';
+                break;
+        }
+
+        return $action;
     }
 }
