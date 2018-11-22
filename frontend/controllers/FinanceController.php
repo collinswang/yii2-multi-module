@@ -36,6 +36,7 @@ class FinanceController extends \yii\web\Controller
                         $searchModel = new FinanceFlowSearch();
                         $searchModel->uid = $uid;
                         $searchModel->invisible = 1;
+
                         $dataProvider = $searchModel->search(yii::$app->getRequest()->getQueryParams());
                         return [
                             'uid'   => $uid,

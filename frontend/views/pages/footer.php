@@ -27,7 +27,7 @@
     <div class="footer_box">
         <div class="footer_add_wp">
             <ul class="clearfix">
-                <li class="item item1"><img src="images/foot-bm-phone.gif" alt="电话图标" />服务咨询<span>(010)5843-5890</span></li>
+                <li class="item item1"><img src="/pages/images/foot-bm-phone.gif" alt="电话图标" />服务咨询<span>(010)5843-5890</span></li>
                 <li class="item item2">一对一贵宾级服务</li>
                 <li class="item item3">7X24小时技术保障</li>
             </ul>
@@ -104,7 +104,8 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/pages/js/flexslider/js/jquery.flexslider-min.js"></script>
+<script type="text/javascript" src="/pages/js/jquery.flexslider-min.js"></script>
+<script type="text/javascript" src="/pages/js/swiper.js"></script>
 <script type="text/javascript" src="/pages/js/base.js"></script>
 
 <script charset="utf-8" type="text/javascript" >

@@ -68,6 +68,7 @@ return [
     'This email address has already been taken' => '邮箱已经被使用了',
     'Please fill out the following fields to signup' => '请填写下面信息完成注册',
     'Please fill out the following fields to reset' => '请填写下面信息完成重置密码',
+    'Incorrect password'=>'旧密码错误',
     'This username not exist' => '用户不存在',
     'Reset Password' => '重置密码',
     'Signup' => '注册',

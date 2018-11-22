@@ -44,10 +44,6 @@ $this->params['breadcrumbs'][] = 'Index';
     <div class="ft_banner banner_box" id="banner_box" style="margin-top: 60px">
         <div class="banner swiper-container">
             <ul class="banner_list  swiper-wrapper dis-n" id="banner_list">
-                <!-- <li class="swiper-slide banner-item-mid-autumn">
-                    <a href="/service/sms_promote.html" target="_blank" onclick="_hmt.push(['_trackEvent', '官网', 'click', '首页_本层_banner_按钮_短信促销活动页面'])"><span></span></a>
-                </li> -->
-
                 <li class="swiper-slide banner-item-AI">
                     <a href="http://xiaoyun.ucpaas.com/" target="_blank" onclick="_hmt.push(['_trackEvent', '官网', 'click', '首页_本层_banner_按钮_短信促销活动页面'])"><span></span></a>
                 </li>
@@ -141,47 +137,12 @@ $this->params['breadcrumbs'][] = 'Index';
                     <a href="/product/internetTraffic.html">  </a>
 
                 </li>
-                <!--<li class="swiper-slide banner_promotion">-->
-                <!--<a href="/product/lead-cow.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '首页_本层_banner_按钮_短信促销活动页面'])"><span></span></a>-->
-                <!--</li>-->
-                <!--<li class="swiper-slide banner_tiem_400">-->
-                <!--<a href="http://400.ucpaas.com/" onclick="_hmt.push(['_trackEvent', '官网', 'click', '首页_本层_banner_按钮_400子站'])"><span></span></a>-->
-                <!--</li>-->
-                <!--<li class="swiper-slide banner_tiem_new">
-                     <a href="/service/cpc_holiday.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '首页_本层_banner_按钮_庆国庆迎中秋'])"><span></span></a>
-                 </li>-->
-                <!--<li class="swiper-slide banner_mifi">-->
-                <!--<a href="/product/mifi.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '首页_本层_banner_按钮_mifi招商加盟'])"><span></span></a>-->
-                <!--</li>-->
-
-                <!--    <li class="swiper-slide banner-item-rebate">
-                       <a href="/service/rebate.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '首页_返利活动_banner_按钮_进入活动页面'])"></a>
-                   </li> -->
-                <!--<li class=" swiper-slide banner-item-4">-->
-                <!--<a href="http://sms.ucpaas.com/index.html" target="_blank" onclick="_hmt.push(['_trackEvent', '官网', 'click', '首页_短信招商_banner_按钮_了解更多'])"></a>-->
-                <!--</li>-->
-
-                <!--<li class=" swiper-slide banner-item-3">-->
-                <!--<div class="banner-con banner2-con">-->
-                <!--<div class="bm_txt">-->
-                <!--<strong>云提醒已加入</strong>-->
-                <!--<strong>反信息诈骗联盟</strong>-->
-                <!--<b></b>-->
-                <!--<p>为促进通信行业的健康发展，保障消费者的合法权益，我们加入了反信息诈骗联盟，坚决抵制信息诈骗等违法行为。我们郑重承诺，将严格遵守电信法律法规政策，诚实守法、合规经营，并自觉接受电信主管部门与社会的监督。（工业和信息化部 投诉电话010-66024129或010-12300）</p>-->
-                <!--</div>-->
-                <!--</div>-->
-
-                <!--</li>-->
             </ul>
             <div class="circle_btns" id="circle_btns">
                 <a href="javascript:void(0)" class="js-go-banner cur" data-page="0"></a>
                 <a href="javascript:void(0)" class="js-go-banner " data-page="1"></a>
                 <a href="javascript:void(0)" class="js-go-banner " data-page="2"></a>
                 <a href="javascript:void(0)" class="js-go-banner " data-page="3"></a>
-                <!-- <a href="javascript:void(0)" class="js-go-banner " data-page="4"></a> -->
-                <!--<a href="javascript:void(0)" class="js-go-banner " data-page="5"></a>-->
-                <!--<a href="javascript:void(0)" class="js-go-banner " data-page="4"></a>-->
-
             </div>
         </div>
     </div>

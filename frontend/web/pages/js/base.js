@@ -423,7 +423,7 @@ var Public = (function ($, win, JSON) {
             _mySwiper = new Swiper('.swiper-container', {
 //		        pagination: '.circle_btns',
                 loop: true,
-                autoplay: 8000,
+                autoplay: 5000,
                 nextButton: '.prev_btn',
                 prevButton: '.next_btn',
                 paginationClickable: true,
@@ -489,41 +489,6 @@ var Public = (function ($, win, JSON) {
         });
     };
 
-    Public.createScript = function(src, id, callback){
-        var script = $('<script id="ebsgovicon" src="http://szcert.ebs.org.cn/govicon.js?id=4a131819-50e3-42d5-82a1-52d9d59221d0&width=18&height=25&type=1" type="text/javascript" charset="utf-8"></script>');
-        script.attr("id", id);
-        $("head").append(script);
-        script[0].onload = callback;
-    };
-
-    Public.addScripts = function(){
-        var scripts = [
-            {url: "http://szcert.ebs.org.cn/govicon.js?id=4a131819-50e3-42d5-82a1-52d9d59221d0&width=18&height=25&type=1", id: "govicon" , callback: function(){alert("hhhh");}}
-        ];
-        for(var i = 0, j = scripts.length; i < j; i++){
-            var s = scripts[i];
-            this.createScript(s.url, s.id, s.callback);
-        }
-    };
-
-    Public.loadFooterHtml = function(){
-//		var url = "/service/footer.html";
-        var url = "/product/foot.html";
-        var data = {};
-        var type = "get";
-        var dataType = "html";
-        this.fetch(url, data, type, function(ret){
-            var appFooter = $("#appFooter");
-            appFooter.html(ret);
-
-            var src = $("#ebsgovicon").attr("old-src");
-            $("#ebsgovicon").attr("src", src);
-
-            //	Public.addScripts();
-        }, function(){
-
-        }, dataType, false);
-    };
     //验证是否为正确的手机号码
     Public.isValidPhone = function(phone){
         var reg = /^1[3|4|5|7|8]\d{9}$/;
@@ -903,21 +868,21 @@ $(function(){
     var currentNav = $("body").attr("data-nav");//当前页面所属导航
     $("[t_nav='" + currentNav + "']").addClass("active");
     Public.setScrollNavInitValue();
-    Public.initHeaderNavMenu();
+//    Public.initHeaderNavMenu();
     //初始化解决方案图标
-    Public.initSolutionsImages();
+//    Public.initSolutionsImages();
 
-    Public.initRecode();
+ //   Public.initRecode();
 
-    Public.showOrHiden();
+ //   Public.showOrHiden();
 
-    Public.focusFormRow();
+ //   Public.focusFormRow();
     Public.initSwiper();
 
-    Public.closeTarget();
-    Public.initInputWraper();
-    Public.init();
-    Public.initEnterKeyEvent();
-    Public.isLogin();
+ //   Public.closeTarget();
+ //   Public.initInputWraper();
+ //   Public.init();
+  //  Public.initEnterKeyEvent();
+  //  Public.isLogin();
 
 });

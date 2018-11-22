@@ -22,6 +22,8 @@ class SignupForm extends Model
 
     public $email;
 
+    public $old_password;
+
     public $password;
 
     public $password_repeat;
@@ -81,10 +83,11 @@ class SignupForm extends Model
     public function scenarios()
     {
         return [
-            'create' => ['username', 'password', 'verify_code'],
-            'sms' => ['username', 'captcha'],
-            'reset' => ['username', 'password', 'verify_code'],
-            'sms_reset' => ['username', 'captcha'],
+            'create' => ['username', 'password', 'verify_code'],//新注册
+            'sms' => ['username', 'captcha'],                   //注册时发送短信
+            'reset' => ['username', 'password', 'verify_code', 'password_repeat'], //重置密码
+            'sms_reset' => ['username', 'captcha'],             //忘记密码时发送短信
+            'self_update' => ['username', 'old_password', 'password', 'password_repeat'],             //忘记密码时发送短信
         ];
     }
 
@@ -169,6 +172,26 @@ class SignupForm extends Model
         }
         $user->setPassword($this->password);
         $user->removePasswordResetToken();
+
+        return $user->save(false);
+    }
+
+    /**
+     * 会员中心修改密码
+     * @return bool
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function selfUpdate()
+    {
+        $this->username = Yii::$app->getUser()->getIdentity()->username;
+        $user = User::findByUsername($this->username);
+        if (! $user || ! $user->validatePassword($this->old_password)) {
+            $this->addError('old_password', yii::t('frontend', 'Incorrect password'));
+            return false;
+        }
+
+        $user->setPassword($this->password);
 
         return $user->save(false);
     }
