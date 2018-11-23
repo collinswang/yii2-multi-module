@@ -46,10 +46,10 @@ class SmsService extends BaseObject
      * @param array $tpl_detail 模板详情
      * @param string $mobile
      * @param array $params
-     * @param $upload_id
+     * @param $task_id
      * @return array
      */
-    public function sendTemplateSingle($uid, $tpl_detail, $mobile, $params, $upload_id)
+    public function sendTemplateSingle($uid, $tpl_detail, $mobile, $params, $task_id)
     {
         if (!$uid || !$tpl_detail || !$mobile || !$params) {
             return ['status' => -1, 'desc' => 'UID不能为空'];
@@ -74,10 +74,10 @@ class SmsService extends BaseObject
                            'source'        => $tpl_detail['source'],
                            'type'        => $type,
                            'template_id' => $tpl_detail['template_id'],
-                           'mobile'      => $mobile,
+                           'mobile'      => strval($mobile),
                            'content'     => $content,
                            'create_at'   => time(),
-                           'upload_id'   => $upload_id,
+                           'task_id'   => $task_id,
         ]);
         if ($id) {
             return ['status' => 1, 'desc' => '添加成功', 'id' => $id];
@@ -157,7 +157,7 @@ class SmsService extends BaseObject
     {
         $result = [];
         $temp_content = $template['content'];
-        preg_match_all('/(\{\w*\})/', $temp_content, $temp_keys);
+        preg_match_all('/\{(\w*)\}/', $temp_content, $temp_keys);
         $temp_keys = $temp_keys[1];
         $total_params = count($temp_keys);
         if($total_params > count($params)){

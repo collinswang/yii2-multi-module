@@ -15,7 +15,9 @@ namespace common\modules\sms\data;
 use common\components\Tools;
 use common\events\SmsTaskEvent;
 use common\modules\finance\data\FinanceFlowData;
+use common\modules\finance\data\FinanceOrderData;
 use common\modules\finance\models\FinanceFlow;
+use common\modules\finance\models\FinanceOrder;
 use common\modules\finance\service\FinanceAccountService;
 use common\modules\sms\models\SmsTask;
 use common\modules\sms\service\SmsService;
@@ -153,20 +155,37 @@ class SmsTaskData extends BaseObject
         try{
             $task->status = self::STATUS_CONFIRM;
             if ($task->save()) {
-                //同时扣除用户相应金额
-                $flow = new FinanceFlow();
-                $flow->uid = $task->uid;
-                $flow->money = -$task->total_price/100;   //消费为负数
-                $flow->target_type = FinanceFlowData::TARGET_TYPE_OUTCOME;
-                $flow->target_id = $task->id;
-                $flow->create_time = time();
-                $flow->invisible = FinanceFlowData::INVISIBLE_SHOW;
-                if($flow->save()){
-                    $flow_id = $flow->id;
+                //创建订单
+                $order = new FinanceOrder();
+                $order->uid = $task->uid;
+                $order->item_price = $task->single_price;   //分
+                $order->item_qty = $task->total;
+                $order->order_amount = number_format($task->total_price/100, 2, '.', '');   //元
+                $order->coupon_amount = 0;  //元
+                $order->coupon_id = 0;
+                $order->total_amount = number_format($order->order_amount - $order->coupon_amount, 2, '.', '');
+                $order->status = FinanceOrderData::STATUS_SUCCESS;
+                $order->invisible = FinanceOrderData::INVISIBLE_SHOW;
+                if($order->save()){
+                    //同时扣除用户相应金额
+                    $flow = new FinanceFlow();
+                    $flow->uid = $task->uid;
+                    $flow->money = -$task->total_price/100;   //消费为负数
+                    $flow->target_type = FinanceFlowData::TARGET_TYPE_OUTCOME;
+                    $flow->target_id = $task->id;
+                    $flow->create_time = time();
+                    $flow->invisible = FinanceFlowData::INVISIBLE_SHOW;
+                    if($flow->save()){
+                        $flow_id = $flow->id;
+                    } else {
+                        //print_r($flow->getErrors());
+                        $transaction->rollBack();
+                        return ['status'=>-2, 'msg'=>$flow->getErrors()];
+                    }
                 } else {
-                    //print_r($flow->getErrors());
+                    //print_r($order->getErrors());
                     $transaction->rollBack();
-                    return ['status'=>-2, 'msg'=>$flow->getErrors()];
+                    return ['status'=>-3, 'msg'=>$task->getErrors()];
                 }
             } else {
                 //print_r($model->getErrors());

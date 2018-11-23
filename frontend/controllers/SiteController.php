@@ -391,4 +391,13 @@ class SiteController extends BaseController
         }
     }
 
+    public function actionTest()
+    {
+        $model = new SignupForm();
+        $model->setScenario('sms');
+        $model->username = 13712223144;
+        $result = $model->sendSms();
+        print_r($result);
+    }
+
 }

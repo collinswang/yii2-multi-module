@@ -43,17 +43,6 @@ return [
                     'class' => yii\log\FileTarget::className(),
                     'levels' => ['error', 'warning'],
                 ],
-                [
-                    'class' => yii\log\EmailTarget::className(),
-                    'levels' => ['error', 'warning'],
-                    'except' => [
-                        'yii\debug\Module::checkAccess',
-                    ],
-                    'message' => [
-                        'to' => ['admin@feehi.com', 'liufee@126.com'],//当触发levels配置的错误级别时，发送到此些邮箱（请改成自己的邮箱）
-                        'subject' => '来自 Feehi CMS 前台的新日志消息',
-                    ],
-                ],
             ],
         ],
         'errorHandler' => [

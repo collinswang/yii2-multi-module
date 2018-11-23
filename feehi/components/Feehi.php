@@ -82,24 +82,6 @@ class Feehi extends Component
             yii::$app->getResponse()->format = Response::FORMAT_HTML;
         }
 
-        if (! empty(yii::$app->feehi->smtp_host) && ! empty(yii::$app->feehi->smtp_username)) {
-            Yii::configure(yii::$app->mailer, [
-                'useFileTransport' => false,
-                'transport' => [
-                    'class' => 'Swift_SmtpTransport',
-                    'host' => yii::$app->feehi->smtp_host,  //每种邮箱的host配置不一样
-                    'username' => yii::$app->feehi->smtp_username,
-                    'password' => yii::$app->feehi->smtp_password,
-                    'port' => yii::$app->feehi->smtp_port,
-                    'encryption' => yii::$app->feehi->smtp_encryption,
-
-                ],
-                'messageConfig' => [
-                    'charset' => 'UTF-8',
-                    'from' => [yii::$app->feehi->smtp_username => yii::$app->feehi->smtp_nickname]
-                ],
-            ]);
-        }
     }
 
     public static function frontendInit()

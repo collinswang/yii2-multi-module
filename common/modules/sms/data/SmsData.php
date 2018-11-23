@@ -55,7 +55,7 @@ class SmsData extends BaseObject
             $this->setQueue($model->attributes);
             return $model->id;
         } else {
-            return ($model->getErrors());
+            print_r($model->getErrors());
             return false;
         }
     }

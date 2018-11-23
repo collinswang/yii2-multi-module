@@ -31,7 +31,7 @@ class PageController extends BaseController
         if (empty($model)) {
             throw new NotFoundHttpException('None page named ' . $name);
         }
-        return $this->render('view', [
+        return $this->renderPartial('view', [
             'model' => $model,
         ]);
     }

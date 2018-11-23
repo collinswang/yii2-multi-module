@@ -7,6 +7,9 @@
  */
 namespace frontend\models\form;
 
+use common\modules\sms\data\SmsData;
+use common\modules\sms\data\SmsTemplateData;
+use common\modules\sms\service\SmsService;
 use yii;
 use common\models\User;
 use yii\base\InvalidParamException;
@@ -17,6 +20,7 @@ use yii\base\Model;
  */
 class SignupForm extends Model
 {
+    const CODE_PREFIX = 'CODE.';
 
     public $username;
 
@@ -137,8 +141,17 @@ class SignupForm extends Model
     public function sendSms()
     {
         $code = rand(100000, 999999);
-        Yii::$app->redis->executeCommand("setex", [$this->username, self::EXPIRE_TIME, $code]);
-        return $code;
+        Yii::$app->redis->executeCommand("SETEX", [self::CODE_PREFIX.$this->username, self::EXPIRE_TIME, $code]);
+        $sms_service = new SmsService(SmsService::SMS_SIGN_API_ALIDAYU);
+        $sms_code_template_id = 19;
+        $template_model = new SmsTemplateData();
+        $template_info = $template_model->get(SmsTemplateData::SEARCH_BY_ID, $sms_code_template_id);
+        $result = $sms_service->sendTemplateSingle(1, $template_info, $this->username, [$code], 0);
+        if($result['status'] == 1){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -149,7 +162,7 @@ class SignupForm extends Model
      */
     public function checkVerifyCode($attribute, $params)
     {
-        $verify_code = Yii::$app->redis->executeCommand("GET", [$this->username]);
+        $verify_code = Yii::$app->redis->executeCommand("GET", [self::CODE_PREFIX.$this->username]);
         if($this->verify_code == $verify_code){
             return true;
         } else {

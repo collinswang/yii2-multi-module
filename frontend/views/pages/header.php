@@ -14,7 +14,7 @@ use yii\helpers\Url;
             <?php if(Yii::$app->getUser()->getIsGuest()){?>
             <span class="ft_header_nologin">
                 <?=Html::a('登录',  Url::toRoute(['/site/login']), ['class'=>'log', 'id'=>'pubLogin'])?>
-                <?=Html::a('注册有礼',  Url::toRoute(['/site/reg']), ['class'=>'reg', 'id'=>'pubRegister'])?>
+                <?=Html::a('注册',  Url::toRoute(['/site/reg']), ['class'=>'reg', 'id'=>'pubRegister'])?>
             </span>
             <?php } else { ?>
             <span class="ft_header_nologin">
@@ -26,10 +26,10 @@ use yii\helpers\Url;
         <div class="ft_nav">
             <ul class="clearfix">
                 <li id="pubHome"><a href="/" target="_blank">首页</a></li>
-                <li><a href="#">通知短信</a></li>
-                <li><a href="#">群发短信</a></li>
-                <li><a href="#">技术支持</a></li>
-                <li><a href="#">关于我们</a>
+                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'notice_letter'])?>">通知短信</a></li>
+                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'spread_letter'])?>">营销短信</a></li>
+                <li><a href="<?=Url::toRoute(['/article/list', 'cat'=>'help'])?>">使用帮助</a></li>
+                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'about'])?>">关于我们</a>
                 </li>
             </ul>
 

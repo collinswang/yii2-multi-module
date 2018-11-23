@@ -1,6 +1,5 @@
 <?php
 return [
-    'supportEmail' => 'admin@feehi.com',
     'user.passwordResetTokenExpire' => 3600,
     'site' => [
         'url' => 'http://cms.feehi.com',

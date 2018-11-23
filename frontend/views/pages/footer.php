@@ -1,3 +1,7 @@
+<?php
+use yii\helpers\Url;
+use common\models\FriendlyLink;
+?>
 <!--右下角功能菜单-->
 <div class="pub-r-b-fun-content" id="pubRightFunctionContent">
     <ul class="pub-fun-list">
@@ -35,51 +39,26 @@
     </div>
     <div class="footer_link">
         <div class="ft_footer_wp clearfix">
-            <dl>
-                <dt>公司</dt>
-                <dd><a href="/about/index.html#cert" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_公司资质'])">公司资质</a></dd>
-                <dd><a href="/about/index.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_关于我们'])">关于我们</a></dd>
-                <dd><a href="/about/partners.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_合作伙伴'])">合作伙伴</a></dd>
-                <dd><a href="/about/index.html#contract" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_联系我们'])">联系我们</a></dd>
-                <dd><a href="https://app.mokahr.com/apply/ucpaas" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_加入我们'])">加入我们</a></dd>
-            </dl>
-            <dl>
-                <dt>产品</dt>
-                <dd><a href="/product/sms.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_短信验证码'])">短信验证</a></dd>
-                <dd><a href="/product/voice-code.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_语音验证码'])">语音验证</a></dd>
-                <dd><a href="/product/message-notice.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_短信通知'])">短信通知</a></dd>
-                <dd><a href="/product/voice-notice.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_语音通知'])">语音通知</a></dd>
-                <dd><a href="/product/hidden-call.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_隐号通话'])">隐私保护通话</a></dd>
-                <dd><a href="/product/cloud-service.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_云客服API'])">呼叫中心</a></dd>
-            </dl>
-            <dl>
-                <dt>客户案例</dt>
-                <dd><a href="/case/lianjia.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_链家网'])">链家网</a></dd>
-                <dd><a href="/case/gionee.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_金立手机'])">金立手机</a></dd>
-                <dd><a href="/case/jindie.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_云之家'])">云之家</a></dd>
-                <dd><a href="/case/index.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_客户案例'])">更多案例</a></dd>
-            </dl>
-            <dl>
-                <dt>开发者服务</dt>
-                <dd><a href="http://docs.ucpaas.com/doku.php" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_开发文档'])">开发文档</a></dd>
-                <dd><a href="/product/sdk-download.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_SDK下载'])">SDK下载</a></dd>
-                <dd><a href="/mt/FAQ/index.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_常见问题'])">常见问题</a></dd>
-                <dd><a href="/about/items.html" onclick="_hmt.push(['_trackEvent', '官网', 'click', '底部菜单_本层_底部_文字链_用户协议'])">用户协议</a></dd>
-            </dl>
-            <dl class="share">
-                <dt>关注云提醒</dt>
-                <dd>
-                    <img src="/pages/images/wx_code.png" />
-                    <span>云提醒官方微信</span>
-                </dd>
-            </dl>
+            <ul class="foot_nav">
+                <li><a href="<?= Url::toRoute(['/page/view', 'name'=>'notice_letter'])?>">通知短信</a></li>
+                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'spread_letter'])?>">营销短信</a></li>
+                <li><a href="<?=Url::toRoute(['/article/list', 'cat'=>'help'])?>">使用帮助</a></li>
+                <li><a href="<?=Url::toRoute(['/article/list', 'cat'=>'news'])?>">新闻中心</a></li>
+                <li><a href="<?=Url::toRoute(['/article/list', 'cat'=>'case'])?>">成功案例</a></li>
+                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'about'])?>">关于我们</a>
+            </ul>
+<!--            <ul class="share">-->
+<!--                <li style="flex:5; text-align: right">关注云提醒</li>-->
+<!--                <li style="flex:2; text-align: center">-->
+<!--                    <img src="/pages/images/wx_code.png"/>-->
+<!--                </li>-->
+<!--                <li style="flex:5; text-align: left">云提醒官方微信</li>-->
+<!--            </ul>-->
         </div>
         <div class="relate_links">
             <div class="relate_wp">
-                <span  target="_blank">友情链接</span><i class="first"></i>
+                <span>友情链接</span><i class="first"></i>
                 <?php
-                use common\models\FriendlyLink;
-
                 $links = FriendlyLink::find()->where(['status' => FriendlyLink::DISPLAY_YES])->orderBy("sort asc, id asc")->asArray()->all();
                 foreach ($links as $link) {
                     echo "<a target='_blank' href='{$link['url']}'>{$link['name']}</a><i></i>";
@@ -92,7 +71,7 @@
             <div class="ft_footer_wp">
                 <p>
                     2018 北京世恒绿都科技有限公司
-                    <span class="icp"><a href="http://www.miitbeian.gov.cn/"  target="_blank">京ICP备14046848号</a></span>
+                    <span class="icp"><a href="http://www.miitbeian.gov.cn/"  target="_blank">京ICP备18049487号</a></span>
                     <!--工商网监图标-->
                     <a href="#" target="_blank"><img src="/pages/images/govIcon.gif" width="18" height="25" border="0" style="border-width:0;border:none;"></a>
                     <!--工商网监图标-->
