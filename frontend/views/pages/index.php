@@ -43,22 +43,24 @@ $this->params['breadcrumbs'][] = 'Index';
 
     <div class="ft_banner banner_box" id="banner_box" style="margin-top: 60px">
         <div class="banner swiper-container">
-            <ul class="banner_list  swiper-wrapper dis-n" id="banner_list">
-                <li class="swiper-slide banner-item-1">
-                    <div class="banner-con banner1-con">
-                        <div class="bm_txt">
-                            <strong>全能力融合通信开放平台</strong>
-                            <p class="link"><a href="<?=Url::toRoute(['/site/reg'])?>">免费注册</a></p>
-                        </div>
-                    </div>
-                </li>
-                <li class="swiper-slide banner_tiem_index">
-                    <a href="#"><span class="btn_submit"></span></a>
-                </li>
+              <ul class="banner_list  swiper-wrapper dis-n" id="banner_list">
+                <?php
+                $count = count($flash);
+                $nav = '';
+                foreach ($flash as $key => $item) {
+                    if ($key == 0) {
+                        $style = 'swiper-slide-duplicate-active';
+                    } elseif ($key == 1) {
+                        $style = 'swiper-slide-duplicate-next';
+                    } elseif ($key == $count - 1) {
+                        $style = 'swiper-slide-prev';
+                    }
+                    echo '<li class="swiper-slide" style="background: url('.$item['img'].') no-repeat center center;"></li>';
+                    $nav .='<a href="javascript:void(0)" class="js-go-banner '.($key==0? 'cur':'').'" data-page="'.$key.'"></a>';
+                } ?>
             </ul>
             <div class="circle_btns" id="circle_btns">
-                <a href="javascript:void(0)" class="js-go-banner cur" data-page="0"></a>
-                <a href="javascript:void(0)" class="js-go-banner " data-page="1"></a>
+                <?=$nav;?>
             </div>
         </div>
     </div>

@@ -6,6 +6,8 @@
 namespace frontend\controllers;
 
 
+use common\models\Options;
+
 class IndexController extends BaseController
 {
     //不用LAYOUT
@@ -24,7 +26,8 @@ class IndexController extends BaseController
 
     public function actionIndex()
     {
-        return $this->renderPartial('/pages/index');
+        $flash_list = Options::getBannersByType('index');
+        return $this->renderPartial('/pages/index', ['flash'=>$flash_list]);
     }
 
 }

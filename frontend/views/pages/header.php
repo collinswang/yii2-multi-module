@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 ?>
+<a name="page_header"></a>
 <div class="ft_header" id="appHeader">
     <div class="ft_header_wp clearfix">
         <div class="ft_logo">
@@ -26,10 +27,10 @@ use yii\helpers\Url;
         <div class="ft_nav">
             <ul class="clearfix">
                 <li id="pubHome"><a href="/" target="_blank">首页</a></li>
-                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'notice_letter'])?>">通知短信</a></li>
-                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'spread_letter'])?>">营销短信</a></li>
-                <li><a href="<?=Url::toRoute(['/article/list', 'cat'=>'help'])?>">使用帮助</a></li>
-                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'about'])?>">关于我们</a>
+                <li><a href="<?=Url::toRoute(['/index/page', 'view'=>'notice'])?>">通知短信</a></li>
+                <li><a href="<?=Url::toRoute(['/index/page', 'view'=>'spread'])?>">营销短信</a></li>
+                <li><a href="<?=Url::toRoute(['/article/index', 'cat'=>'help'])?>">使用帮助</a></li>
+                <li><a href="<?=Url::toRoute(['/index/page', 'view'=>'about'])?>">关于我们</a>
                 </li>
             </ul>
 

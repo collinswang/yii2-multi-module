@@ -37,248 +37,83 @@ $this->registerMetaTag(['tags' => call_user_func(function()use($model) {
 $this->registerMetaTag(['property' => 'article:author', 'content' => $model->author_name]);
 $categoryName = $model->category ? $model->category->name : yii::t('app', 'uncategoried');
 
-ViewAsset::register($this);
 ?>
-<div class="content-wrap">
-    <div class="content">
-        <div class="breadcrumbs">
-            <a title="<?=yii::t('frontend', 'Return Home')?>" href="<?= yii::$app->getHomeUrl() ?>"><i class="fa fa-home"></i></a>
-            <small>&gt;</small>
-            <a href="<?= Url::to(['article/index', 'cat' => $categoryName]) ?>"><?= $categoryName ?></a>
-            <small>&gt;</small>
-            <span class="muted"><?= $model->title ?></span>
-        </div>
-        <header class="article-header">
-            <h1 class="article-title"><a href="<?= Url::to(['article/view', 'id' => $model->id]) ?>"><?= $model->title ?></a></h1>
-            <div class="meta">
-                <span id="mute-category" class="muted"><i class="fa fa-list-alt"></i>
-                    <a href="<?= Url::to([
-                        'article/index',
-                        'cat' => $categoryName
-                    ]) ?>"> <?= $categoryName ?>
-                    </a>
-                </span>
-                <span class="muted"><i class="fa fa-user"></i> <a href="">admin</a></span>
-                <time class="muted"><i class="fa fa-clock-o"></i> <?= yii::$app->getFormatter()->asDate($model->created_at) ?></time>
-                <span class="muted"><i class="fa fa-eye"></i> <span id="scanCount"><?= $model->scan_count * 100 ?></span>℃</span>
-                <span class="muted"><i class="fa fa-comments-o"></i>
-                    <a href="<?= Url::to([
-                        'article/view',
-                        'id' => $model->id
-                    ]) ?>#comments">
-                        <span id="commentCount"><?= $model->comment_count ?></span>
-                    <?=yii::t('frontend', 'Comment')?></a>
-                </span>
-            </div>
-        </header>
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta content="短信接口,pass平台,saas软件,流量充值,短信发送平台,im云,即时通讯云,云提醒,云通讯,云通信,SDK,API,视频会议,VTM,融合通信,政企通讯,视频云,视频直播,视频点播,视频会议,云呼叫中心,云客服,呼叫中心建设,呼叫中心能力,通讯线路,虚拟运营商,短信服务,流量分发平台,匿名通话,公费电话,企业服务,云提醒云通讯,隐私保护通话,云总机,身份认证,消息通知,在线客服,企业通信,企业协同通讯" name="keywords">
+    <meta content="云提醒——精于技术，简于接口。云提醒PaaS平台将复杂的底层通讯资源打包成简单的API和SDK，让SaaS厂商和软件开发者可以方便的通过接口嵌入消息、语音、视频、流量、直播、身份验证等，从而实现云通讯的功能。云提醒提供的通信接口包括短信、隐私保护通话、多方通话、400电话、呼叫中心、隐私保护通话、云总机、身份认证、消息通知、IM（即时消息）、在线客服及企业通信等，广泛应用于O2O、电商、社交、生活服务、房地产、快递物流、交通出行、企业通信、智能硬件、移动医疗等行业。" name="description">
+    <title>云提醒云通信平台_提供点击通话、短信验证码、语音验证码、视频、云呼叫中心、云总机、隐私保护通话、流量分发系统等服务的融合通讯开放平台</title>
+    <!--[if IE 8 ]> <link rel='stylesheet' type='text/css' href='/pages/css/ie8.css'/> <![endif]-->
+    <meta name="robots" content="index,follow"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!--公共头部 ft_header bof-->
+    <link rel="shortcut icon" href="/pages/images/ucpaas.ico" type="image/x-icon"/>
+    <link rel='stylesheet' type='text/css' href='/pages/css/idangerous.swiper.css'/>
+    <link rel='stylesheet' type='text/css' href='/pages/css/flexslider/css/flexslider.css'/>
+    <link rel='stylesheet' type='text/css' href='/pages/css/base.css'/>
+    <link rel='stylesheet' type='text/css' href='/pages/css/about.css'/>
+    <script type="text/javascript" src="/pages/js/jquery-1.12.3.min.js"></script>
+    <!--[if lte IE 8]>
+    <link rel='stylesheet' type='text/css' href='/pages/css/ie8.css'/>
 
-        <article class="article-content">
-            <?= $model->articleContent->content ?>
-            <p>
-                <?= yii::t('frontend', 'Reproduced please indicate the source') ?>：
-                <a href="<?= yii::$app->homeUrl ?>" data-original-title="" title=""><?= yii::$app->feehi->website_title ?></a>
-                »
-                <a href="<?= Url::to(['article/view', 'id' => $model->id]) ?>" data-original-title="" title=""><?= $model->title ?></a>
-            </p>
+    <![endif]-->
+    <!--公共头部 ft_header bof-->
+</head>
 
-            <div class="article-social">
-                <a href="javascript:;" data-action="ding" data-id="<?=$model->id?>" like-url="<?=Url::to(['article/like'])?>" id="Addlike" class="action"><i class="fa fa-heart-o"></i><?=yii::t('frontend', 'Like')?> (<span class="count"><?= $model->getArticleLikeCount() ?></span>)</a>
-                <span class="or">or</span>
-                <span class="action action-share bdsharebuttonbox"><i class="fa fa-share-alt"></i><?=yii::t('frontend', 'Share')?> (<span class="bds_count" data-cmd="count" title="累计分享0次">0</span>)
-                    <div class="action-popover">
-                        <div class="popover top in"><div class="arrow"></div>
-                            <div class="popover-content">
-                                <a href="#" class="sinaweibo fa fa-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
-                                <a href="#" class="bds_qzone fa fa-star" data-cmd="qzone" title="分享到QQ空间"></a>
-                                <a href="#" class="tencentweibo fa fa-tencent-weibo" data-cmd="tqq" title="分享到腾讯微博"></a>
-                                <a href="#" class="qq fa fa-qq" data-cmd="sqq" title="分享到QQ好友"></a>
-                                <a href="#" class="bds_renren fa fa-renren" data-cmd="renren" title="分享到人人网"></a>
-                                <a href="#" class="bds_weixin fa fa-weixin" data-cmd="weixin" title="分享到微信"></a>
-                                <a href="#" class="bds_more fa fa-ellipsis-h" data-cmd="more"></a>
-                            </div>
-                        </div>
-                    </div>
-                </span>
-            </div>
-        </article>
-        <footer class="article-footer">
-            <div class="article-tags">
-                <i class="fa fa-tags"></i>
-                <?php foreach ($model->articleTags as $tag){ ?>
-                    <a href="<?=Url::to(['search/tag', 'tag'=>$tag->value])?>" rel="tag" data-original-title="" title=""><?=$tag->value?></a>
-                <?php } ?>
-            </div>
-        </footer>
-        <nav class="article-nav">
-            <?php
-                if ($prev !== null) {
-            ?>
-                <span class="article-nav-prev">
-                    <i class="fa fa-angle-double-left"></i><a href='<?= Url::to(['article/view', 'id' => $prev->id]) ?>' rel="prev"><?= $prev->title ?></a>
-                </span>
-            <?php } ?>
-            <?php
-                if ($next != null) {
-            ?>
-                <span class="article-nav-next">
-                    <a href="<?= Url::to(['article/view', 'id' => $next->id]) ?>" rel="next"><?= $next->title ?></a><i class="fa fa-angle-double-right"></i>
-                </span>
-            <?php } ?>
-        </nav>
-
-        <div class="related_top">
-            <div class="related_posts">
-                <ul class="related_img">
-                    <h2><?= yii::t('frontend', 'Related Recommends') ?></h2>
-                    <?php
-                    //$articles = Article::getArticleLists(['flag_picture'=>1], 8, 'rand()');
-                    $articles = $recommends;
-                    foreach ($articles as $article) {
-                        $url = Url::to(['article/view', 'id' => $article->id]);
-                        $imgUrl = Url::to(['/timthumb.php', 'src'=>$article->thumb, 'h'=>110, 'w'=>185, 'zc'=>0]);
-                        echo "<li class='related_box'>
-                             <a href='{$url}' title='{$article->title}' target='_blank'>
-                                <img src='{$imgUrl}' alt='{$article->title}'><br>
-                                <span class='r_title'>{$article->title}</span>
-                             </a>
-                        </li>";
-                    }
-                    ?>
-                </ul>
+<body id="b-01" data-nav="home" class="index_validate">
+<?=$this->render('/pages/header');?>
+<!--主体部分 ft_content bof-->
+<div class="cul_content">
+    <div class="cul_banner">
+        <div class="cul_banner_wp">
+            <div class="txt">
+                <h1>云提醒·让通讯更简单</h1>
+                <h2>--专注于提供短信服务--</h2>
             </div>
         </div>
+    </div>
 
-        <div id="respond" class="no_webshot">
-            <form action="" method="post" id="commentform">
-                <?php $form = ActiveForm::begin(); ?>
-                <?= Html::activeHiddenInput($commentModel, 'aid', ['value' => $model->id]) ?>
-                <div class="comt-title" style="display: block;">
-                    <div class="comt-avatar pull-left">
-                        <img src="https://secure.gravatar.com/avatar/" class="avatar avatar-108" height="50" width="50">
-                    </div>
-                    <div class="comt-author pull-left"><?php if (yii::$app->getUser()->getIsGuest()) {
-                            echo yii::t('frontend', 'Guest');
-                        } else {
-                            echo yii::$app->getUser()->getIdentity()->username;
-                        } ?> <span><?= yii::t('frontend', 'Post my comment') ?></span> &nbsp;
-                        <a class="switch-author" href="javascript:void(0)" data-type="switch-author" style="font-size:12px;"><?= yii::t('frontend', 'Change account') ?></a>
-                    </div>
-                    <a id="cancel-comment-reply-link" class="pull-right" href="javascript:;"><?= yii::t('frontend', 'Cancel comment') ?></a>
+    <div class="item_box media-detail-box1">
+        <div class="item_box_wp">
+            <div class="new-con-l ft-l">
+                <!-- <div class="place"> <strong>当前位置:</strong> <a href='//'>主页</a> > <a href='//mt/'>媒体报道</a> >  </div> -->
+                <!-- /place -->
+                <div class="news_detail">
+                    <h6 class="art-title"><?=$model->title;?></h6>
+                    <!--  <p class="date">2017-06-15 By 云吞吞 点击  <script src="//plus/count.php?view=yes&aid=220&mid=8" type='text/javascript' language="javascript"></script>次</p>   -->
+                    <!-- /info -->
+                    <div class="detail_left"><?=$model->articleContent->content;?></div>
                 </div>
-
-                <div class="comt">
-                    <div class="comt-box">
-                        <?= $form->field($commentModel, 'content', ['template' => '{input}'])->textarea([
-                            'class' => 'input-block-level comt-area',
-                            'cols' => '100%',
-                            'rows' => '3',
-                            'tabindex' => 1,
-                            'placeholder' => yii::t('frontend', 'Writing some...'),
-                            "id" => "comment"
-                        ]) ?>
-                        <div class="comt-ctrl">
-                            <button class="btn btn-primary pull-right" type="submit" name="submit" id="submit" tabindex="5">
-                                <i class="fa fa-check-square-o"></i> <?= yii::t('frontend', 'Submit comment') ?>
-                            </button>
-                            <div class="comt-tips pull-right">
-                                <div class="comt-tip comt-error" style="display: none;"></div>
-                                <input type='hidden' name='comment_post_ID' value='114' id='comment_post_ID'/>
-                                <?= $form->field($commentModel, 'reply_to', ['template' => '{input}'])->hiddenInput(['value' => 0, 'id' => 'comment_parent']) ?>
-                                <p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="32920dc775"/></p>
-                                <p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="101"/></p>
-                            </div>
-                            <span data-type="comment-insert-smilie" class="muted comt-smilie"><i class="fa fa-smile-o"></i> <?= yii::t('frontend', 'emoj') ?></span>
-                            <span class="muted comt-mailme"><label for="comment_mail_notify" class="checkbox inline" style="padding-top:0">
-                                <input type="checkbox" name="comment_mail_notify" id="comment_mail_notify" value="comment_mail_notify" checked="checked"><?=yii::t('frontend', 'Send email at someone replied')?></label>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="comt-comterinfo" id="comment-author-info" style="display:none">
-                        <h4><?= yii::t('frontend', 'Hi, Please fill') ?></h4>
+                <div class="detail_relate">
+                    <?php if($prev){
+                        echo '<span class="prev ft-l">上一篇：'.Html::a($prev->title, ['view', 'id'=>$prev->id]).'</span>';
+                    }?>
+                    <?php if($next){
+                        echo '<span class="prev ft-l">下一篇：'.Html::a($next->title, ['view', 'id'=>$next->id]).'</span>';
+                    }?>
+                </div>
+            </div>
+            <div class="new-con-r ft-r">
+                <div class="con  con1">
+                    <h4>热门新闻</h4>
                         <ul>
-                            <li class="form-inline">
-                                <label class="hide" for="author"><?= yii::t('app', 'Nickname') ?></label>
-                                <?php if (yii::$app->getUser()->getIsGuest()) {
-                                    $defaultNickname = yii::t('frontend', 'Guest');
-                                } else {
-                                    $defaultNickname = yii::$app->getUser()->getIdentity()->username;
-                                } ?>
-                                <?= $form->field($commentModel, 'nickname', ['template' => '{input}<span class="help-inline">' . yii::t('app', 'Nickname') . ' (' . yii::t('frontend', 'required') . ')</span>'])->textInput(['value' => $defaultNickname]) ?>
-                            </li>
-                            <li class="form-inline"><?= $form->field($commentModel, 'email', ['template' => '{input}<span class="help-inline">' . yii::t('app', 'Email') . ' </span>'])->textInput() ?></li>
-                            <li class="form-inline"><?= $form->field($commentModel, 'website_url', ['template' => '{input}<span class="help-inline">' . yii::t('frontend', 'Website') . '</span>'])->textInput() ?></li>
+                            <?php
+                            if($recommends){
+                                foreach ($recommends as $recommend) {
+                                    echo '<li>'.Html::a($recommend->title, ['view', 'id'=>$recommend->id]).'</li>';
+                                }
+                            }
+                            ?>
                         </ul>
                     </div>
-                </div>
-                <?php ActiveForm::end() ?>
-        </div>
-        <div id="postcomments">
-            <div id="comments">
-                <i class="fa fa-comments-o"></i> <b> (<?= $model->comment_count ?>)</b><?= yii::t('frontend', 'person posted') ?>
-            </div>
-            <ol class="commentlist">
-                <?php
-                foreach ($commentList as $v) {
-                    ?>
-                    <li class="comment even thread-even depth-1 byuser comment-author-admin bypostauthor"
-                        id="comment-<?= $v['id'] ?>">
-                        <div class="c-avatar">
-                            <img data-original="https://secure.gravatar.com/avatar/<?= md5($v['email']) ?>?s=50" class="avatar avatar-108" height="50" width="50" src="https://secure.gravatar.com/avatar/<?= md5($v['nickname']) ?>" style="display: block;">
-                            <div class="c-main" id="div-comment-<?= $v['id'] ?>">
-                                <?= $v['content'] ?><br>
-                                <div class="c-meta">
-                                    <span class="c-author"><a href="<?= $v['website_url'] ?>" rel="external nofollow" class="url" target="_blank"><?= empty($v['nickname']) ? '游客' : $v['nickname'] ?></a></span><?= yii::$app->formatter->asDate($v['created_at']) ?>
-                                    (<?= yii::$app->getFormatter()->asRelativeTime($v['created_at']) ?>)
-                                    <a rel="nofollow" class="comment-reply-link" href="" onclick="return addComment.moveForm('div-comment-<?= $v['id'] ?>', '<?= $v['id'] ?>', 'respond','0' )" aria-label="回复给admin">回复</a>
-                                </div>
-                            </div>
-                        </div>
-                        <?php
-                        if (! empty($v['sub'])) {
-                            ?>
-                            <ul class="children">
-                                <?php
-                                    foreach ($v['sub'] as $value) {
-                                ?>
-                                    <li class="comment odd alt depth-2" id="comment-<?= $value['id'] ?>">
-                                        <div class="c-avatar">
-                                            <img data-original="https://secure.gravatar.com/avatar/<?= md5($v['email']) ?>?s=50" class="avatar avatar-108" height="50" width="50" src="https://secure.gravatar.com/avatar/<?= md5($v['nickname']) ?>" style="display: block;">
-                                            <div class="c-main" id="div-comment-<?= $value['id'] ?>"><?= $value['content'] ?><br>
-                                                <div class="c-meta">
-                                                    <span class="c-author">
-                                                        <a href="<?= $v['website_url'] ?>" rel="external nofollow" class="url" target="_blank"><?= empty($value['nickname']) ? yii::t('frontend', "Guest") : $value['nickname'] ?></a>
-                                                    </span>
-                                                    <?= yii::$app->getFormatter()->asDate($value['created_at']) ?>(<?= yii::$app->getFormatter()->asRelativeTime($value['created_at']) ?>)
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li><!-- #comment-## -->
-                                <?php } ?>
-                            </ul>
-                        <?php } ?>
-                    </li><!-- #comment-## -->
-                <?php } ?>
-            </ol>
-            <div class="commentnav">
             </div>
         </div>
     </div>
 </div>
-<?= $this->render('/widgets/_sidebar') ?>
-<?php JsBlock::begin(); ?>
-<script type="text/javascript">
-    SyntaxHighlighter.all();
-    $(document).ready(function () {
-        $.ajax({
-            url:"<?=Url::to(['article/view-ajax'])?>",
-            data:{id:<?=$model->id?>},
-            success:function (data) {
-                $("span.count").html(data.likeCount);
-                $("span#scanCount").html(data.scanCount);
-                $("span#commentCount").html(data.commentCount);
-            }
-        });
-    })
-</script>
-<script>with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
-<?php JsBlock::end(); ?>
+<!--主体部分 ft_content eof-->
+
+<?=$this->render('/pages/footer');?>
+</body>
+</html>

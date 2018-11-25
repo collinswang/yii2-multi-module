@@ -11,6 +11,7 @@ namespace frontend\controllers;
 use yii;
 use common\libs\Constants;
 use frontend\models\form\ArticlePasswordForm;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use frontend\models\Article;
 use common\models\Category;
@@ -51,7 +52,7 @@ class ArticleController extends BaseController
      * @return string
      * @throws \yii\web\NotFoundHttpException
      */
-    public function actionIndex($cat = '')
+    public function actionIndex($cat = '', $page = 1)
     {
         if ($cat == '') {
             $cat = yii::$app->getRequest()->getPathInfo();
@@ -75,19 +76,15 @@ class ArticleController extends BaseController
             }
         }
         $query = Article::find()->with('category')->where($where);
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort' => [
-                'defaultOrder' => [
-                    'sort' => SORT_ASC,
-                    'created_at' => SORT_DESC,
-                    'id' => SORT_DESC,
-                ]
-            ]
-        ]);
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'type' => ( !empty($cat) ? yii::t('frontend', 'Category {cat} articles', ['cat'=>$cat]) : yii::t('frontend', 'Latest Articles') ),
+
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'page'=> $page-1, 'pageSize'=>2]);
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        return $this->renderPartial('index', [
+            'pagination' => $pages,
+            'list' => $models,
         ]);
     }
 
@@ -114,131 +111,21 @@ class ArticleController extends BaseController
             ->orderBy("sort desc,created_at desc,id asc")
             ->limit(1)
             ->one();//->createCommand()->getRawSql();
-        $commentModel = new Comment();
-        $commentList = $commentModel->getCommentByAid($id);
+
         $recommends = Article::find()
             ->where(['type' => Article::ARTICLE, 'status' => Article::ARTICLE_PUBLISHED])
-            ->andWhere(['<>', 'thumb', ''])
             ->orderBy("rand()")
             ->limit(8)
             ->all();
-        switch ($model->visibility){
-            case Constants::ARTICLE_VISIBILITY_COMMENT://评论可见
-                if( yii::$app->getUser()->getIsGuest() ){
-                    $result = Comment::find()->where(['aid'=>$model->id, 'ip'=>yii::$app->getRequest()->getUserIP()])->one();
-                }else{
-                    $result = Comment::find()->where(['aid'=>$model->id, 'uid'=>yii::$app->getUser()->getId()])->one();
-                }
-                if( $result === null ) {
-                    $model->articleContent->content = "<p style='color: red'>" . yii::t('frontend', "Only commented user can visit this article") . "</p>";
-                }
-                break;
-            case Constants::ARTICLE_VISIBILITY_SECRET://加密文章
-                $authorized = yii::$app->getSession()->get("article_password_" . $model->id, null);
-                if( $authorized === null ) $this->redirect(Url::toRoute(['password', 'id'=>$id]));
-                break;
-            case Constants::ARTICLE_VISIBILITY_LOGIN://登陆可见
-                if( yii::$app->getUser()->getIsGuest() ) {
-                    $model->articleContent->content = "<p style='color: red'>" . yii::t('frontend', "Only login user can visit this article") . "</p>";
-                }
-                break;
-        }
-        return $this->render('view', [
+
+        return $this->renderPartial('view', [
             'model' => $model,
             'prev' => $prev,
             'next' => $next,
             'recommends' => $recommends,
-            'commentModel' => $commentModel,
-            'commentList' => $commentList,
         ]);
     }
 
-    /**
-     * 获取文章的点赞数和浏览数
-     *
-     * @param $id
-     * @return array
-     * @throws NotFoundHttpException
-     */
-    public function actionViewAjax($id)
-    {
-        $model = Article::findOne($id);
-        if( $model === null ) throw new NotFoundHttpException("None exists article id");
-        return [
-            'likeCount' => (int)$model->getArticleLikeCount(),
-            'scanCount' => $model->scan_count * 100,
-            'commentCount' => $model->comment_count,
-        ];
-    }
-
-    /**
-     * 评论
-     *
-     */
-    public function actionComment()
-    {
-        if (yii::$app->getRequest()->getIsPost()) {
-            $commentModel = new Comment();
-            if ($commentModel->load(yii::$app->getRequest()->post()) && $commentModel->save()) {
-                $avatar = 'https://secure.gravatar.com/avatar?s=50';
-                if ($commentModel->email != '') {
-                    $avatar = "https://secure.gravatar.com/avatar/" . md5($commentModel->email) . "?s=50";
-                }
-                $tips = '';
-                if (yii::$app->feehi->website_comment_need_verify) {
-                    $tips = "<span class='c-approved'>" . yii::t('frontend', 'Comment waiting for approved.') . "</span><br />";
-                }
-                $commentModel->afterFind();
-                return "
-                <li class='comment even thread-even depth-1' id='comment-{$commentModel->id}'>
-                    <div class='c-avatar'><img src='{$avatar}' class='avatar avatar-108' height='50' width='50'>
-                        <div class='c-main' id='div-comment-{$commentModel->id}'><p>{$commentModel->content}</p>
-                            {$tips}
-                            <div class='c-meta'><span class='c-author'><a href='{$commentModel->website_url}' rel='external nofollow' class='url'>{$commentModel->nickname}</a></span>  (" . yii::t('frontend', 'a minutes ago') . ")</div>
-                        </div>
-                    </div>";
-            } else {
-                $temp = $commentModel->getErrors();
-                $str = '';
-                foreach ($temp as $v) {
-                    $str .= $v[0] . "<br>";
-                }
-                return "<font color='red'>" . $str . "</font>";
-            }
-        }
-    }
-
-    /**
-     * @param $id
-     * @return string|\yii\web\Response
-     */
-    public function actionPassword($id)
-    {
-        $model = new ArticlePasswordForm();
-
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->checkPassword($id)) {
-            return $this->redirect(Url::toRoute(['view', 'id'=>$id]));
-        } else {
-            return $this->render("password", [
-                'model' => $model,
-                'article' => Article::findOne($id),
-            ]);
-        }
-    }
-
-    /**
-     * 点赞
-     *
-     * @return int|string
-     */
-    public function actionLike()
-    {
-        $aid = yii::$app->getRequest()->post("aid");
-        $model = new ArticleMetaLike();
-        $model->setLike($aid);
-        return $model->getLikeCount($aid);
-
-    }
 
     /**
      * rss订阅

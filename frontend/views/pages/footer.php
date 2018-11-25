@@ -21,7 +21,7 @@ use common\models\FriendlyLink;
             <a href="https://www.wenjuan.com/s/neYnqe/" target="_blank">意见反馈</a>
         </li>
         <li class="item to-top js-to-top"  id="pubGoToTop">
-            <a href="javascript:void(0);">TOP</a>
+            <a href="#page_header">TOP</a>
         </li>
     </ul>
 </div>
@@ -40,20 +40,14 @@ use common\models\FriendlyLink;
     <div class="footer_link">
         <div class="ft_footer_wp clearfix">
             <ul class="foot_nav">
-                <li><a href="<?= Url::toRoute(['/page/view', 'name'=>'notice_letter'])?>">通知短信</a></li>
-                <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'spread_letter'])?>">营销短信</a></li>
-                <li><a href="<?=Url::toRoute(['/article/list', 'cat'=>'help'])?>">使用帮助</a></li>
-                <li><a href="<?=Url::toRoute(['/article/list', 'cat'=>'news'])?>">新闻中心</a></li>
-                <li><a href="<?=Url::toRoute(['/article/list', 'cat'=>'case'])?>">成功案例</a></li>
+                <li><a href="<?= Url::toRoute(['/'])?>">首页</a></li>
+                <li><a href="<?=Url::toRoute(['/index/page', 'view'=>'notice'])?>">通知短信</a></li>
+                <li><a href="<?=Url::toRoute(['/index/page', 'view'=>'spread'])?>">营销短信</a></li>
+                <li><a href="<?=Url::toRoute(['/article/index', 'cat'=>'help'])?>">使用帮助</a></li>
+                <li><a href="<?=Url::toRoute(['/article/index', 'cat'=>'news'])?>">新闻中心</a></li>
+                <li><a href="<?=Url::toRoute(['/article/index', 'cat'=>'case'])?>">成功案例</a></li>
                 <li><a href="<?=Url::toRoute(['/page/view', 'name'=>'about'])?>">关于我们</a>
             </ul>
-<!--            <ul class="share">-->
-<!--                <li style="flex:5; text-align: right">关注云提醒</li>-->
-<!--                <li style="flex:2; text-align: center">-->
-<!--                    <img src="/pages/images/wx_code.png"/>-->
-<!--                </li>-->
-<!--                <li style="flex:5; text-align: left">云提醒官方微信</li>-->
-<!--            </ul>-->
         </div>
         <div class="relate_links">
             <div class="relate_wp">
@@ -88,6 +82,17 @@ use common\models\FriendlyLink;
 <script type="text/javascript" src="/pages/js/base.js"></script>
 
 <script charset="utf-8" type="text/javascript" >
+    // 顶部滚动颜色变化
+    $(window).scroll(function () {
+        var scrollTop = $(this).scrollTop(); //滚动高度
+        if (scrollTop > 300) {
+            $("#pubGoToTop").css("display", 'block');
+        }
+        if (scrollTop < 300) {
+            $("#pubGoToTop").css("display", 'none');
+        }
+    });
+
     $(function(){
 
         //咨询图标位置
