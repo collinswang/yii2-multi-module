@@ -14,6 +14,7 @@ namespace common\modules\sms\data;
 
 use common\components\Tools;
 use common\events\SmsTaskEvent;
+use common\modules\finance\data\FinanceAccountData;
 use common\modules\finance\data\FinanceFlowData;
 use common\modules\finance\data\FinanceOrderData;
 use common\modules\finance\models\FinanceFlow;
@@ -70,6 +71,16 @@ class SmsTaskData extends BaseObject
             return ['status'=>-1, 'error'=>'模板不存在', 'id'=>0];
         }
 
+        $price_per_sms = Yii::$app->params['price_per_sms'];
+        $model = new FinanceAccountData();
+        $finance = $model->get_one($uid);
+        $price_grade_list = Yii::$app->params['price_grade'];
+        foreach ($price_grade_list as $key => $item) {
+            if(abs($finance['total_outcome']) > $key){
+                $price_per_sms = $item;
+            }
+        }
+
         $model = new SmsTask();
         $model->uid = $uid;
         $model->template_id = $template_id;
@@ -77,7 +88,7 @@ class SmsTaskData extends BaseObject
         $model->is_hidden = 0;
         $model->total = $check_result['total'];
         $model->file = $file;
-        $model->single_price = Yii::$app->params['price_per_sms'];  //分
+        $model->single_price = $price_per_sms;  //分
         $model->total_price = round($model->single_price * $model->total);
 
         if($model->save()){
