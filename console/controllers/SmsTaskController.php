@@ -9,14 +9,7 @@
 namespace console\controllers;
 
 
-use common\modules\sms\base\AliSmsClient;
-use common\modules\sms\base\SmsInterface;
-use common\modules\sms\data\SmsData;
 use common\modules\sms\data\SmsTaskData;
-use \common\modules\sms\models\SmsSign;
-use common\modules\sms\service\SmsService;
-use common\modules\sms\service\SmsSignService;
-use Yii;
 
 class SmsTaskController extends \yii\console\Controller
 {
