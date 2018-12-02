@@ -3,9 +3,9 @@
 namespace frontend\controllers;
 
 use common\components\alipay\alipayWeb;
+use common\modules\finance\data\FinanceAccountData;
 use common\modules\finance\data\FinanceIncomeData;
 use common\modules\finance\models\FinanceIncome;
-use common\modules\finance\service\FinanceAccountService;
 use Yii;
 use common\modules\finance\models\FinanceFlowSearch;
 use backend\actions\IndexAction;
@@ -31,7 +31,7 @@ class FinanceController extends \yii\web\Controller
                 'class' => IndexAction::className(),
                 'data' => function(){
                         $uid = Yii::$app->getUser()->getId();
-                        $acc_model = new FinanceAccountService();
+                        $acc_model = new FinanceAccountData();
                         $account = $acc_model->get_one($uid);
                         $searchModel = new FinanceFlowSearch();
                         $searchModel->uid = $uid;
@@ -92,7 +92,7 @@ class FinanceController extends \yii\web\Controller
                     $income_id = $income->id;
                     switch ($income->type){
                         case FinanceIncomeData::TYPE_ALIPAY:
-                            $result = alipayWeb::buildPay($income_id, $income->received, $income->uid);
+                            $result = alipayWeb::buildPay($income_id, $income->received, Yii::$app->getUser()->getIdentity()->username);
                             try {
                                 file_put_contents("/home/web/web_log/pay_" . date("Y_m_d") . ".txt",
                                     var_dump($result) . "\r\n", FILE_APPEND);

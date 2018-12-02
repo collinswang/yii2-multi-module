@@ -93,7 +93,7 @@ class SmsTaskForm extends Model
                 $this->addError('sms_task', yii::t('app', 'Upload {attribute} error: ' . $upload->error, ['attribute' => yii::t('app', 'Ad')]) . ': ' . $fullName);
                 return false;
             }
-            $this->file = str_replace($uploadPath, '', $fullName);
+            $this->file = str_replace(yii::getAlias('@sms_dir/'), '', $fullName);
         }
 
         //保存入库,且返回

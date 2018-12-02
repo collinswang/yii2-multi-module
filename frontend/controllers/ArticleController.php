@@ -78,7 +78,7 @@ class ArticleController extends BaseController
         $query = Article::find()->with('category')->where($where);
 
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'page'=> $page-1, 'pageSize'=>2]);
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'page'=> $page-1, 'pageSize'=>10]);
         $models = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();

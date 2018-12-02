@@ -28,7 +28,7 @@ use backend\grid\ActionColumn;
 use backend\grid\StatusColumn;
 
 $this->title = '短信发送记录';
-$this->params['breadcrumbs'][] = yii::t('app', 'Task List');
+$this->params['breadcrumbs'][] = '短信发送记录';
 
 ?>
 <style>

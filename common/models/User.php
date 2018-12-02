@@ -8,6 +8,7 @@
 
 namespace common\models;
 
+use common\modules\finance\models\FinanceAccount;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -204,6 +205,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function getFinance()
+    {
+        return $this->hasOne(FinanceAccount::className(), ['uid' => 'id']);
     }
 
 }

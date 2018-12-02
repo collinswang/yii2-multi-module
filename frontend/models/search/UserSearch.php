@@ -95,6 +95,9 @@ class UserSearch extends \common\models\User
                 $update_end_at_unixtimestamp
             ]);
         }
+
+        $query->joinWith('finance');
+
         return $dataProvider;
     }
 

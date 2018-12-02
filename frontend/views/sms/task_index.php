@@ -27,7 +27,7 @@ use backend\grid\ActionColumn;
 use backend\grid\StatusColumn;
 
 $this->title = '知信发送任务列表';
-$this->params['breadcrumbs'][] = yii::t('app', 'Task List');
+$this->params['breadcrumbs'][] = '知信发送任务列表';
 
 ?>
 <style>

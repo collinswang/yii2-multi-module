@@ -34,4 +34,11 @@ class SmsTaskController extends \yii\console\Controller
         }
     }
 
+    public function actionTest($task_id)
+    {
+        $model = new SmsTaskData();
+        $result = $model->processTaskQueue($task_id);
+        print_r($result);
+    }
+
 }

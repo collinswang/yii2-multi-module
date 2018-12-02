@@ -26,6 +26,9 @@ foreach ($template_list as $item) {
 }
 
 ?>
+<style>
+    #temp_content{font-size: 14px;}
+</style>
 <div class="col-sm-12">
     <div class="ibox">
         <?= $this->render('/widgets/_ibox-title') ?>
@@ -46,3 +49,17 @@ foreach ($template_list as $item) {
         </div>
     </div>
 </div>
+<?php JsBlock::begin()?>
+<script>
+    <?php
+    foreach ($template_contents as $key=>$template_content) {
+        echo "var template{$key} = '{$template_content}';";
+        }
+    ?>
+    $('#smstaskform-template_id').bind('change', function () {
+        var temp_id = 'template'+$(this).val();
+        $("#temp_content").remove();
+        $(this).parent().append('<div id="temp_content">'+eval(temp_id)+'</div>');
+    });
+</script>
+<?php JsBlock::end()?>

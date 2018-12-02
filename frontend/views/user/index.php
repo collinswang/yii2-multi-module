@@ -87,10 +87,10 @@ $this->title = yii::t('app', 'Backend Manage System');
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li class="hidden-xs">
-                        <a href="<?= yii::$app->params['site']['url'] ?>" target='_blank'><i class="fa fa-internet-explorer"></i> <?= yii::t('frontend', 'Modify Password') ?></a>
+                        <a href="<?= Url::toRoute('user/info')?>"><i class="fa fa-internet-explorer"></i> <?= yii::t('frontend', 'Modify Password') ?></a>
                     </li>
                     <li class="hidden-xs">
-                        <a href="http://cms.feehi.com/help" class="J_menuItem" data-index="0"><i class="fa fa-cart-arrow-down"></i> <?= yii::t('frontend', 'Log out') ?></a>
+                        <a href="<?=Url::toRoute('site/logout')?>" class="J_menuItem" data-index="0"><i class="fa fa-cart-arrow-down"></i> <?= yii::t('frontend', 'Log out') ?></a>
                     </li>
                 </ul>
             </nav>
@@ -116,10 +116,10 @@ $this->title = yii::t('app', 'Backend Manage System');
             <?= Html::a('<i class="fa fa fa-sign-out"></i>' . yii::t('app', 'Logout'), Url::toRoute('site/logout'), ['data-method'=>'post', 'class'=>'roll-nav roll-right J_tabExit'])?>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="<?= Url::to(['user/main']) ?>" frameborder="0" data-id="<?= Url::to(['site/main']) ?>" seamless></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="<?= Url::to(['user/main']) ?>" frameborder="0" data-id="<?= Url::to(['user/main']) ?>" seamless></iframe>
         </div>
         <div class="footer">
-            <div class="pull-right">&copy; 2015-<?=date('Y')?> <a href="#" target="_blank">CMS</a></div>
+            <div class="pull-right">&copy; 2015-<?=date('Y')?> <a href="#" target="_blank">云提醒</a></div>
         </div>
     </div>
     <!--右侧部分结束-->

@@ -14,11 +14,13 @@
 
 use backend\grid\DateColumn;
 use backend\grid\GridView;
+use common\modules\finance\models\FinanceAccount;
 use frontend\models\User;
 use yii\helpers\Html;
 use backend\widgets\Bar;
 use backend\grid\CheckboxColumn;
 use backend\grid\ActionColumn;
+use yii\helpers\Url;
 
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = yii::t('app', 'Users');
@@ -46,7 +48,10 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Users');
                             'attribute' => 'username',
                         ],
                         [
-                            'attribute' => 'email',
+                            'label' => '资金',
+                            'value' => function($model){
+                                return $model->finance->total_usable;
+                            }
                         ],
                         [
                             'attribute' => 'status',
@@ -88,7 +93,19 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Users');
                         ],
                         [
                             'class' => ActionColumn::className(),
-                            'width' => '190px'
+                            'width' => '190px',
+                            'buttons' => [
+                                'finance' => function ($url, $model, $key) {
+                                    return Html::a('<i class="fa  fa-commenting-o" aria-hidden="true"></i> 流水',
+                                        Url::to([
+                                            'finance-flow/index',
+                                            'FinanceFlowSearch[uid]' => $model->id
+                                        ]), [
+                                            'class' => 'btn btn-white btn-sm',
+                                        ]);
+                                },
+                            ],
+                            'template' => '{update}{finance}',
                         ],
                     ]
                 ]); ?>

@@ -29,8 +29,8 @@ foreach ($template_list as $item) {
     <div class="ibox">
         <?= $this->render('/widgets/_ibox-title') ?>
         <div class="ibox-content">
-            <?php $form = ActiveForm::begin(['action'=>['sms/confirm', 'id'=>$id], 'method'=>'post','id' => 'form-confirm', 'class'=>'form-horizontal']); ?>
-            <?= Html::input('hidden', 'task_id', $id)?>
+            <?php $form = ActiveForm::begin(['action'=>['sms/confirm', 'task_id'=>$task_id], 'method'=>'post','id' => 'form-confirm', 'class'=>'form-horizontal']); ?>
+            <?= Html::input('hidden', 'task_id', $task_id)?>
             <div class="form-group field-adform-tips required">
                 <label class="col-sm-2 control-label" for="total">发送数量</label>
                 <div class="col-sm-10">
@@ -67,7 +67,7 @@ foreach ($template_list as $item) {
             <div class="form-group field-adform-tips required">
                 <label class="col-sm-2 control-label" for="adform-tips">短信预览</label>
                 <div class="col-sm-10">
-                    <table>
+                    <table width="100%">
                         <?php if($list){
                             foreach ($list as $item) {
                                 echo "<tr><td>{$item['mobile']}</td><td>{$item['content']}</td></tr>";

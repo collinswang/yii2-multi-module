@@ -51,7 +51,7 @@ function viewLayer(url, obj)
 
 $(document).ready(function(){
     //$('.info').animate({opacity: 1.0}, 3000).fadeOut('slow');
-    $("input[type=file]").prettyFile({text:common.chooseFile});
+    //$("input[type=file]").prettyFile({text:common.chooseFile});
     $(".multi-operate").click(function () {
         var that = $(this);
         var url = $(this).attr('href');
@@ -154,7 +154,7 @@ $(document).ready(function(){
                 if( that.parents("div.image").children().find('img').next().length >= 1 ){
                     that.parents("div.image").children().find('img').next().remove();
                 }
-                that.parents("div.image").children().find('img').attr("src", this.result).after('<div onclick="$(this).parents(\'.image\').find(\'input[type=hidden]\').val(0);$(this).prev().attr(\'src\', $(this).prev().attr(\'nonePicUrl\'));$(this).parents(\'.form-group\').find(\'input[type=file]\').val(\'\');$(this).remove();" style="position: absolute;width: 50px;padding: 5px 3px 3px 5px;top:5px;left:6px;background: black;opacity: 0.6;color: white;cursor: pointer"><i class="fa fa-trash" aria-hidden="true"> '+ common.deleteText +'</i></div>');
+                that.parents("div.image").children().find('img').attr("src", this.result).after('<div onclick="$(this).parents(\'.image\').find(\'input[type=hidden]\').val(0);$(this).prev().attr(\'src\', $(this).prev().attr(\'nonePicUrl\'));$(this).parents(\'.form-group\').find(\'input[type=file]\').val(\'\');$(this).remove();" style="position: absolute;width: 50px;padding: 5px 3px 3px 5px;top:5px;left:6px;background: black;opacity: 0.6;color: white;cursor: pointer"><i class="fa fa-trash" aria-hidden="true"> delete</i></div>');
             }
         }
     });

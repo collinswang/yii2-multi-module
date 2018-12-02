@@ -8,6 +8,9 @@
 
 namespace frontend\controllers;
 
+use backend\actions\IndexAction;
+use common\modules\finance\data\FinanceAccountData;
+use common\modules\finance\models\FinanceFlowSearch;
 use frontend\models\form\SignupForm;
 use frontend\models\User;
 use Yii;
@@ -44,11 +47,19 @@ class UserController extends BaseController
 
     public function actionMain()
     {
+        $uid = Yii::$app->getUser()->getId();
+        $acc_model = new FinanceAccountData();
+        $account = $acc_model->get_one($uid);
+        $searchModel = new FinanceFlowSearch();
+        $searchModel->uid = $uid;
+        $searchModel->invisible = 1;
+
+        $dataProvider = $searchModel->search(yii::$app->getRequest()->getQueryParams());
         return $this->render('main',[
-            'info' => [],
-            'status' => [],
-            'statics' => [],
-            'comments' => [],
+            'uid'   => $uid,
+            'account'   => $account,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 

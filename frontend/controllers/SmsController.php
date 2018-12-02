@@ -142,7 +142,7 @@ class SmsController extends BaseController
         return $this->render('confirm', [
             'list' => $check_result['list'],
             'info' => $task->attributes,
-            'id'   => $task_id,
+            'task_id'   => $task_id,
             'finance' => $finance
         ]);
     }
@@ -169,115 +169,6 @@ class SmsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
-    }
-
-    /**
-     * 添加入sms_upload表
-     * @param $uid
-     * @param $source
-     * @param $template_id
-     * @param $total
-     * @return int
-     */
-    private function save_upload($uid, $source, $template_id, $total)
-    {
-        $model = new SmsUploadData();
-        $data = [
-            'uid' => $uid,
-            'source' => $source,
-            'template_id' => $template_id,
-            'total' => $total,
-            'is_hidden' => 0,
-        ];
-        $upload_id = $model->add($data);
-        return $upload_id;
-    }
-
-    /**
-     * 添加入sms表
-     * @param $uid
-     * @param $tpl_detail
-     * @param $sms_list
-     * @param $upload_id
-     * @return array
-     */
-    private function save_sms($uid, $tpl_detail, $sms_list, $upload_id)
-    {
-        $success = $fail = $total = 0;
-        $sms_model = new SmsService(Yii::$app->params['smsPlatform']);
-        foreach ($sms_list as $item) {
-            if (!$item) {
-                continue;
-            }
-            $item_arr = explode(",", str_replace('"','', $item));
-            if (count($item_arr)) {
-                $mobile = array_shift($item_arr);
-                if ($mobile) {
-                    $single_result = $sms_model->sendTemplateSingle($uid, $tpl_detail, $mobile, $item_arr, $upload_id);
-                    //$single_result['status'] >0 表示成功
-                    if($single_result['status']>0){
-                        $success++;
-                    } else {
-                        $fail++;
-                    }
-                }
-            }
-            $total++;
-        }
-        return ['total'=>$total, 'success'=>$success, 'fail'=>$fail];
-    }
-
-    /**
-     * 检查短信上传记录
-     * @param $page
-     * @return array
-     */
-    public function actionCheckUpload($page = 1)
-    {
-        $uid = intval($this->uid);
-        $page = intval($page);
-
-        $model = new SmsService(Yii::$app->params['smsPlatform']);
-        $result = $model->getUploadList($uid, $page);
-        $result['status'] = 1;
-        $result['desc'] = "成功";
-        $result['title'] = [
-            "id" => "ID",
-            "source" => "渠道",
-            "template_id" => "模板",
-            "total" => "发送数量",
-            "total_success" => "成功数量",
-            "start_time" => "发送时间",
-            "operate" => "操作"
-        ];
-        return $result;
-    }
-
-    /**
-     * 检查短信发送记录
-     * @param $page
-     * @param $upload_id
-     * @return array
-     */
-    public function actionCheckUploadDetail($page = 1, $upload_id = 0)
-    {
-        $uid = intval($this->uid);
-        $page = intval($page);
-        $upload_id = intval($upload_id);
-
-        $model = new SmsService(Yii::$app->params['smsPlatform']);
-        $result = $model->getSendList($uid, $page, $upload_id);
-        $result['status'] = 1;
-        $result['desc'] = "成功";
-        $result['title'] = [
-            "source" => "渠道",
-            "template_id" => "模板",
-            "mobile" => "手机",
-            "send_status" => "发送状态",
-            "send_time" => "发送时间",
-            "content" => "发送内容",
-        ];
-        return $result;
     }
 
 }

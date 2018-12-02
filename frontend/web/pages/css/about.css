@@ -33,7 +33,7 @@ input[type='button'],input[type='submit'] { width: 100px; height: 36px; line-hei
 input[type='button'].w140,input[type='submit'].w140 { width: 140px;}
 .cul_content_wp{width: 100%;width: 1180px; margin: 0 auto;}
 .cul_content { background: #fff;width: 100%;min-width: 1200px;}
-.cul_content .item_box { width: 100%; padding: 73px 0px 62px 0px; overflow: hidden;}
+.cul_content .item_box { width: 100%; padding: 73px 0px 0px 0px; overflow: hidden;}
 .item_box_wp { width: 1180px; margin:0 auto;}
 .item_box .title{text-align: left;}
 .item_box .title h4{font-size: 40px;margin-bottom: 10px;}
@@ -53,7 +53,7 @@ input[type='button'].w140,input[type='submit'].w140 { width: 140px;}
 .cul_nav .nav ul li.current a,.cul_nav .nav ul li:hover a{color: #fff;}
 
 /*公司简介*/
-.about-box1{height: 510px;}
+.about-box1{height: 450px;}
 .about-box1 .title{padding-top: 40px;margin-bottom: 30px;}
 .about-box1 .con p{width: 50%;line-height: 26px;text-indent: 2em;margin-bottom: 40px;font-size: 16px;}
 .about-box1 .bg{position: absolute;right: -60px;top: 0;}

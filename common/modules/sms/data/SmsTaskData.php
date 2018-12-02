@@ -115,7 +115,7 @@ class SmsTaskData extends BaseObject
 
         $result = [];
         $success = $fail = $total = $err = 0;
-        $sms_list = @file_get_contents($file);
+        $sms_list = @file_get_contents(yii::getAlias('@sms_dir/').$file);
         $sms_list = str_replace(["\r\n", "\r"], "\n", $sms_list);
         $sms_list = explode("\n", $sms_list);
         foreach ($sms_list as $item) {
@@ -259,7 +259,7 @@ class SmsTaskData extends BaseObject
             }
 
             $success = $fail = $total = $err = 0;
-            $sms_list = @file_get_contents($task->file);
+            $sms_list = @file_get_contents(yii::getAlias('@sms_dir/').$task->file);
             $sms_list = str_replace(["\r\n", "\r"], "\n", $sms_list);
             $sms_list = explode("\n", $sms_list);
             foreach ($sms_list as $item) {

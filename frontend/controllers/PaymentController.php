@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\components\alipay\lib\AlipayNotify;
 use common\components\wxpay\WxPay;
 use common\modules\finance\data\FinanceIncomeData;
 use common\modules\finance\service\FinanceIncomeService;
@@ -11,6 +12,7 @@ use common\modules\finance\service\FinanceIncomeService;
  */
 class PaymentController extends \yii\web\Controller
 {
+    public $enableCsrfValidation = false;
 
     /**
      * 支付返回验证
@@ -23,6 +25,7 @@ class PaymentController extends \yii\web\Controller
     {
         switch ($code) {
             case 'alipay':
+            case 'alipayweb':
                 $result = $this->_response_alipay();
                 break;
             default:    //华讯接口微信支付回调
@@ -51,13 +54,13 @@ class PaymentController extends \yii\web\Controller
             $out_trade_no = intval($_POST['out_trade_no']);    //商户订单号
             $trade_no = $_POST['trade_no'];         //支付宝交易号
             $trade_status = $_POST['trade_status']; //交易状态
-            $total_fee = $_POST['total_fee'];	//交易金额
-            $partner = $_POST['partner'];	//商户号
+            $total_fee = $_POST['total_amount'];	//交易金额
+            $app_id = $_POST['app_id'];	//商户号
             $seller_id = $_POST['seller_id'];	//商户号
             //检查订单是否存在
             $model = new FinanceIncomeService();
             $orderinfo = $model->getOne($out_trade_no);
-            if ($orderinfo && $total_fee == $orderinfo['payable'] && $seller_id == $alipay_config['partner'] && ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS')) {
+            if ($orderinfo && $total_fee == $orderinfo['payable'] && $app_id == $alipay_config['partner'] && ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS')) {
                 //校验成功,入库
                 $result = $model->update($out_trade_no, FinanceIncomeData::STATUS_SUCCESS, 0, "$trade_no");
                 return "success";
